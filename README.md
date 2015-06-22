@@ -11,4 +11,4 @@ creation.
 Maybe you can find something useful, take a look.
 
 <br />—<br />
-By [Andrés Villalobos](http://twitter.com/matnesis)
+[Andrés Villalobos](http://twitter.com/matnesis)

@@ -1,0 +1,29 @@
+# Unity folders
+[Bb]uild/
+[Ll]ibrary/
+[Oo]bj/
+[Tt]emp/
+
+# Sublime
+*.sublime-workspace
+
+# VS/MD
+*.booproj
+*.csproj
+*.pidb
+*.sln
+*.suo
+*.tmp
+*.unityproj
+*.user
+*.userprefs
+
+# Unity meta
+*.pidb.meta
+*.meta
+
+# Unity crash reports
+sysinfo.txt
+
+# Mac junk
+.DS_Store

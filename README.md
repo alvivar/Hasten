@@ -1,7 +1,6 @@
 Hasten
 
-My personal Unity gamedev toolset.
+My Unity gamedev toolset, my bag of tricks for game jams.
+  
 
-
-
-[Andrés Villalobos](twitter.com/matnesis)
+By [Andrés Villalobos](twitter.com/matnesis)

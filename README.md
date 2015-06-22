@@ -1,5 +1,6 @@
 ###**Hasten**
-Unity GameDev Toolkit <br/><br/>
+**Unity GameDev Toolkit**
+<br />
 
 This is the code base I use in all [my games](http://matnesis.itch.io/). It's
 a collection of scripts, extensions and custom tools for Unity.
@@ -10,4 +11,5 @@ new creation.
 
 Maybe you can find something useful here, take a look.
 
-<br />By [Andrés Villalobos](http://twitter.com/matnesis)
+<br />
+By [Andrés Villalobos](http://twitter.com/matnesis)

@@ -1,5 +1,6 @@
 ﻿
-// Splender is a collection of ready-to-use simple static effects.
+// Splender is a collection of ready-to-use simple static effects using
+// DOTween.
 
 // Andrés Villalobos > andresalvivar@gmail.com > twitter.com/matnesis
 // 2015/06/22 04:15:09 PM
@@ -13,50 +14,28 @@ using DG.Tweening;
 
 public class Splender : MonoBehaviour
 {
-    public static void BubbleExplosion(Transform explosion, Vector3 position, float radius, float duration,
-                                       Transform spark, int sparksQuantity, float sparkRadius, float sparkDuration)
+    public static void BubbleExplosion(Transform explosion, Vector3 position, float radius, float duration, Color color)
     {
         // Main explosion
         Transform mainExplosion = explosion.lpSpawn(position, Quaternion.identity);
-        MeshRenderer mainMesh = explosion.GetComponent<MeshRenderer>();
+        mainExplosion.SetPosZ(Camera.main.transform.position.z + 1);
+        MeshRenderer mainMesh = mainExplosion.GetComponent<MeshRenderer>();
 
-
-        // Defaults
         mainExplosion.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        mainMesh.material.color = Color.white;
+        mainMesh.material.color = color;
 
-
-        // Explosion fx
         Sequence ts = DOTween.Sequence();
+
         ts.Insert(0, mainExplosion.DOScale(radius, duration));
-        ts.Insert(0, mainMesh.material.DOColor(Color.clear, duration));
+        ts.Insert(duration * 0.50f, mainMesh.material.DOColor(Color.white * 0.1f, duration - duration * 0.50f));
+
+        ts.Insert(duration, mainExplosion.DOScale(radius * 1.5f, duration * 2));
+        ts.Insert(duration, mainMesh.material.DOColor(Color.clear, duration * 2));
+
         ts.AppendCallback(() =>
         {
-            mainMesh.material.color = Color.clear;
             mainExplosion.lpRecycle();
         });
 
-
-        // Sparks generation
-        Sequence sts = DOTween.Sequence();
-        while (sparksQuantity-- > 0)
-        {
-            Vector3 randomPos = Random.insideUnitSphere * radius;
-            Transform someSpark = spark.lpSpawn(position + randomPos, Quaternion.identity);
-            MeshRenderer sparkMesh = spark.GetComponent<MeshRenderer>();
-
-            // Sparks default
-            someSpark.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-            sparkMesh.material.color = Color.white;
-
-            // Spark fx
-            sts.Insert(0, someSpark.DOScale(sparkRadius, sparkDuration));
-            sts.Insert(0, sparkMesh.material.DOColor(Color.clear, sparkDuration));
-            sts.AppendCallback(() =>
-            {
-                sparkMesh.material.color = Color.clear;
-                someSpark.lpRecycle();
-            });
-        }
     }
 }

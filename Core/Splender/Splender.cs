@@ -36,6 +36,5 @@ public class Splender : MonoBehaviour
         {
             mainExplosion.lpRecycle();
         });
-
     }
 }

@@ -1,5 +1,4 @@
-﻿using InControl;
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,6 +8,7 @@ using UnityEngine;
 public class Motion : MonoBehaviour
 {
     public bool update = true;
+    public bool isTopDown = false;
 
     [Header("AI")]
     public bool botMode = false; // Overrides inputs
@@ -62,7 +62,6 @@ public class Motion : MonoBehaviour
     private float horizontalInput;
 
     // Components
-    private InputDevice device;
     private Rigidbody2D rigidbody2;
     private Collider2D collider2;
 
@@ -90,15 +89,12 @@ public class Motion : MonoBehaviour
         if (!update)
             return;
 
-        // inputs +InControl
-        // #todo Destroy all inputs
-        device = InputManager.ActiveDevice;
 
         if (allowInputs)
         {
             if (allowVertical)
             {
-                verticalInput = Mathf.Clamp(device.Direction.Y + Input.GetAxisRaw("Vertical"), -1, 1);
+                verticalInput = Mathf.Clamp(Input.GetAxisRaw("Vertical"), -1, 1);
             }
             else
             {
@@ -107,7 +103,7 @@ public class Motion : MonoBehaviour
 
             if (allowHorizontal)
             {
-                horizontalInput = Mathf.Clamp(device.Direction.X + Input.GetAxisRaw("Horizontal"), -1, 1);
+                horizontalInput = Mathf.Clamp(Input.GetAxisRaw("Horizontal"), -1, 1);
             }
             else
             {
@@ -115,12 +111,14 @@ public class Motion : MonoBehaviour
             }
         }
 
+
         // Bot mode override other inputs
         if (botMode)
         {
             verticalInput = Mathf.Clamp(botInputVector.y, -1,  1);
             horizontalInput = Mathf.Clamp(botInputVector.x, -1, 1);
         }
+
 
         // Looking direction
         if (verticalInput > 0)
@@ -135,8 +133,10 @@ public class Motion : MonoBehaviour
         if (horizontalInput < 0)
             lastInputDirection.x = -1;
 
+
         // Rotation
         AutoRotateAnimatorX();
+
 
         // Animator
         if (animator)
@@ -144,7 +144,7 @@ public class Motion : MonoBehaviour
             inputSignal = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
 
             // Walking on ground
-            if (inputSignal > 0 && isGrounded)
+            if (inputSignal > 0 && (isGrounded || isTopDown))
                 walkOutput = inputSignal;
             else
                 walkOutput = 0;
@@ -153,15 +153,19 @@ public class Motion : MonoBehaviour
             animator.SetFloat("MotionWalk", walkOutput);
         }
 
+
         // speed
         currentSpeed = speed;
+
 
         // walls analysis
         if (!coAnalyzeWalls)
             StartCoroutine(CoAnalyzeWalls());
 
+
         // Ground collision check
         CheckGround();
+
 
         // Near cliff or near wall
         AnalyzeHorizontalProximity();

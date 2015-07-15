@@ -32,8 +32,10 @@ public class Camera2D : MonoBehaviour
 
     void Start()
     {
+        // The whitescreen could be disabled to avoid click over it while working
         if (whitescreen.gameObject.activeSelf == false)
             whitescreen.gameObject.SetActive(true);
+
 
         // Fix children layer
         Transform[] children = GetComponentsInChildren<Transform>();
@@ -49,9 +51,11 @@ public class Camera2D : MonoBehaviour
     {
         Vector3 pos = Vector3.zero;
 
+
         // Main focus
         if (focus)
             pos = focus.position;
+
 
         // Be at the center of everything
         if (focusGroup.Count > 0)
@@ -63,12 +67,14 @@ public class Camera2D : MonoBehaviour
             pos /= (focusGroup.Count + (focus == null ? 0 : 1)) + 1;
         }
 
+
         // Go!
         if (focus || focusGroup.Count > 0)
         {
             pos.z = layer;
             transform.position = Vector3.Lerp(transform.position, pos, Time.deltaTime * speed);
         }
+
 
         // Whitescreen
         this.tt("Whitescreen").ttAdd(delegate()

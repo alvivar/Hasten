@@ -1,4 +1,9 @@
-﻿using System;
+﻿
+// Andrés Villalobos | @matnesis | andresalvivar@gmail.com
+// 2015/07/14 06:16:02 PM
+
+
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -10,9 +15,11 @@ public class Motion : MonoBehaviour
     public bool update = true;
     public bool isTopDown = false;
 
+
     [Header("AI")]
     public bool botMode = false; // Overrides inputs
     public Vector3 botInputVector = Vector3.zero;
+
 
     [Header("IO")]
     public bool allowInputs = true;
@@ -21,13 +28,16 @@ public class Motion : MonoBehaviour
     public float inputSignal = 0;
     public Vector2 lastInputDirection;
 
+
     [Header("Gravity")]
     public float gravity = -9.81f;
     public Vector2 gravityScale = new Vector3(0, 14);
 
+
     [Header("Movement")]
     public float speed = 5f;
     public float movementDecay = 15;
+
 
     [Header("Jump")]
     public Vector2 jumpForce = new Vector2(0, 28);
@@ -35,6 +45,7 @@ public class Motion : MonoBehaviour
     public int maxJumps = 1;
     public int jumpCount = 0;
     public float lastJump = 0;
+
 
     [Header("Walls/Ground")]
     public LayerMask wallLayer;
@@ -48,6 +59,7 @@ public class Motion : MonoBehaviour
     public bool isNearWall;
     public bool isNearCliff;
 
+
     [Header("Animator")]
     public Animator animator;
     public bool isLookingRight = true;
@@ -55,15 +67,18 @@ public class Motion : MonoBehaviour
     public float walkOutput = 0;
     public float flyOutput = 0;
 
+
     // Internal
     private float currentSpeed;
     private Vector2 currentJump;
     private float verticalInput;
     private float horizontalInput;
 
+
     // Components
-    private Rigidbody2D rigidbody2;
-    private Collider2D collider2;
+    private Rigidbody2D rigid;
+    private Collider2D collid;
+
 
     // Actions
     public Action OnJump = null;
@@ -74,13 +89,13 @@ public class Motion : MonoBehaviour
     void Start()
     {
         // Rigidbody defaults
-        rigidbody2 = GetComponent<Rigidbody2D>();
-        rigidbody2.gravityScale = 0;
-        rigidbody2.interpolation = RigidbodyInterpolation2D.Interpolate;
+        rigid = GetComponent<Rigidbody2D>();
+        rigid.gravityScale = 0;
+        rigid.interpolation = RigidbodyInterpolation2D.Interpolate;
 
         // collider data
-        collider2 = GetComponent<Collider2D>();
-        colliderExtend = collider2.bounds.extents.y;
+        collid = GetComponent<Collider2D>();
+        colliderExtend = collid.bounds.extents.y;
     }
 
 
@@ -143,11 +158,13 @@ public class Motion : MonoBehaviour
         {
             inputSignal = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
 
+
             // Walking on ground
-            if (inputSignal > 0 && (isGrounded || isTopDown))
+            if (inputSignal > 0 && isGrounded)
                 walkOutput = inputSignal;
             else
                 walkOutput = 0;
+
 
             // Animator sync
             animator.SetFloat("MotionWalk", walkOutput);
@@ -175,11 +192,12 @@ public class Motion : MonoBehaviour
     void FixedUpdate()
     {
         // gravity
-        rigidbody2.AddForce(gravityScale * gravity);
+        rigid.AddForce(gravityScale * gravity);
+
 
         // movement
         currentJump = Vector2.Lerp(currentJump, Vector2.zero, Time.deltaTime * jumpDecay);
-        rigidbody2.velocity = Vector2.Lerp(rigidbody2.velocity, new Vector2(horizontalInput * currentSpeed + currentJump.x, verticalInput * currentSpeed + currentJump.y), Time.deltaTime * movementDecay);
+        rigid.velocity = Vector2.Lerp(rigid.velocity, new Vector2(horizontalInput * currentSpeed + currentJump.x, verticalInput * currentSpeed + currentJump.y), Time.deltaTime * movementDecay);
     }
 
 
@@ -212,9 +230,18 @@ public class Motion : MonoBehaviour
 
     bool CheckGround()
     {
+        // When Top down, it's always ground
+        if (isTopDown)
+        {
+            isGrounded = true;
+            return true;
+        }
+
+
         // Ground & head hit
         bool hitg = Physics2D.Raycast(transform.position, groundDirection, colliderExtend + 0.5f, wallLayer);
         bool hith = Physics2D.Raycast(transform.position, -groundDirection, colliderExtend + 0.5f, wallLayer);
+
 
         // Check
         if (hitg || hith)
@@ -289,19 +316,22 @@ public class Motion : MonoBehaviour
             lastWallCollision = 4;
         }
 
+
         // Spider component seems to need this
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
+
         // flying
         previousIsFlying = isFlying;
         isFlying = wallCollision.x + wallCollision.y + wallCollision.z + wallCollision.w <= 0;
 
+
         // ground detection
         // CheckGround();
 
-        yield return null;
+        // yield return null;
 
         coAnalyzeWalls = false;
     }
@@ -311,10 +341,7 @@ public class Motion : MonoBehaviour
     {
         this.tt("AnalyzeCliffProximity").ttAdd(0.10f, () =>
         {
-
-            //
             // Is near wall?
-
             isNearWall = false;
 
             bool hitRight = Physics2D.Raycast(transform.position, Vector2.right, colliderExtend + 1f, wallLayer);
@@ -330,9 +357,7 @@ public class Motion : MonoBehaviour
             }
 
 
-            //
             // Is Near cliff?
-
             isNearCliff = false;
 
             hitRight = Physics2D.Raycast(transform.position + new Vector3(colliderExtend * 2, 0, 0), Vector2.up * -1, colliderExtend + 0.2f, wallLayer);
@@ -356,27 +381,35 @@ public class Motion : MonoBehaviour
     {
         CheckGround();
 
+
+        // Jump limit
         if (jumpCount >= maxJumps)
             return;
+
 
         // Jump event
         if (OnJump != null)
             OnJump();
 
+
         // Air jump event
         if (isFlying == true && OnAirJump != null)
             OnAirJump();
 
-        lastJump = Time.time;
 
+        // Jump!
+        lastJump = Time.time;
         jumpCount += 1;
         currentJump = jumpForce;
 
+
+        // #hm What?
         if (jumpForce.x != 0)
-            rigidbody2.velocity = new Vector2(0, rigidbody2.velocity.y);
+            rigid.velocity = new Vector2(0, rigid.velocity.y);
 
         if (jumpForce.y != 0)
-            rigidbody2.velocity = new Vector2(rigidbody2.velocity.x, 0);
+            rigid.velocity = new Vector2(rigid.velocity.x, 0);
+
 
         // Animator
         if (animator != null)
@@ -389,6 +422,7 @@ public class Motion : MonoBehaviour
         currentJump = Vector3.ClampMagnitude(currentJump, speed);
 
         // Resets the count jump if there is no change of flying state
+        // Why? #hm
         if (previousIsFlying == isFlying)
             jumpCount = 0;
     }
@@ -397,7 +431,7 @@ public class Motion : MonoBehaviour
     public void Reset()
     {
         ResetJump();
-        rigidbody2.velocity = Vector3.zero;
+        rigid.velocity = Vector3.zero;
         verticalInput = 0;
         horizontalInput = 0;
     }

@@ -431,7 +431,12 @@ public class Motion : MonoBehaviour
     public void Reset()
     {
         ResetJump();
+
+        currentJump = Vector3.zero;
+        currentSpeed = 0;
+
         rigid.velocity = Vector3.zero;
+
         verticalInput = 0;
         horizontalInput = 0;
     }

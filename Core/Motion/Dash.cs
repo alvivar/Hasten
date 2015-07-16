@@ -44,14 +44,10 @@ public class Dash : MonoBehaviour
 
 			transform.DORotate(new Vector3(0, 0, 360), 1);
 
-			this.tt("DashDown").ttReset().ttAdd(0.10f, (ttHandler t) =>
+			// Tween down
+			this.tt("DashSlowDown").ttReset().ttAdd(0.1f).ttLoop(0.2f, (ttHandler t) =>
 			{
-				motion.ResetJump();
-			})
-			.ttAdd(0.30f, () =>
-			{
-
-				motion.Reset();
+				motion.currentJump = Vector2.Lerp(motion.currentJump, Vector2.zero, t.deltaTime);
 			});
 		}
 	}

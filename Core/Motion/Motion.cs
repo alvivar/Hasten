@@ -68,9 +68,12 @@ public class Motion : MonoBehaviour
     public float flyOutput = 0;
 
 
+    [Header("Meta")]
+    public float currentSpeed;
+    public Vector2 currentJump;
+
+
     // Internal
-    private float currentSpeed;
-    private Vector2 currentJump;
     private float verticalInput;
     private float horizontalInput;
 

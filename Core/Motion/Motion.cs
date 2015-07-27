@@ -36,6 +36,7 @@ public class Motion : MonoBehaviour
 
     [Header("Movement")]
     public float speed = 5f;
+    public float speedOverride = 0; // While != 0, will override the speed
     public float movementDecay = 15;
 
 
@@ -175,7 +176,7 @@ public class Motion : MonoBehaviour
 
 
         // speed
-        currentSpeed = speed;
+        currentSpeed = speedOverride != 0 ? speedOverride : speed;
 
 
         // walls analysis

@@ -200,7 +200,8 @@ public class Fly : MonoBehaviour
             motion.allowVertical = allowsVerticalGr;
 
             // A little push to the front
-            motion.speed = speed;
+            // motion.speed = speed;
+            // motion.jumpForce.x = motion.lastInputDirection.x *  motion.jumpForce.y;
             motion.Jump();
 
             // Normalize

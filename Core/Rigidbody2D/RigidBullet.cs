@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Collections;
 
 
@@ -9,6 +10,7 @@ public class RigidBullet : MonoBehaviour
 	public float force;
 
 	private Rigidbody2D body;
+
 
 
 	void Start()
@@ -28,9 +30,9 @@ public class RigidBullet : MonoBehaviour
 
 			this.tt("VelocityRefresh").ttAdd(() =>
 			{
-				body.velocity = Vector2.zero;
+				body.velocity = target.GetComponent<Rigidbody2D>().velocity;
 			})
-			.ttAdd(2).ttWait();
+			.ttAdd(1).ttWait();
 		}
 	}
 }

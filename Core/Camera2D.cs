@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿
+// 2015/08/11 09:42:14 PM
+
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -12,10 +16,10 @@ public class Camera2D : MonoBehaviour
     [Header("Config")]
     public float speed = 3;
     public float layer = -10;
-    public float childrenLayer = 1;
+    public float childrenLocalLayer = 1;
 
-    [Header("Whitescreen")]
-    public SpriteRenderer whitescreen = null;
+    [Header("White Screen")]
+    public Renderer whiteScreen;
 
 
     private static Camera2D instance;
@@ -32,9 +36,9 @@ public class Camera2D : MonoBehaviour
 
     void Start()
     {
-        // The whitescreen could be disabled to avoid click over it while working
-        if (whitescreen.gameObject.activeSelf == false)
-            whitescreen.gameObject.SetActive(true);
+        // The whiteScreen could be disabled to avoid click over it while working
+        if (whiteScreen.gameObject.activeSelf == false)
+            whiteScreen.gameObject.SetActive(true);
 
 
         // Fix children layer
@@ -42,8 +46,22 @@ public class Camera2D : MonoBehaviour
         for (int i = 0; i < children.Length; i++)
         {
             if (children[i] == transform) continue;
-            children[i].localPosition = new Vector3(children[i].localPosition.x, children[i].localPosition.y, childrenLayer);
+            children[i].localPosition = new Vector3(children[i].localPosition.x, children[i].localPosition.y, childrenLocalLayer);
         }
+
+
+        // White Screen adjustment
+        this.tt("whiteScreen").ttAdd(delegate()
+        {
+            if (whiteScreen != null)
+            {
+                float height = Camera.main.orthographicSize * 2.0f;
+                float width = height * Screen.width / Screen.height;
+                whiteScreen.transform.localScale = new Vector3(width, height, 1) * 1.1f;
+                whiteScreen.sortingOrder = Mathf.Abs(Mathf.FloorToInt(layer));
+            }
+        })
+        .ttAdd(1).ttRepeat();
     }
 
 
@@ -74,19 +92,5 @@ public class Camera2D : MonoBehaviour
             pos.z = layer;
             transform.position = Vector3.Lerp(transform.position, pos, Time.deltaTime * speed);
         }
-
-
-        // Whitescreen
-        this.tt("Whitescreen").ttAdd(delegate()
-        {
-            if (whitescreen != null)
-            {
-                float height = Camera.main.orthographicSize * 2.0f;
-                float width = height * Screen.width / Screen.height;
-                whitescreen.transform.localScale = new Vector3(width, height, 1) * 1.1f;
-                whitescreen.sortingOrder = Mathf.Abs(Mathf.FloorToInt(layer));
-            }
-        })
-        .ttAdd(1).ttWait();
     }
 }

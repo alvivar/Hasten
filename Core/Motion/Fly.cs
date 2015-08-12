@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
+// using DG.Tweening;
 
 
 public class Fly : MonoBehaviour

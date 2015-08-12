@@ -4,7 +4,7 @@
 
 using UnityEngine;
 using System.Collections;
-using DG.Tweening;
+// using DG.Tweening;
 
 
 [RequireComponent(typeof(Motion))]
@@ -42,7 +42,7 @@ public class Dash : MonoBehaviour
 			motion.jumpForce = dashDir * dashPower;
 			motion.Jump();
 
-			transform.DORotate(new Vector3(0, 0, 360), 1);
+			// transform.DORotate(new Vector3(0, 0, 360), 1);
 
 			// Tween down
 			this.tt("DashSlowDown").ttReset().ttAdd(0.1f).ttLoop(0.2f, (ttHandler t) =>

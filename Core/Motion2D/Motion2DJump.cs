@@ -14,11 +14,13 @@ public class Motion2DJump : MonoBehaviour
 	public float decay;
 
 	private Motion2D motion;
+	private Rigidbody2D rbody;
 
 
 	void Start()
 	{
 		motion = GetComponent<Motion2D>();
+		rbody = GetComponent<Rigidbody2D>();
 	}
 
 
@@ -26,22 +28,21 @@ public class Motion2DJump : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			// Update force values
-			Vector2 jumpForce;
+			Vector2 jumpForce = Vector2.zero;
 			jumpForce.x = force.x != 0 ? force.x : motion.force.x;
 			jumpForce.y = force.y != 0 ? force.y : motion.force.y;
-			// motion.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-			// motion.movement = Vector2.zero;
+
 			motion.force = jumpForce;
 
 
-			this.tt("JumpAttackDecay")
-			.ttReset()
-			// .ttLoop(attack, (ttHandler t) =>
-			// {
-			// 	motion.force = Vector2.Lerp(motion.force, force, t.deltaTime);
-			// })
-			.ttLoop(decay, (ttHandler t) =>
+			// if (force.x != 0)
+			// 	rbody.velocity = new Vector2(rbody.velocity.x, 0);
+
+			// if (force.y != 0)
+			// 	rbody.velocity = new Vector2(0, rbody.velocity.y);
+
+
+			this.tt("JumpDecay").ttReset().ttLoop(decay, (ttHandler t) =>
 			{
 				motion.force = Vector2.Lerp(motion.force, Vector2.zero, t.deltaTime);
 			});

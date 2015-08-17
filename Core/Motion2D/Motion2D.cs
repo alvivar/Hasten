@@ -64,7 +64,7 @@ public class Motion2D : MonoBehaviour
 
 
 		// Raycast length recommended
-		raylen = Mathf.Max(collider.bounds.extents.y, collider.bounds.extents.x) * 2f;
+		raylen = Mathf.Max(collider.bounds.extents.y, collider.bounds.extents.x) * 1.5f;
 
 
 		this.tt("WallCollisionDetection").ttAdd(0.10f, () =>

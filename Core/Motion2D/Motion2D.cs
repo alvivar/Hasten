@@ -44,6 +44,13 @@ public class Motion2D : MonoBehaviour
 		// Rigidbody2D defaults
 		rbody.interpolation = RigidbodyInterpolation2D.Interpolate; // Smooth
 		rbody.gravityScale = 0; // We use our own gravity
+
+
+		this.tt().ttAdd(0.10f, () =>
+		{
+			CalculateWallCollision();
+		})
+		.ttRepeat();
 	}
 
 
@@ -80,8 +87,6 @@ public class Motion2D : MonoBehaviour
 		wallsColliding.y = Physics2D.Raycast(pos, Vector2.right, 1,  wallLayer) ? 1 : 0;
 		wallsColliding.x = Physics2D.Raycast(pos, Vector2.up, 1,  wallLayer) ? 1 : 0;
 		wallsColliding.z = Physics2D.Raycast(pos, Vector2.down, 1, wallLayer) ? 1 : 0;
-
-		Debug.Log(wallsColliding);
 	}
 
 
@@ -93,9 +98,6 @@ public class Motion2D : MonoBehaviour
 
 	void OnCollisionExit2D(Collision2D other)
 	{
-		this.tt().ttAdd(0.10f, () =>
-		{
-			CalculateWallCollision();
-		});
+
 	}
 }

@@ -51,7 +51,7 @@ public class Camera2D : MonoBehaviour
 
 
         // White Screen adjustment
-        this.tt("whiteScreen").ttAdd(delegate()
+        this.tt("whiteScreenAdjustment").ttAdd(() =>
         {
             if (whiteScreen != null)
             {
@@ -86,7 +86,7 @@ public class Camera2D : MonoBehaviour
         }
 
 
-        // Go!
+        // Focus
         if (focus || focusGroup.Count > 0)
         {
             pos.z = layer;

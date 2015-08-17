@@ -11,10 +11,24 @@ using System.Collections;
 [RequireComponent(typeof(CircleCollider2D))]
 public class Motion2D : MonoBehaviour
 {
+	// Connetion to Rigidbody2D.velocity
+	public Vector2 velocity
+	{
+		get
+		{
+			return rbody.velocity;
+		}
+		set
+		{
+			rbody.velocity = value;
+		}
+	}
+
 	[Header("Config")]
 	[Range(0, 10)] public float attack;
 	[Range(0, 10)] public float decay;
 	public float limit;
+	public float limitOverride;
 
 	[Header("Constants")]
 	public Vector2 direction;
@@ -22,7 +36,9 @@ public class Motion2D : MonoBehaviour
 
 	[Header("Forces")]
 	public Vector2 gravity;
+	public Vector2 gravityOverride;
 	public Vector2 force;
+	public float forceLimit;
 
 	[Header("Walls")]
 	public LayerMask wallLayer;
@@ -32,6 +48,7 @@ public class Motion2D : MonoBehaviour
 	private Rigidbody2D rbody;
 	private Collider2D collider;
 	private Vector2 movement;
+	private float raylen;
 
 
 	void Start()
@@ -46,7 +63,11 @@ public class Motion2D : MonoBehaviour
 		rbody.gravityScale = 0; // We use our own gravity
 
 
-		this.tt().ttAdd(0.10f, () =>
+		// Raycast length recommended
+		raylen = Mathf.Max(collider.bounds.extents.y, collider.bounds.extents.x) * 2f;
+
+
+		this.tt("WallCollisionDetection").ttAdd(0.10f, () =>
 		{
 			CalculateWallCollision();
 		})
@@ -61,16 +82,25 @@ public class Motion2D : MonoBehaviour
 		movement *= magnitude;
 
 
-		// Limited force
-		movement += gravity;
+		// Gravity + Override
+		if (gravityOverride != Vector2.zero)
+			movement += gravityOverride;
+		else
+			movement += gravity;
 
 
-		// Limit
-		movement = Vector2.ClampMagnitude(movement, limit);
+		// Limit + Override
+		if (limitOverride != 0)
+			movement = Vector2.ClampMagnitude(movement, limitOverride);
+		else
+			movement = Vector2.ClampMagnitude(movement, limit);
 
 
 		// Unlimited force
-		movement += force;
+		if (forceLimit != 0)
+			movement += Vector2.ClampMagnitude(force, forceLimit);
+		else
+			movement += force;
 
 
 		// Velocity
@@ -83,10 +113,10 @@ public class Motion2D : MonoBehaviour
 	{
 		Vector3 pos = transform.position;
 
-		wallsColliding.w = Physics2D.Raycast(pos, Vector2.left, 1, wallLayer) ? 1 : 0;
-		wallsColliding.y = Physics2D.Raycast(pos, Vector2.right, 1,  wallLayer) ? 1 : 0;
-		wallsColliding.x = Physics2D.Raycast(pos, Vector2.up, 1,  wallLayer) ? 1 : 0;
-		wallsColliding.z = Physics2D.Raycast(pos, Vector2.down, 1, wallLayer) ? 1 : 0;
+		wallsColliding.w = Physics2D.Raycast(pos, Vector2.left, raylen, wallLayer) ? 1 : 0;
+		wallsColliding.y = Physics2D.Raycast(pos, Vector2.right, raylen,  wallLayer) ? 1 : 0;
+		wallsColliding.x = Physics2D.Raycast(pos, Vector2.up, raylen,  wallLayer) ? 1 : 0;
+		wallsColliding.z = Physics2D.Raycast(pos, Vector2.down, raylen, wallLayer) ? 1 : 0;
 	}
 
 

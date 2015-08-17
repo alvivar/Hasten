@@ -10,6 +10,9 @@ using System.Collections;
 [RequireComponent(typeof(Motion2D))]
 public class Motion2DAxis : MonoBehaviour
 {
+	public bool enableHorizontal = true;
+	public bool enableVertical = true;
+
 	private Motion2D motion;
 
 
@@ -21,6 +24,9 @@ public class Motion2DAxis : MonoBehaviour
 
 	void Update()
 	{
-		motion.direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+		float horiAxis = enableHorizontal ? Input.GetAxisRaw("Horizontal") : 0;
+		float vertAxis = enableVertical ? Input.GetAxisRaw("Vertical") : 0;
+
+		motion.direction = new Vector2(horiAxis, vertAxis);
 	}
 }

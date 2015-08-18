@@ -16,10 +16,12 @@ public class Camera2D : MonoBehaviour
     [Header("Config")]
     public float speed = 3;
     public float layer = -10;
-    public float childrenLocalLayer = 1;
+    public float childrenZLayer = 1;
 
     [Header("White Screen")]
     public Renderer whiteScreen;
+
+    private float slowdown = 1;
 
 
     private static Camera2D instance;
@@ -46,7 +48,7 @@ public class Camera2D : MonoBehaviour
         for (int i = 0; i < children.Length; i++)
         {
             if (children[i] == transform) continue;
-            children[i].localPosition = new Vector3(children[i].localPosition.x, children[i].localPosition.y, childrenLocalLayer);
+            children[i].localPosition = new Vector3(children[i].localPosition.x, children[i].localPosition.y, childrenZLayer);
         }
 
 
@@ -75,6 +77,40 @@ public class Camera2D : MonoBehaviour
             pos = focus.position;
 
 
+        // Slowdown on proximity #experimental
+        Vector3 camerapos = transform.position;
+        camerapos.z = 0;
+
+        Vector3 focuspos = pos;
+        focuspos.z = 0;
+
+        if (Vector3.Distance(camerapos, focuspos) < 9)
+        {
+            this.tt("SlowdownDown").ttAdd(() =>
+            {
+                this.tt("SlowdownUp").ttReset();
+                slowdown = 1;
+            })
+            .ttLoop(1f, (ttHandler t) =>
+            {
+                slowdown = Mathf.Lerp(slowdown, 0.34f, t.deltaTime);
+            })
+            .ttAdd(int.MaxValue).ttWait();
+        }
+        else
+        {
+            this.tt("SlowdownUp").ttAdd(() =>
+            {
+                this.tt("SlowdownDown").ttReset();
+            })
+            .ttLoop(1f, (ttHandler t) =>
+            {
+                slowdown = Mathf.Lerp(slowdown, 1f, t.deltaTime);
+            })
+            .ttAdd(int.MaxValue).ttWait();
+        }
+
+
         // Be at the center of everything
         if (focusGroup.Count > 0)
         {
@@ -90,7 +126,7 @@ public class Camera2D : MonoBehaviour
         if (focus || focusGroup.Count > 0)
         {
             pos.z = layer;
-            transform.position = Vector3.Lerp(transform.position, pos, Time.deltaTime * speed);
+            transform.position = Vector3.Lerp(transform.position, pos, Time.deltaTime * speed * slowdown);
         }
     }
 }

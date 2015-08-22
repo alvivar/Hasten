@@ -84,12 +84,12 @@ public class Camera2D : MonoBehaviour
         Vector3 focuspos = pos;
         focuspos.z = 0;
 
-        if (Vector3.Distance(camerapos, focuspos) < 9)
+        if (Vector3.Distance(camerapos, focuspos) < 7)
         {
             this.tt("SlowdownDown").ttAdd(() =>
             {
-                this.tt("SlowdownUp").ttReset();
                 slowdown = 1;
+                this.tt("SlowdownUp").ttReset();
             })
             .ttLoop(1f, (ttHandler t) =>
             {

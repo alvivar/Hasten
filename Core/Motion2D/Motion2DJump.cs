@@ -10,9 +10,17 @@ using System.Collections;
 [RequireComponent(typeof(Motion2D))]
 public class Motion2DJump : MonoBehaviour
 {
+	[Header("Config")]
 	public Vector2 force; // 0 is neutral
 	public Vector2 forceOverride; // Overrides ^
 	public float decay; // How fast becames 0 after jump
+
+	[Header("Limits")]
+	public int maxGroundJumps = 1;
+	public int maxAirJumps = 0;
+
+	private int currentGroundJumps = 0;
+	private int currentAirJumps = 0;
 
 	private Motion2D motion;
 	private Rigidbody2D rbody;
@@ -29,13 +37,24 @@ public class Motion2DJump : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			DoJump(force);
+			// Only jumps if touching the ground
+			if (motion.wallsColliding.SqrMagnitude() != 0)
+				DoJump(force);
 		}
+
+
+		// Reset the ground jumps
+		if (motion.wallsColliding.SqrMagnitude() != 0)
+			currentGroundJumps = 0;
 	}
 
 
 	public void DoJump(Vector2 force)
 	{
+		// Count up
+		currentGroundJumps += 1;
+
+
 		// 0 is neutral as input
 		Vector2 jumpForce = Vector2.zero;
 		jumpForce.x = force.x != 0 ? force.x : motion.force.x;

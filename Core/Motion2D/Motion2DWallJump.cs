@@ -30,6 +30,10 @@ public class Motion2DWallJump : MonoBehaviour
 
 	void Update()
 	{
+		// >
+		// BEHAVIOUR WHEN TOUCHING THE WALLS
+		//
+
 		Vector2 nextGravity = gravityOnWall;
 
 		// Modify gravity towards the wall (left, right)

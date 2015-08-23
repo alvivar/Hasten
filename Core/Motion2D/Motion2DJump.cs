@@ -19,6 +19,9 @@ public class Motion2DJump : MonoBehaviour
 	public int maxGroundJumps = 1;
 	public int maxAirJumps = 0;
 
+	[Header("Input")]
+	public KeyCode jumpKey = KeyCode.None;
+
 	private int currentGroundJumps = 0;
 	private int currentAirJumps = 0;
 
@@ -35,7 +38,7 @@ public class Motion2DJump : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.Space))
+		if (jumpKey != KeyCode.None && Input.GetKeyDown(KeyCode.Space))
 		{
 			// Only jumps if touching the ground
 			if (motion.wallsColliding.SqrMagnitude() != 0)

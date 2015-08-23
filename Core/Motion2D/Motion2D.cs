@@ -14,15 +14,10 @@ public class Motion2D : MonoBehaviour
 	// Connetion to Rigidbody2D.velocity
 	public Vector2 velocity
 	{
-		get
-		{
-			return rbody.velocity;
-		}
-		set
-		{
-			rbody.velocity = value;
-		}
+		get { return rbody.velocity; }
+		set { rbody.velocity = value; }
 	}
+
 
 	[Header("Config")]
 	[Range(0, 10)] public float attack;
@@ -40,15 +35,16 @@ public class Motion2D : MonoBehaviour
 	public Vector2 force;
 	public float forceLimit;
 
-	[Header("Walls")]
+	[Header("Walls Detection")]
+	public float raycastLength = 0.25f;
 	public LayerMask wallLayer;
 	public Vector4 wallsColliding; // Clock style; x = up, y = right, z = down, w = left
 
+	private float colliderRadius;
 
 	private Rigidbody2D rbody;
 	private Collider2D collider;
 	private Vector2 movement;
-	private float raylen;
 
 
 	void Start()
@@ -63,8 +59,8 @@ public class Motion2D : MonoBehaviour
 		rbody.gravityScale = 0; // We use our own gravity
 
 
-		// Raycast length recommended
-		raylen = Mathf.Max(collider.bounds.extents.y, collider.bounds.extents.x) * 1.5f;
+		// Collider radius
+		colliderRadius = Mathf.Max(collider.bounds.extents.y, collider.bounds.extents.x);
 
 
 		this.tt("WallCollisionDetection").ttAdd(0.10f, () =>
@@ -113,10 +109,10 @@ public class Motion2D : MonoBehaviour
 	{
 		Vector3 pos = transform.position;
 
-		wallsColliding.w = Physics2D.Raycast(pos, Vector2.left, raylen, wallLayer) ? 1 : 0;
-		wallsColliding.y = Physics2D.Raycast(pos, Vector2.right, raylen,  wallLayer) ? 1 : 0;
-		wallsColliding.x = Physics2D.Raycast(pos, Vector2.up, raylen,  wallLayer) ? 1 : 0;
-		wallsColliding.z = Physics2D.Raycast(pos, Vector2.down, raylen, wallLayer) ? 1 : 0;
+		wallsColliding.w = Physics2D.Raycast(pos, Vector2.left, colliderRadius + raycastLength, wallLayer) ? 1 : 0;
+		wallsColliding.y = Physics2D.Raycast(pos, Vector2.right, colliderRadius + raycastLength,  wallLayer) ? 1 : 0;
+		wallsColliding.x = Physics2D.Raycast(pos, Vector2.up, colliderRadius + raycastLength,  wallLayer) ? 1 : 0;
+		wallsColliding.z = Physics2D.Raycast(pos, Vector2.down, colliderRadius + raycastLength, wallLayer) ? 1 : 0;
 	}
 
 

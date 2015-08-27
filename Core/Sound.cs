@@ -4,6 +4,7 @@ using System.Collections;
 
 public class Sound : MonoBehaviour
 {
+    public AudioClip[] bg;
     public AudioClip sfxCheckpoint;
     public AudioClip[] sfxStep;
     public AudioClip sfxJump;
@@ -13,10 +14,11 @@ public class Sound : MonoBehaviour
     public AudioClip sfxBreath;
     public AudioClip sfxGod;
 
-    private AudioSource audio2;
+    public AudioSource audioBg;
+    public AudioSource audioSounds;
 
     private static Sound instance;
-    public static Sound Get
+    public static Sound g
     {
         get
         {
@@ -29,74 +31,70 @@ public class Sound : MonoBehaviour
 
     void Start()
     {
-        audio2 = GetComponent<AudioSource>();
-    }
+        AudioSource[] audios = GetComponents<AudioSource>();
+        audioBg = audios[0];
+        audioSounds = audios[1];
 
 
-    void Update()
-    {
-        if (!cEternalLoop) StartCoroutine(EternalLoop());
-    }
+        // Play the soundtrack sounds one after the other
+        int bgMark = 0;
+        this.tt("PlayTheBGSound").ttAdd((ttHandler t) =>
+        {
+            audioBg.PlayOneShot(bg[bgMark]);
+            bgMark = (bgMark + 1) % bg.Length;
 
-
-    bool cEternalLoop = false;
-    IEnumerator EternalLoop()
-    {
-        cEternalLoop = true;
-
-        audio2.PlayOneShot(audio2.clip);
-        yield return new WaitForSeconds(audio2.clip.length / 2);
-
-        cEternalLoop = false;
+            t.WaitFor(bg[bgMark].length);
+        })
+        .ttRepeat();
     }
 
 
     public void PlayCheckpoint()
     {
-        audio2.PlayOneShot(sfxCheckpoint, 0.50f);
+        audioSounds.PlayOneShot(sfxCheckpoint, 0.50f);
     }
 
 
     public void PlayStep()
     {
         int who = Random.Range(0, sfxStep.Length);
-        audio2.PlayOneShot(sfxStep[who], 0.10f);
+        audioSounds.PlayOneShot(sfxStep[who], 0.10f);
     }
 
 
     public void PlayJump()
     {
         if (sfxJump)
-            audio2.PlayOneShot(sfxJump, 0.70f);
+            audioSounds.PlayOneShot(sfxJump, 0.70f);
     }
 
 
     public void PlayClaw()
     {
-        audio2.PlayOneShot(sfxClaw, 0.3f);
+        audioSounds.PlayOneShot(sfxClaw, 0.3f);
     }
 
 
     public void PlayHurt()
     {
-        audio2.PlayOneShot(sfxHurt);
+        audioSounds.PlayOneShot(sfxHurt);
     }
 
 
     public void PlayDarkAmbience()
     {
-        audio2.PlayOneShot(sfxDarkAmbience);
+        audioSounds.PlayOneShot(sfxDarkAmbience);
     }
 
 
     public void PlayBreath()
     {
-        audio2.PlayOneShot(sfxBreath);
+        audioSounds.PlayOneShot(sfxBreath);
     }
 
 
     public void PlayGod()
     {
-        audio2.PlayOneShot(sfxGod);
+        audioSounds.PlayOneShot(sfxGod);
     }
 }

@@ -44,10 +44,6 @@ public class Spider : MonoBehaviour
         // gravity change
         if (lastDirection != motion.lastWallCollision)
         {
-            // sfx
-            if (lastDirection != 3)
-                Sound.Get.PlayClaw();
-
             // Resets the jump force
             motion.ResetJump();
             lastDirection = motion.lastWallCollision;

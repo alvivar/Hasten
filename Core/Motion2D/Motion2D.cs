@@ -43,7 +43,7 @@ public class Motion2D : MonoBehaviour
 	private float colliderRadius;
 
 	private Rigidbody2D rbody;
-	private Collider2D collider;
+	private Collider2D collidr;
 	private Vector2 movement;
 
 
@@ -51,7 +51,7 @@ public class Motion2D : MonoBehaviour
 	{
 		// Required
 		rbody = GetComponent<Rigidbody2D>();
-		collider = GetComponent<Collider2D>();
+		collidr = GetComponent<Collider2D>();
 
 
 		// Rigidbody2D defaults
@@ -60,7 +60,7 @@ public class Motion2D : MonoBehaviour
 
 
 		// Collider radius
-		colliderRadius = Mathf.Max(collider.bounds.extents.y, collider.bounds.extents.x);
+		colliderRadius = Mathf.Max(collidr.bounds.extents.y, collidr.bounds.extents.x);
 
 
 		this.tt("WallCollisionDetection").ttAdd(0.10f, () =>

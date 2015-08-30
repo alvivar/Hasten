@@ -36,20 +36,11 @@ public class Camera2D : MonoBehaviour
     }
 
 
-    void Start()
+    void Awake()
     {
         // The whiteScreen could be disabled to avoid click over it while working
         if (whiteScreen.gameObject.activeSelf == false)
             whiteScreen.gameObject.SetActive(true);
-
-
-        // Fix children layer
-        Transform[] children = GetComponentsInChildren<Transform>();
-        for (int i = 0; i < children.Length; i++)
-        {
-            if (children[i] == transform) continue;
-            children[i].localPosition = new Vector3(children[i].localPosition.x, children[i].localPosition.y, childrenZLayer);
-        }
 
 
         // White Screen adjustment
@@ -64,6 +55,18 @@ public class Camera2D : MonoBehaviour
             }
         })
         .ttAdd(1).ttRepeat();
+    }
+
+
+    void Start()
+    {
+        // Fix children layer
+        Transform[] children = GetComponentsInChildren<Transform>();
+        for (int i = 0; i < children.Length; i++)
+        {
+            if (children[i] == transform) continue;
+            children[i].localPosition = new Vector3(children[i].localPosition.x, children[i].localPosition.y, childrenZLayer);
+        }
     }
 
 

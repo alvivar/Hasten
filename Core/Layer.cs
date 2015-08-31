@@ -12,4 +12,5 @@
 	public const string EnemyDetection = "EnemyDetection";
 	public const string Ghost = "Ghost";
 	public const string Checkpoint = "Checkpoint";
+	public const string Score = "Score";
 }

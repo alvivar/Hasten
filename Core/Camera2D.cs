@@ -80,7 +80,7 @@ public class Camera2D : MonoBehaviour
             pos = focus.position;
 
 
-        // Slowdown on proximity #experimental
+        // #experimental Slowdown on proximity
         Vector3 camerapos = transform.position;
         camerapos.z = 0;
 
@@ -121,7 +121,7 @@ public class Camera2D : MonoBehaviour
             {
                 pos += focusGroup[i].position;
             }
-            pos /= (focusGroup.Count + (focus == null ? 0 : 1)) + 1;
+            pos /= (focusGroup.Count + (focus != null ? 1 : 0));
         }
 
 

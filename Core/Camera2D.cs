@@ -11,6 +11,7 @@ public class Camera2D : MonoBehaviour
 {
     [Header("Focus")]
     public Transform focus;
+    public Vector3 focusOffset;
     public List<Transform> focusGroup;
 
     [Header("Config")]
@@ -36,7 +37,7 @@ public class Camera2D : MonoBehaviour
     }
 
 
-    void Awake()
+    void Start()
     {
         // The whiteScreen could be disabled to avoid click over it while working
         if (whiteScreen.gameObject.activeSelf == false)
@@ -55,11 +56,8 @@ public class Camera2D : MonoBehaviour
             }
         })
         .ttAdd(1).ttRepeat();
-    }
 
 
-    void Start()
-    {
         // Fix children layer
         Transform[] children = GetComponentsInChildren<Transform>();
         for (int i = 0; i < children.Length; i++)
@@ -77,41 +75,41 @@ public class Camera2D : MonoBehaviour
 
         // Main focus
         if (focus)
-            pos = focus.position;
+            pos = focus.position + focusOffset;
 
 
         // #experimental Slowdown on proximity
-        Vector3 camerapos = transform.position;
-        camerapos.z = 0;
+        // Vector3 camerapos = transform.position;
+        // camerapos.z = 0;
 
-        Vector3 focuspos = pos;
-        focuspos.z = 0;
+        // Vector3 focuspos = pos;
+        // focuspos.z = 0;
 
-        if (Vector3.Distance(camerapos, focuspos) < 7)
-        {
-            this.tt("SlowdownDown").ttAdd(() =>
-            {
-                slowdown = 1;
-                this.tt("SlowdownUp").ttReset();
-            })
-            .ttLoop(1f, (ttHandler t) =>
-            {
-                slowdown = Mathf.Lerp(slowdown, 0.34f, t.deltaTime);
-            })
-            .ttAdd(int.MaxValue).ttWait();
-        }
-        else
-        {
-            this.tt("SlowdownUp").ttAdd(() =>
-            {
-                this.tt("SlowdownDown").ttReset();
-            })
-            .ttLoop(1f, (ttHandler t) =>
-            {
-                slowdown = Mathf.Lerp(slowdown, 1f, t.deltaTime);
-            })
-            .ttAdd(int.MaxValue).ttWait();
-        }
+        // if (Vector3.Distance(camerapos, focuspos) < 7)
+        // {
+        //     this.tt("SlowdownDown").ttAdd(() =>
+        //     {
+        //         slowdown = 1;
+        //         this.tt("SlowdownUp").ttReset();
+        //     })
+        //     .ttLoop(1f, (ttHandler t) =>
+        //     {
+        //         slowdown = Mathf.Lerp(slowdown, 0.34f, t.deltaTime);
+        //     })
+        //     .ttAdd(int.MaxValue).ttWait();
+        // }
+        // else
+        // {
+        //     this.tt("SlowdownUp").ttAdd(() =>
+        //     {
+        //         this.tt("SlowdownDown").ttReset();
+        //     })
+        //     .ttLoop(1f, (ttHandler t) =>
+        //     {
+        //         slowdown = Mathf.Lerp(slowdown, 1f, t.deltaTime);
+        //     })
+        //     .ttAdd(int.MaxValue).ttWait();
+        // }
 
 
         // Be at the center of everything

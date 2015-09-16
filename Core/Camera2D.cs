@@ -37,6 +37,15 @@ public class Camera2D : MonoBehaviour
     }
 
 
+    public static Vector2 GetWidthHeightScale(Camera camera)
+    {
+        float height = Camera.main.orthographicSize * 2.0f;
+        float width = height * Screen.width / Screen.height;
+
+        return new Vector2(width, height);
+    }
+
+
     void Start()
     {
         // The whiteScreen could be disabled to avoid click over it while working
@@ -49,8 +58,10 @@ public class Camera2D : MonoBehaviour
         {
             if (whiteScreen != null)
             {
-                float height = Camera.main.orthographicSize * 2.0f;
-                float width = height * Screen.width / Screen.height;
+                Vector2 wh = Camera2D.GetWidthHeightScale(Camera.main);
+
+                float width = wh.x;
+                float height = wh.y;
                 whiteScreen.transform.localScale = new Vector3(width, height, 1) * 1.1f;
                 whiteScreen.sortingOrder = Mathf.Abs(Mathf.FloorToInt(layer));
             }

@@ -5,6 +5,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using matnesis.TeaTime;
 
 
 public class Camera2D : MonoBehaviour
@@ -23,6 +24,9 @@ public class Camera2D : MonoBehaviour
     public Renderer whiteScreen;
 
     private float slowdown = 1;
+
+    // tt
+    private TeaTime whitescreenRefill;
 
 
     private static Camera2D instance;
@@ -54,7 +58,7 @@ public class Camera2D : MonoBehaviour
 
 
         // White Screen adjustment
-        this.tt("whiteScreenAdjustment").ttAdd(() =>
+        whitescreenRefill = this.TeaTime().Add(() =>
         {
             if (whiteScreen != null)
             {
@@ -66,7 +70,7 @@ public class Camera2D : MonoBehaviour
                 whiteScreen.sortingOrder = Mathf.Abs(Mathf.FloorToInt(layer));
             }
         })
-        .ttAdd(1).ttRepeat();
+        .Add(1).Repeat();
 
 
         // Fix children layer

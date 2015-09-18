@@ -5,6 +5,7 @@
 
 using UnityEngine;
 using System.Collections;
+using matnesis.TeaTime;
 
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -46,6 +47,9 @@ public class Motion2D : MonoBehaviour
 	private Collider2D collidr;
 	private Vector2 movement;
 
+	// tt
+	private TeaTime wallCollisionDetection;
+
 
 	void Start()
 	{
@@ -63,11 +67,12 @@ public class Motion2D : MonoBehaviour
 		colliderRadius = Mathf.Max(collidr.bounds.extents.y, collidr.bounds.extents.x);
 
 
-		this.tt("WallCollisionDetection").ttAdd(0.10f, () =>
+		// > Wall collision calculation
+		wallCollisionDetection = this.TeaTime().Add(0.10f, () =>
 		{
 			CalculateWallCollision();
 		})
-		.ttRepeat();
+		.Repeat();
 	}
 
 

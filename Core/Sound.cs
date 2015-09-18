@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using matnesis.TeaTime;
 
 
 public class Sound : MonoBehaviour
@@ -16,6 +17,10 @@ public class Sound : MonoBehaviour
 
     public AudioSource audioBg;
     public AudioSource audioSounds;
+
+    // tt
+    private TeaTime playBackground;
+
 
     private static Sound instance;
     public static Sound g
@@ -38,14 +43,14 @@ public class Sound : MonoBehaviour
 
         // Play the soundtrack sounds one after the other
         int bgMark = 0;
-        this.tt("PlayTheBGSound").ttAdd((ttHandler t) =>
+        playBackground = this.TeaTime().Add((ttHandler t) =>
         {
             audioBg.PlayOneShot(bg[bgMark]);
             bgMark = (bgMark + 1) % bg.Length;
 
             t.WaitFor(bg[bgMark].length);
         })
-        .ttRepeat();
+        .Repeat();
     }
 
 

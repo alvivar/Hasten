@@ -5,6 +5,7 @@
 
 using UnityEngine;
 using System.Collections;
+using matnesis.TeaTime;
 
 
 [RequireComponent(typeof(Motion2D))]
@@ -28,11 +29,16 @@ public class Motion2DJump : MonoBehaviour
 	private Motion2D motion;
 	private Rigidbody2D rbody;
 
+	// tt
+	private TeaTime jumpDecay;
+
 
 	void Start()
 	{
 		motion = GetComponent<Motion2D>();
 		rbody = GetComponent<Rigidbody2D>();
+
+		jumpDecay = this.TeaTime();
 	}
 
 
@@ -76,7 +82,8 @@ public class Motion2DJump : MonoBehaviour
 		motion.force = jumpForce;
 
 
-		this.tt("JumpDecay").ttReset().ttLoop(decay, (ttHandler t) =>
+		// Jump decay
+		jumpDecay.Reset().Loop(decay, (ttHandler t) =>
 		{
 			motion.force = Vector2.Lerp(motion.force, Vector2.zero, t.deltaTime);
 		});

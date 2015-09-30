@@ -58,7 +58,7 @@ public class Camera2D : MonoBehaviour
 
 
         // White Screen adjustment
-        whitescreenRefill = this.TeaTime().Add(() =>
+        whitescreenRefill = this.tt().Add(() =>
         {
             if (whiteScreen != null)
             {

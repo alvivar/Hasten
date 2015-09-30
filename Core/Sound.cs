@@ -43,12 +43,11 @@ public class Sound : MonoBehaviour
 
         // Play the soundtrack sounds one after the other
         int bgMark = 0;
-        playBackground = this.TeaTime().Add((ttHandler t) =>
+        playBackground = this.tt().Add((ttHandler t) =>
         {
             audioBg.PlayOneShot(bg[bgMark]);
             bgMark = (bgMark + 1) % bg.Length;
-
-            t.WaitFor(bg[bgMark].length);
+            t.WaitFor(bg[bgMark].length * 0.5f);
         })
         .Repeat();
     }

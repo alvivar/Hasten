@@ -38,7 +38,7 @@ public class Motion2DJump : MonoBehaviour
 		motion = GetComponent<Motion2D>();
 		rbody = GetComponent<Rigidbody2D>();
 
-		jumpDecay = this.TeaTime();
+		jumpDecay = this.tt();
 	}
 
 

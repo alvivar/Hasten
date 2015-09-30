@@ -68,7 +68,7 @@ public class Motion2D : MonoBehaviour
 
 
 		// > Wall collision calculation
-		wallCollisionDetection = this.TeaTime().Add(0.10f, () =>
+		wallCollisionDetection = this.tt().Add(0.10f, () =>
 		{
 			CalculateWallCollision();
 		})

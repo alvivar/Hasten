@@ -23,4 +23,6 @@ public class Palette : MonoBehaviour
 
 	public Color grayLite;
 	public Color grayStrong;
+
+	public Color redAlert;
 }

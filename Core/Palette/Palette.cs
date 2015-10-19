@@ -21,8 +21,11 @@ public class Palette : MonoBehaviour
 	}
 
 
+	[Header("Gray")]
 	public Color grayLite;
 	public Color grayStrong;
 
+	[Header("Red")]
 	public Color redAlert;
+	public Color redSoft;
 }

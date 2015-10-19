@@ -2,9 +2,9 @@
 // 2015/08/11 09:42:14 PM
 
 
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using matnesis.TeaTime;
 
 
@@ -25,9 +25,6 @@ public class Camera2D : MonoBehaviour
 
     private float slowdown = 1;
 
-    // tt
-    private TeaTime whitescreenRefill;
-
 
     private static Camera2D instance;
     public static Camera2D g
@@ -41,6 +38,10 @@ public class Camera2D : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Returns a Vector2 where 'x' represents the width and 'y' represents the
+    /// heigh of the screen scale for the camera.
+    /// </summary>
     public static Vector2 GetWidthHeightScale(Camera camera)
     {
         float height = Camera.main.orthographicSize * 2.0f;
@@ -58,7 +59,7 @@ public class Camera2D : MonoBehaviour
 
 
         // White Screen adjustment
-        whitescreenRefill = this.tt().Add(() =>
+        TeaTime whiteScreenAdjustment = this.tt().Add(() =>
         {
             if (whiteScreen != null)
             {
@@ -66,6 +67,7 @@ public class Camera2D : MonoBehaviour
 
                 float width = wh.x;
                 float height = wh.y;
+
                 whiteScreen.transform.localScale = new Vector3(width, height, 1) * 1.1f;
                 whiteScreen.sortingOrder = Mathf.Abs(Mathf.FloorToInt(layer));
             }

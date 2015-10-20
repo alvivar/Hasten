@@ -1,6 +1,8 @@
 ﻿
+// Configurable jump for Motion2D.
+
 // Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
-// 2015/08/14 12:15:12 AM
+// 2015/08/14 12:15 AM
 
 
 using UnityEngine;

@@ -1,6 +1,8 @@
 ﻿
+// Custom Rigidbody2D Motion a la CharacterController.
+
 // Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
-// 2015/08/11 10:13:43 PM
+// 2015/08/11 10:13 PM
 
 
 using UnityEngine;
@@ -129,6 +131,6 @@ public class Motion2D : MonoBehaviour
 
 	void OnCollisionExit2D(Collision2D other)
 	{
-
+		//
 	}
 }

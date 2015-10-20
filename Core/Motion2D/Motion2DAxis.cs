@@ -1,6 +1,8 @@
 ﻿
+// Simple bind between Motion2D and Input to move.
+
 // Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
-// 2015/08/11 10:57:05 PM
+// 2015/08/11 10:57 PM
 
 
 using UnityEngine;

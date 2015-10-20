@@ -2,8 +2,8 @@
 // Splender is a collection of ready-to-use simple static effects using
 // DOTween.
 
-// Andrés Villalobos > andresalvivar@gmail.com > twitter.com/matnesis
-// 2015/06/22 04:15:09 PM
+// Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
+// 2015/06/22 04:15 PM
 
 
 using UnityEngine;

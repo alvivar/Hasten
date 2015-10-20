@@ -1,13 +1,17 @@
-﻿using UnityEngine;
+﻿
+// Repaint changes the color of all SpriteRenderer for the current GameObject
+// and children.
+
+// Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
+// 2015/08/11 09:15 PM
+
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 
-/// <summary>
-/// Repaint changes the color of all SpriteRenderer for the current GameObject 
-/// and children.
-/// </summary>
 [ExecuteInEditMode]
 public class Repaint : MonoBehaviour
 {
@@ -55,7 +59,7 @@ public class Repaint : MonoBehaviour
             SyncWithGlobalPallete();
         }
 
-        // Get a common color 
+        // Get a common color
         if (reload == true)
         {
             reload = false;

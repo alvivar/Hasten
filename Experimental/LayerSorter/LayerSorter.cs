@@ -1,11 +1,11 @@
 ﻿
 // LayerSorter v0.1
-// by Andrés Villalobos | twitter.com/matnesis | andresalvivar@gmail.com
+// by Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
 
 // The transform with this component can UP and DOWN the sorting order of all
 // SpriteRenderer in his children with buttons.
 
-// 2015/06/04 02:39:49 AM
+// 2015/06/04 02:39 AM
 
 
 using UnityEngine;

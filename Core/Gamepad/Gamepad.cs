@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿
+// Simple bind between Action events and Inputs.
+
+// Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
+// 2015/08/11 09:15 PM
+
+
+using UnityEngine;
 using System.Collections;
 using System;
 

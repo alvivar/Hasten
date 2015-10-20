@@ -1,5 +1,8 @@
 ﻿
-// 2015/09/30 09:48:35 PM
+// Simple color library.
+
+// Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
+// 2015/09/30 09:48 PM
 
 
 using UnityEngine;
@@ -8,19 +11,6 @@ using System.Collections;
 
 public class Palette : MonoBehaviour
 {
-	private static Palette _instance;
-	public static Palette g
-	{
-		get
-		{
-			if (_instance == null)
-				_instance = FindObjectOfType<Palette>();
-
-			return _instance;
-		}
-	}
-
-
 	[Header("Gray")]
 	public Color grayLite;
 	public Color grayStrong;

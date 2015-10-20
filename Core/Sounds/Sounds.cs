@@ -1,9 +1,16 @@
-﻿using UnityEngine;
+﻿
+// Sound library.
+
+// Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
+// 2015/10/19 04:48 PM
+
+
+using UnityEngine;
 using System.Collections;
 using matnesis.TeaTime;
 
 
-public class Sound : MonoBehaviour
+public class Sounds : MonoBehaviour
 {
     public AudioClip[] bg;
     public AudioClip sfxCheckpoint;
@@ -19,19 +26,7 @@ public class Sound : MonoBehaviour
     public AudioSource audioSounds;
 
     // tt
-    private TeaTime playBackground;
-
-
-    private static Sound instance;
-    public static Sound g
-    {
-        get
-        {
-            if (instance == null)
-                instance = GameObject.FindObjectOfType<Sound>();
-            return instance;
-        }
-    }
+    public TeaTime playBackground;
 
 
     void Start()

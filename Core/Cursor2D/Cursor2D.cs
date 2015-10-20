@@ -1,7 +1,10 @@
 ﻿
-// 2015/07/16 12:26:44 PM
+// This is basically a mouse cursor that looks at certain rotation towards an
+// origin.
 
-// This is basically a mouse cursor with a look at rotation from an origin.
+// Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
+// 2015/07/16 12:26 PM
+
 
 
 using UnityEngine;

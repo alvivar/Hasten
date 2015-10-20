@@ -1,5 +1,8 @@
 ﻿
-// 2015/08/11 09:42:14 PM
+// Custom 2D camera with some tricks.
+
+// Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
+// 2015/08/11 09:42 PM
 
 
 using System.Collections.Generic;
@@ -11,31 +14,17 @@ using matnesis.TeaTime;
 public class Camera2D : MonoBehaviour
 {
     [Header("Focus")]
-    public Transform focus;
-    public Vector3 focusOffset;
-    public List<Transform> focusGroup;
+    public Transform focus; // Main point of focus
+    public Vector3 focusOffset; // Variation to the focus position
+    public List<Transform> focusGroup; // All transforms here share the camera focus
 
     [Header("Config")]
-    public float speed = 3;
-    public float layer = -10;
-    public float childrenZLayer = 1;
+    public float speed = 3; // Speed
+    public float layer = -10; // Camera Z position
+    public float childrenZLayer = 1; // Local z position for children
 
     [Header("White Screen")]
-    public Renderer whiteScreen;
-
-    private float slowdown = 1;
-
-
-    private static Camera2D instance;
-    public static Camera2D g
-    {
-        get
-        {
-            if (instance == null)
-                instance = GameObject.FindObjectOfType<Camera2D>();
-            return instance;
-        }
-    }
+    public Renderer whiteScreen; // Renderer used to fully cover the screen for special fx
 
 
     /// <summary>
@@ -59,7 +48,7 @@ public class Camera2D : MonoBehaviour
 
 
         // White Screen adjustment
-        TeaTime whiteScreenAdjustment = this.tt().Add(() =>
+        this.tt("WhiteScreenAdjustment").Add(() =>
         {
             if (whiteScreen != null)
             {
@@ -95,40 +84,6 @@ public class Camera2D : MonoBehaviour
             pos = focus.position + focusOffset;
 
 
-        // #experimental Slowdown on proximity
-        // Vector3 camerapos = transform.position;
-        // camerapos.z = 0;
-
-        // Vector3 focuspos = pos;
-        // focuspos.z = 0;
-
-        // if (Vector3.Distance(camerapos, focuspos) < 7)
-        // {
-        //     this.tt("SlowdownDown").ttAdd(() =>
-        //     {
-        //         slowdown = 1;
-        //         this.tt("SlowdownUp").ttReset();
-        //     })
-        //     .ttLoop(1f, (ttHandler t) =>
-        //     {
-        //         slowdown = Mathf.Lerp(slowdown, 0.34f, t.deltaTime);
-        //     })
-        //     .ttAdd(int.MaxValue).ttWait();
-        // }
-        // else
-        // {
-        //     this.tt("SlowdownUp").ttAdd(() =>
-        //     {
-        //         this.tt("SlowdownDown").ttReset();
-        //     })
-        //     .ttLoop(1f, (ttHandler t) =>
-        //     {
-        //         slowdown = Mathf.Lerp(slowdown, 1f, t.deltaTime);
-        //     })
-        //     .ttAdd(int.MaxValue).ttWait();
-        // }
-
-
         // Be at the center of everything
         if (focusGroup.Count > 0)
         {
@@ -144,7 +99,7 @@ public class Camera2D : MonoBehaviour
         if (focus || focusGroup.Count > 0)
         {
             pos.z = layer;
-            transform.position = Vector3.Lerp(transform.position, pos, Time.deltaTime * speed * slowdown);
+            transform.position = Vector3.Lerp(transform.position, pos, Time.deltaTime * speed);
         }
     }
 }

@@ -13,14 +13,9 @@ using matnesis.TeaTime;
 public class Sounds : MonoBehaviour
 {
     public AudioClip[] bg;
-    public AudioClip sfxCheckpoint;
-    public AudioClip[] sfxStep;
-    public AudioClip sfxJump;
-    public AudioClip sfxClaw;
-    public AudioClip sfxHurt;
-    public AudioClip sfxDarkAmbience;
-    public AudioClip sfxBreath;
-    public AudioClip sfxGod;
+    public AudioClip sfxShooting;
+	public AudioClip sfxCharging;
+	public AudioClip sfxMoving;
 
     public AudioSource audioBg;
     public AudioSource audioSounds;
@@ -34,7 +29,6 @@ public class Sounds : MonoBehaviour
         AudioSource[] audios = GetComponents<AudioSource>();
         audioBg = audios[0];
         audioSounds = audios[1];
-
 
         // Play the soundtrack sounds one after the other
         if (bg.Length < 1)
@@ -50,53 +44,11 @@ public class Sounds : MonoBehaviour
         .Repeat();
     }
 
-
-    public void PlayCheckpoint()
+    public void PlayShoot()
     {
-        audioSounds.PlayOneShot(sfxCheckpoint, 0.50f);
+		SoundManager.Get.PlayClip (sfxShooting,false);
+
+        //audioSounds.PlayOneShot(sfxShooting, 1f);
     }
 
-
-    public void PlayStep()
-    {
-        int who = Random.Range(0, sfxStep.Length);
-        audioSounds.PlayOneShot(sfxStep[who], 0.10f);
-    }
-
-
-    public void PlayJump()
-    {
-        if (sfxJump)
-            audioSounds.PlayOneShot(sfxJump, 0.70f);
-    }
-
-
-    public void PlayClaw()
-    {
-        audioSounds.PlayOneShot(sfxClaw, 0.3f);
-    }
-
-
-    public void PlayHurt()
-    {
-        audioSounds.PlayOneShot(sfxHurt);
-    }
-
-
-    public void PlayDarkAmbience()
-    {
-        audioSounds.PlayOneShot(sfxDarkAmbience);
-    }
-
-
-    public void PlayBreath()
-    {
-        audioSounds.PlayOneShot(sfxBreath);
-    }
-
-
-    public void PlayGod()
-    {
-        audioSounds.PlayOneShot(sfxGod);
-    }
 }

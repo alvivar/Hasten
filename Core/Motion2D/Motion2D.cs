@@ -6,7 +6,6 @@
 
 
 using UnityEngine;
-using System.Collections;
 using matnesis.TeaTime;
 
 
@@ -14,7 +13,40 @@ using matnesis.TeaTime;
 [RequireComponent(typeof(CircleCollider2D))]
 public class Motion2D : MonoBehaviour
 {
-	// Connetion to Rigidbody2D.velocity
+	// Axis shortcut
+	private Motion2DAxis _axis;
+	public Motion2DAxis axis
+	{
+		get
+		{
+			return _axis == null ? _axis = GetComponent<Motion2DAxis>() : _axis;
+		}
+	}
+
+
+	// Jump shortcut
+	private Motion2DJump _jump;
+	public Motion2DJump jump
+	{
+		get
+		{
+			return _jump == null ? _jump = GetComponent<Motion2DJump>() : _jump;
+		}
+	}
+
+
+	// Wall jump shortcut
+	private Motion2DWallJump _wallJump;
+	public Motion2DWallJump wallJump
+	{
+		get
+		{
+			return _wallJump == null ? _wallJump = GetComponent<Motion2DWallJump>() : _wallJump;
+		}
+	}
+
+
+	// Connection to Rigidbody2D.velocity
 	public Vector2 velocity
 	{
 		get { return rbody.velocity; }

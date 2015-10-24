@@ -1,20 +1,24 @@
 ﻿
-// Simple bind between Motion2D and Input to move.
+// Simple axis control for Motion2D.
 
 // Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
 // 2015/08/11 10:57 PM
 
 
 using UnityEngine;
-using System.Collections;
 
 
 [RequireComponent(typeof(Motion2D))]
 public class Motion2DAxis : MonoBehaviour
 {
-	public bool active = true;
+	[Header("Options")]
+	public bool update = true;
 	public bool enableHorizontal = true;
 	public bool enableVertical = true;
+
+	[Header("Input")]
+	public float horizontalAxis = 0;
+	public float verticalAxis = 0;
 
 	private Motion2D motion;
 
@@ -27,11 +31,11 @@ public class Motion2DAxis : MonoBehaviour
 
 	void Update()
 	{
-		if (!active)
+		if (!update)
 			return;
 
-		float horiAxis = enableHorizontal ? Input.GetAxisRaw("Horizontal") : 0;
-		float vertAxis = enableVertical ? Input.GetAxisRaw("Vertical") : 0;
+		float horiAxis = enableHorizontal ? horizontalAxis : 0;
+		float vertAxis = enableVertical ? verticalAxis : 0;
 
 		motion.direction = new Vector2(horiAxis, vertAxis);
 	}

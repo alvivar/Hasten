@@ -37,6 +37,9 @@ public class Sounds : MonoBehaviour
 
 
         // Play the soundtrack sounds one after the other
+        if (bg.Length < 1)
+            return;
+
         int bgMark = 0;
         playBackground = this.tt().Add((ttHandler t) =>
         {

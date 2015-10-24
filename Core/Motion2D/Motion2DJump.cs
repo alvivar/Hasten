@@ -6,7 +6,6 @@
 
 
 using UnityEngine;
-using System.Collections;
 using matnesis.TeaTime;
 
 
@@ -46,14 +45,6 @@ public class Motion2DJump : MonoBehaviour
 
 	void Update()
 	{
-		if (jumpKey != KeyCode.None && Input.GetKeyDown(KeyCode.Space))
-		{
-			// Only jumps if touching the ground
-			if (motion.wallsColliding.SqrMagnitude() != 0)
-				DoJump(force);
-		}
-
-
 		// Reset the ground jumps
 		if (motion.wallsColliding.SqrMagnitude() != 0)
 			currentGroundJumps = 0;

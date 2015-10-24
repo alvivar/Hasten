@@ -18,6 +18,7 @@ public class GamepadInControl : MonoBehaviour
 	public Action OnActivate;
 	public Action OnDash;
 	public Action OnAttack;
+	public Action OnAttackRelease;
 	public Action OnCommand;
 
 
@@ -80,8 +81,11 @@ public class GamepadInControl : MonoBehaviour
 		if (_playerInControlActions.Dash.WasPressed && OnDash != null)
 			OnDash();
 
-		if (_playerInControlActions.Attack.WasPressed && OnDash != null)
+		if (_playerInControlActions.Attack.WasPressed && OnAttack != null)
 			OnAttack();
+
+		if (_playerInControlActions.Attack.WasReleased && OnAttackRelease != null)
+			OnAttackRelease();
 
 
 		// Main menu
@@ -119,8 +123,11 @@ public class GamepadInControl : MonoBehaviour
 		if (_playerInControlActions.Dash.WasPressed)
 			Debug.Log("Dash " + Time.time);
 
-		if (_playerInControlActions.Dash.WasPressed)
+		if (_playerInControlActions.Attack.WasPressed)
 			Debug.Log("Attack " + Time.time);
+
+		if (_playerInControlActions.Attack.WasReleased)
+			Debug.Log("Attack Release" + Time.time);
 
 
 		// Menu

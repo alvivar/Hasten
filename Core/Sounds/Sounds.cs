@@ -13,9 +13,6 @@ using matnesis.TeaTime;
 public class Sounds : MonoBehaviour
 {
     public AudioClip[] bg;
-    public AudioClip sfxShooting;
-	public AudioClip sfxCharging;
-	public AudioClip sfxMoving;
 
     public AudioSource audioBg;
     public AudioSource audioSounds;
@@ -43,12 +40,4 @@ public class Sounds : MonoBehaviour
         })
         .Repeat();
     }
-
-    public void PlayShoot()
-    {
-		SoundManager.Get.PlayClip (sfxShooting,false);
-
-        //audioSounds.PlayOneShot(sfxShooting, 1f);
-    }
-
 }

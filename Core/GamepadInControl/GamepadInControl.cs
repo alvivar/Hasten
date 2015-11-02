@@ -22,7 +22,7 @@ public class GamepadInControl : MonoBehaviour
 	public Action OnAttackRelease;
 	public Action OnCommand;
 
-	private GamepadInControlActionSet _playerInControlActions;
+	public GamepadInControlActionSet currentPlayer;
 
 
 	// Movement vector
@@ -30,14 +30,14 @@ public class GamepadInControl : MonoBehaviour
 	{
 		get
 		{
-			return _playerInControlActions != null ? _playerInControlActions.Movement.Value : Vector2.zero;
+			return currentPlayer != null ? currentPlayer.Movement.Value : Vector2.zero;
 		}
 	}
 
 
 	void Start()
 	{
-		// SetInputDevice(inputDevice, -1);
+		SetInputDevice(inputDevice, -1);
 	}
 
 
@@ -48,24 +48,24 @@ public class GamepadInControl : MonoBehaviour
 
 
 		// Actions
-		if (_playerInControlActions.Jump.WasPressed && OnJump != null)
+		if (currentPlayer.Jump.WasPressed && OnJump != null)
 			OnJump();
 
-		if (_playerInControlActions.Activate.WasPressed && OnActivate != null)
+		if (currentPlayer.Activate.WasPressed && OnActivate != null)
 			OnActivate();
 
-		if (_playerInControlActions.Dash.WasPressed && OnDash != null)
+		if (currentPlayer.Dash.WasPressed && OnDash != null)
 			OnDash();
 
-		if (_playerInControlActions.Attack.WasPressed && OnAttack != null)
+		if (currentPlayer.Attack.WasPressed && OnAttack != null)
 			OnAttack();
 
-		if (_playerInControlActions.Attack.WasReleased && OnAttackRelease != null)
+		if (currentPlayer.Attack.WasReleased && OnAttackRelease != null)
 			OnAttackRelease();
 
 
 		// Main menu
-		if (_playerInControlActions.Command.WasPressed && OnCommand != null)
+		if (currentPlayer.Command.WasPressed && OnCommand != null)
 			OnCommand();
 
 
@@ -75,59 +75,56 @@ public class GamepadInControl : MonoBehaviour
 
 	public void SetInputDevice(InputDevice newInputDevice, int order)
 	{
-		_playerInControlActions = new GamepadInControlActionSet();
+		currentPlayer = new GamepadInControlActionSet();
 
 		// Movement (Axis + Dpad + WASD + Keys)
-		// _playerInControlActions.Left.AddDefaultBinding(Key.A);
-		// _playerInControlActions.Left.AddDefaultBinding(Key.LeftArrow);
-		_playerInControlActions.Left.AddDefaultBinding(InputControlType.DPadLeft);
-		_playerInControlActions.Left.AddDefaultBinding(InputControlType.LeftStickLeft);
+		currentPlayer.Left.AddDefaultBinding(Key.A);
+		currentPlayer.Left.AddDefaultBinding(Key.LeftArrow);
+		currentPlayer.Left.AddDefaultBinding(InputControlType.DPadLeft);
+		currentPlayer.Left.AddDefaultBinding(InputControlType.LeftStickLeft);
 
-		// _playerInControlActions.Right.AddDefaultBinding(Key.D);
-		// _playerInControlActions.Right.AddDefaultBinding(Key.RightArrow);
-		_playerInControlActions.Right.AddDefaultBinding(InputControlType.DPadRight);
-		_playerInControlActions.Right.AddDefaultBinding(InputControlType.LeftStickRight);
+		currentPlayer.Right.AddDefaultBinding(Key.D);
+		currentPlayer.Right.AddDefaultBinding(Key.RightArrow);
+		currentPlayer.Right.AddDefaultBinding(InputControlType.DPadRight);
+		currentPlayer.Right.AddDefaultBinding(InputControlType.LeftStickRight);
 
-		// _playerInControlActions.Up.AddDefaultBinding(Key.W);
-		// _playerInControlActions.Up.AddDefaultBinding(Key.UpArrow);
-		_playerInControlActions.Up.AddDefaultBinding(InputControlType.DPadUp);
-		_playerInControlActions.Up.AddDefaultBinding(InputControlType.LeftStickUp);
+		currentPlayer.Up.AddDefaultBinding(Key.W);
+		currentPlayer.Up.AddDefaultBinding(Key.UpArrow);
+		currentPlayer.Up.AddDefaultBinding(InputControlType.DPadUp);
+		currentPlayer.Up.AddDefaultBinding(InputControlType.LeftStickUp);
 
-		// _playerInControlActions.Down.AddDefaultBinding(Key.S);
-		// _playerInControlActions.Down.AddDefaultBinding(Key.DownArrow);
-		_playerInControlActions.Down.AddDefaultBinding(InputControlType.DPadDown);
-		_playerInControlActions.Down.AddDefaultBinding(InputControlType.LeftStickDown);
+		currentPlayer.Down.AddDefaultBinding(Key.S);
+		currentPlayer.Down.AddDefaultBinding(Key.DownArrow);
+		currentPlayer.Down.AddDefaultBinding(InputControlType.DPadDown);
+		currentPlayer.Down.AddDefaultBinding(InputControlType.LeftStickDown);
 
 
 		// Actions
-		// _playerInControlActions.Jump.AddDefaultBinding(Key.Space);
-		_playerInControlActions.Jump.AddDefaultBinding(InputControlType.Action1);
+		currentPlayer.Jump.AddDefaultBinding(Key.Space);
+		currentPlayer.Jump.AddDefaultBinding(InputControlType.Action1);
 
-		// _playerInControlActions.Activate.AddDefaultBinding(Key.E);
-		_playerInControlActions.Activate.AddDefaultBinding(InputControlType.Action3);
+		currentPlayer.Activate.AddDefaultBinding(Key.E);
+		currentPlayer.Activate.AddDefaultBinding(InputControlType.Action3);
 
-		// _playerInControlActions.Dash.AddDefaultBinding(Key.V);
-		_playerInControlActions.Dash.AddDefaultBinding(InputControlType.Action4);
+		currentPlayer.Dash.AddDefaultBinding(Key.V);
+		currentPlayer.Dash.AddDefaultBinding(InputControlType.Action4);
 
-		// _playerInControlActions.Attack.AddDefaultBinding(Key.V);
-		_playerInControlActions.Attack.AddDefaultBinding(InputControlType.Action4);
+		currentPlayer.Attack.AddDefaultBinding(Key.V);
+		currentPlayer.Attack.AddDefaultBinding(InputControlType.Action4);
 
 
 		// Menu
-		_playerInControlActions.Command.AddDefaultBinding(Key.Escape);
-		_playerInControlActions.Command.AddDefaultBinding(InputControlType.Command);
+		currentPlayer.Command.AddDefaultBinding(Key.Escape);
+		currentPlayer.Command.AddDefaultBinding(InputControlType.Command);
 
 
 		// Force the input device
 		if (newInputDevice != null)
 		{
-			_playerInControlActions.Device = newInputDevice;
+			currentPlayer.Device = newInputDevice;
 
 			inputDevice = newInputDevice;
 			inputDeviceOrder = order;
-
-			Debug.Log(newInputDevice.GetHashCode());
-			Debug.Log(order);
 		}
 	}
 
@@ -135,38 +132,38 @@ public class GamepadInControl : MonoBehaviour
 	void QuickInputTest()
 	{
 		// Movement
-		if (_playerInControlActions.Left.WasPressed)
+		if (currentPlayer.Left.WasPressed)
 			Debug.Log("Left " + Time.time);
 
-		if (_playerInControlActions.Right.WasPressed)
+		if (currentPlayer.Right.WasPressed)
 			Debug.Log("Right " + Time.time);
 
-		if (_playerInControlActions.Up.WasPressed)
+		if (currentPlayer.Up.WasPressed)
 			Debug.Log("Up " + Time.time);
 
-		if (_playerInControlActions.Down.WasPressed)
+		if (currentPlayer.Down.WasPressed)
 			Debug.Log("Down " + Time.time);
 
 
 		// Actions
-		if (_playerInControlActions.Jump.WasPressed)
+		if (currentPlayer.Jump.WasPressed)
 			Debug.Log("Jump " + Time.time);
 
-		if (_playerInControlActions.Activate.WasPressed)
+		if (currentPlayer.Activate.WasPressed)
 			Debug.Log("Activate " + Time.time);
 
-		if (_playerInControlActions.Dash.WasPressed)
+		if (currentPlayer.Dash.WasPressed)
 			Debug.Log("Dash " + Time.time);
 
-		if (_playerInControlActions.Attack.WasPressed)
+		if (currentPlayer.Attack.WasPressed)
 			Debug.Log("Attack " + Time.time);
 
-		if (_playerInControlActions.Attack.WasReleased)
+		if (currentPlayer.Attack.WasReleased)
 			Debug.Log("Attack Release" + Time.time);
 
 
 		// Menu
-		if (_playerInControlActions.Command.WasPressed)
+		if (currentPlayer.Command.WasPressed)
 			Debug.Log("Command " + Time.time);
 	}
 }

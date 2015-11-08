@@ -11,9 +11,6 @@ using System;
 
 public class GamepadInControl : MonoBehaviour
 {
-	public int inputDeviceOrder = 0;
-	public InputDevice inputDevice; // if null, InControl will use the current active device
-
 	// Actions
 	public Action OnJump;
 	public Action OnActivate;
@@ -22,7 +19,7 @@ public class GamepadInControl : MonoBehaviour
 	public Action OnAttackRelease;
 	public Action OnCommand;
 
-	public GamepadInControlActionSet currentPlayer;
+	public InControlActionSet currentPlayer;
 
 
 	// Movement vector
@@ -37,45 +34,7 @@ public class GamepadInControl : MonoBehaviour
 
 	void Start()
 	{
-		SetInputDevice(inputDevice, -1);
-	}
-
-
-	void Update()
-	{
-		if (inputDevice == null)
-			return;
-
-
-		// Actions
-		if (currentPlayer.Jump.WasPressed && OnJump != null)
-			OnJump();
-
-		if (currentPlayer.Activate.WasPressed && OnActivate != null)
-			OnActivate();
-
-		if (currentPlayer.Dash.WasPressed && OnDash != null)
-			OnDash();
-
-		if (currentPlayer.Attack.WasPressed && OnAttack != null)
-			OnAttack();
-
-		if (currentPlayer.Attack.WasReleased && OnAttackRelease != null)
-			OnAttackRelease();
-
-
-		// Main menu
-		if (currentPlayer.Command.WasPressed && OnCommand != null)
-			OnCommand();
-
-
-		// QuickInputTest();
-	}
-
-
-	public void SetInputDevice(InputDevice newInputDevice, int order)
-	{
-		currentPlayer = new GamepadInControlActionSet();
+		currentPlayer = new InControlActionSet();
 
 		// Movement (Axis + Dpad + WASD + Keys)
 		currentPlayer.Left.AddDefaultBinding(Key.A);
@@ -116,16 +75,34 @@ public class GamepadInControl : MonoBehaviour
 		// Menu
 		currentPlayer.Command.AddDefaultBinding(Key.Escape);
 		currentPlayer.Command.AddDefaultBinding(InputControlType.Command);
+	}
 
 
-		// Force the input device
-		if (newInputDevice != null)
-		{
-			currentPlayer.Device = newInputDevice;
+	void Update()
+	{
+		// Actions
+		if (currentPlayer.Jump.WasPressed && OnJump != null)
+			OnJump();
 
-			inputDevice = newInputDevice;
-			inputDeviceOrder = order;
-		}
+		if (currentPlayer.Activate.WasPressed && OnActivate != null)
+			OnActivate();
+
+		if (currentPlayer.Dash.WasPressed && OnDash != null)
+			OnDash();
+
+		if (currentPlayer.Attack.WasPressed && OnAttack != null)
+			OnAttack();
+
+		if (currentPlayer.Attack.WasReleased && OnAttackRelease != null)
+			OnAttackRelease();
+
+
+		// Main menu
+		if (currentPlayer.Command.WasPressed && OnCommand != null)
+			OnCommand();
+
+
+		// QuickInputTest();
 	}
 
 

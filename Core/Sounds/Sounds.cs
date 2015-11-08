@@ -6,37 +6,34 @@
 
 
 using UnityEngine;
-using System.Collections;
 using matnesis.TeaTime;
 
 
 public class Sounds : MonoBehaviour
 {
-    public AudioClip[] bg;
+    public AudioClip[] backgroundClips;
 
-    public AudioSource audioBg;
-    public AudioSource audioSounds;
-
-    // tt
-    public TeaTime playBackground;
+    public AudioSource background;
+    public AudioSource sounds;
 
 
     void Start()
     {
         AudioSource[] audios = GetComponents<AudioSource>();
-        audioBg = audios[0];
-        audioSounds = audios[1];
+        background = audios[0];
+        sounds = audios[1];
+
 
         // Play the soundtrack sounds one after the other
-        if (bg.Length < 1)
+        if (backgroundClips.Length < 1)
             return;
 
         int bgMark = 0;
-        playBackground = this.tt().Add((ttHandler t) =>
+        this.tt("backgroundPlay").Add((ttHandler t) =>
         {
-            audioBg.PlayOneShot(bg[bgMark]);
-            bgMark = (bgMark + 1) % bg.Length;
-            t.WaitFor(bg[bgMark].length * 0.5f);
+            background.PlayOneShot(backgroundClips[bgMark]);
+            bgMark = (bgMark + 1) % backgroundClips.Length;
+            t.WaitFor(backgroundClips[bgMark].length * 0.8f);
         })
         .Repeat();
     }

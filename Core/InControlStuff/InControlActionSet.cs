@@ -7,7 +7,7 @@
 using InControl;
 
 
-public class GamepadInControlActionSet : PlayerActionSet
+public class InControlActionSet : PlayerActionSet
 {
 	// Joystick
 	public PlayerAction Left;
@@ -18,15 +18,15 @@ public class GamepadInControlActionSet : PlayerActionSet
 
 	// Basic actions
 	public PlayerAction Jump;
-	public PlayerAction Activate;
 	public PlayerAction Dash;
 	public PlayerAction Attack;
+	public PlayerAction Activate;
 
 	// Menu
 	public PlayerAction Command;
 
 
-	public GamepadInControlActionSet()
+	public InControlActionSet()
 	{
 		// Joystick
 		Left = CreatePlayerAction("MoveLeft");
@@ -39,9 +39,9 @@ public class GamepadInControlActionSet : PlayerActionSet
 
 		// Actions
 		Jump = CreatePlayerAction("Jump");
-		Activate = CreatePlayerAction("Activate");
 		Dash = CreatePlayerAction("Dash");
 		Attack = CreatePlayerAction("Attack");
+		Activate = CreatePlayerAction("Activate");
 
 
 		// Menu

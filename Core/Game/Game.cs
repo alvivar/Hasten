@@ -5,7 +5,6 @@
 // 2015/10/19 04:29 PM
 
 
-
 using UnityEngine;
 using System.Collections;
 
@@ -82,20 +81,6 @@ public class Game : MonoBehaviour
 				_timeflux = GameObject.FindObjectOfType<Timeflux>();
 
 			return _timeflux;
-		}
-	}
-
-
-	// Gamepad + InControl
-	private static GamepadInControl _gamepadInControl;
-	public static GamepadInControl gamepadInControl
-	{
-		get
-		{
-			if (_gamepadInControl == null)
-				_gamepadInControl = GameObject.FindObjectOfType<GamepadInControl>();
-
-			return _gamepadInControl;
 		}
 	}
 }

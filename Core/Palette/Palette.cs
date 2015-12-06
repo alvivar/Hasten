@@ -18,4 +18,7 @@ public class Palette : MonoBehaviour
 	[Header("Red")]
 	public Color redAlert;
 	public Color redSoft;
+
+	[Header("Yellow")]
+	public Color yellowBlink;
 }

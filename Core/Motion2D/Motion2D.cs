@@ -17,10 +17,7 @@ public class Motion2D : MonoBehaviour
 	private Motion2DAxis _axis;
 	public Motion2DAxis axis
 	{
-		get
-		{
-			return _axis == null ? _axis = GetComponent<Motion2DAxis>() : _axis;
-		}
+		get { return _axis == null ? _axis = GetComponent<Motion2DAxis>() : _axis; }
 	}
 
 
@@ -28,10 +25,7 @@ public class Motion2D : MonoBehaviour
 	private Motion2DJump _jump;
 	public Motion2DJump jump
 	{
-		get
-		{
-			return _jump == null ? _jump = GetComponent<Motion2DJump>() : _jump;
-		}
+		get { return _jump == null ? _jump = GetComponent<Motion2DJump>() : _jump; }
 	}
 
 
@@ -39,10 +33,15 @@ public class Motion2D : MonoBehaviour
 	private Motion2DWallJump _wallJump;
 	public Motion2DWallJump wallJump
 	{
-		get
-		{
-			return _wallJump == null ? _wallJump = GetComponent<Motion2DWallJump>() : _wallJump;
-		}
+		get { return _wallJump == null ? _wallJump = GetComponent<Motion2DWallJump>() : _wallJump; }
+	}
+
+
+	// Actions shortcut
+	private Motion2DActions _actions;
+	public Motion2DActions actions
+	{
+		get { return _actions == null ? _actions = GetComponent<Motion2DActions>() : _actions; }
 	}
 
 

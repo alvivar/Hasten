@@ -42,14 +42,17 @@ public class Motion2DWakySteps : MonoBehaviour
 
 	void Update()
 	{
-		if (motion.direction.sqrMagnitude != 0)
+		if (enableWakySteps)
 		{
-			wakyMovement.Play();
-		}
-		else
-		{
-			if (wakyMovement.IsPlaying)
-				wakyMovement.Stop();
+			if (motion.direction.sqrMagnitude != 0)
+			{
+				wakyMovement.Play();
+			}
+			else
+			{
+				if (wakyMovement.IsPlaying)
+					wakyMovement.Stop();
+			}
 		}
 	}
 }

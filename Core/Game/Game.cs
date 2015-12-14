@@ -1,7 +1,7 @@
 ﻿
-// Core communication between systems and important stuff.
+// Core communication between important stuff.
 
-// Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
+// @matnesis
 // 2015/10/19 04:29 PM
 
 
@@ -11,7 +11,7 @@ using System.Collections;
 
 public class Game : MonoBehaviour
 {
-	// The Player is the game object with the tag Player.
+	// = Tag.Player
 	private static Transform _player;
 	public static Transform player
 	{
@@ -29,7 +29,7 @@ public class Game : MonoBehaviour
 	}
 
 
-	// Camera2D
+	// ^
 	private static Camera2D _camera2d;
 	public static Camera2D camera2D
 	{
@@ -43,7 +43,7 @@ public class Game : MonoBehaviour
 	}
 
 
-	// Sound library
+	// ^
 	private static Sounds _sounds;
 	public static Sounds sounds
 	{
@@ -57,7 +57,7 @@ public class Game : MonoBehaviour
 	}
 
 
-	// Color library
+	// ^
 	private static Palette _palette;
 	public static Palette palette
 	{
@@ -71,7 +71,7 @@ public class Game : MonoBehaviour
 	}
 
 
-	// Time control
+	// ^
 	private static Timeflux _timeflux;
 	public static Timeflux timeflux
 	{

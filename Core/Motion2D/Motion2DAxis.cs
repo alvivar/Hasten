@@ -40,7 +40,6 @@ public class Motion2DAxis : MonoBehaviour
 		float vertAxis = enableVertical ? verticalAxis : 0;
 
 
-		// Input.GetAxisRaw
 		if (enableSimpleInput)
 		{
 			horiAxis = Input.GetAxisRaw("Horizontal");

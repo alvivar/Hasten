@@ -1,5 +1,5 @@
 
-// Configurable Motion 2D behaviours.
+// Configurable Motion2D TeaTime behaviours.
 
 // @matnesis
 // 2015/12/13 06:11 PM

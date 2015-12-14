@@ -6,14 +6,14 @@
 
 
 using UnityEngine;
-using System.Collections;
-using DG.Tweening;
+using matnesis.TeaTime;
 
 
 [RequireComponent(typeof(Motion2D))]
 public class Motion2DPaperFlip : MonoBehaviour
 {
-	public bool enableXFlip = false;
+	[Header("Config")]
+	public bool enableXFlip = true;
 	public float flipDuration = 0.20f;
 
 	private Motion2D motion;

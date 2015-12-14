@@ -43,7 +43,7 @@ public class Camera2D : MonoBehaviour
     void Start()
     {
         // The whiteScreen could be disabled to avoid click over it while working
-        if (whiteScreen.gameObject.activeSelf == false)
+		if (whiteScreen && whiteScreen.gameObject.activeSelf == false)
             whiteScreen.gameObject.SetActive(true);
 
 

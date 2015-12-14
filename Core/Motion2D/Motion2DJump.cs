@@ -25,10 +25,8 @@ public class Motion2DJump : MonoBehaviour
 	public KeyCode jumpKey = KeyCode.None;
 
 	private int currentGroundJumps = 0;
-	private int currentAirJumps = 0;
 
 	private Motion2D motion;
-	private Rigidbody2D rbody;
 
 	// tt
 	private TeaTime jumpDecay;
@@ -37,7 +35,6 @@ public class Motion2DJump : MonoBehaviour
 	void Start()
 	{
 		motion = GetComponent<Motion2D>();
-		rbody = GetComponent<Rigidbody2D>();
 
 		jumpDecay = this.tt();
 	}

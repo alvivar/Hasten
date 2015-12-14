@@ -19,13 +19,11 @@ public class Motion2DWallJump : MonoBehaviour
 	public float forceLimitOnWall;
 
 	private Motion2D motion;
-	private Motion2DJump jump;
 
 
 	void Start()
 	{
 		motion = GetComponent<Motion2D>();
-		jump = GetComponent<Motion2DJump>();
 	}
 
 

@@ -69,8 +69,12 @@ public class BoolReactiveProp : ReactiveProp<bool>
 	/// </summary>
 	public void SyncWithInspector()
 	{
+
+#if UNITY_EDITOR
 		if (Value != boolValue)
 			Value = boolValue;
+#endif
+
 	}
 }
 
@@ -94,8 +98,12 @@ public class StringReactiveProp : ReactiveProp<string>
 	/// </summary>
 	public void SyncWithInspector()
 	{
+
+#if UNITY_EDITOR
 		if (Value != stringValue)
 			Value = stringValue;
+#endif
+
 	}
 }
 
@@ -119,8 +127,12 @@ public class IntReactiveProp : ReactiveProp<int>
 	/// </summary>
 	public void SyncWithInspector()
 	{
+
+#if UNITY_EDITOR
 		if (Value != intValue)
 			Value = intValue;
+#endif
+
 	}
 }
 
@@ -144,8 +156,12 @@ public class FloatReactiveProp : ReactiveProp<float>
 	/// </summary>
 	public void SyncWithInspector()
 	{
+
+#if UNITY_EDITOR
 		if (Value != floatValue)
 			Value = floatValue;
+#endif
+
 	}
 }
 
@@ -169,7 +185,11 @@ public class Vector3ReactiveProp : ReactiveProp<Vector3>
 	/// </summary>
 	public void SyncWithInspector()
 	{
+
+#if UNITY_EDITOR
 		if (Value != vector3Value)
 			Value = vector3Value;
+#endif
+
 	}
 }

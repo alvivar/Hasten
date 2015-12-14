@@ -7,23 +7,29 @@ using System;
 
 public static class Extensions
 {
-    //
+    // ^
     // MonoBehaviour
 
     public static Transform GetOrCreateTransform(this MonoBehaviour self, string name)
     {
         GameObject go = GameObject.Find(name);
 
-
         if (go == null)
             go = new GameObject(name);
-
 
         return go.transform;
     }
 
+    /// <summary>
+    /// GetComponent shortcut.
+    /// </summary>
+    public static T _<T>(this MonoBehaviour instance)
+    {
+        return instance.GetComponent<T>();
+    }
 
-    //
+
+    // ^
     // transform.position
 
     public static Vector3 SetPosX(this Transform self, float x)
@@ -70,7 +76,7 @@ public static class Extensions
     }
 
 
-    //
+    // ^
     // transform.localScale
 
     public static Vector3 SetScaleX(this Transform self, float x)
@@ -117,7 +123,7 @@ public static class Extensions
     }
 
 
-    //
+    // ^
     // LayerMask
 
     public static bool IsInside(this LayerMask self, int layer)
@@ -131,7 +137,7 @@ public static class Extensions
     }
 
 
-    //
+    // ^
     // TrailRenderer
 
     public static void Reset(this TrailRenderer trail, MonoBehaviour instance)

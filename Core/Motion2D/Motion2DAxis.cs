@@ -18,6 +18,7 @@ public class Motion2DAxis : MonoBehaviour
 	public float deadZone = 0.3f; // Ignore values less than the dead zone
 
 	[Header("Input")]
+	public bool enableSimpleInput = true; // Basically Input.GetAxisRaw
 	public float horizontalAxis = 0;
 	public float verticalAxis = 0;
 
@@ -37,6 +38,15 @@ public class Motion2DAxis : MonoBehaviour
 
 		float horiAxis = enableHorizontal ? horizontalAxis : 0;
 		float vertAxis = enableVertical ? verticalAxis : 0;
+
+
+		// Input.GetAxisRaw
+		if (enableSimpleInput)
+		{
+			horiAxis = Input.GetAxisRaw("Horizontal");
+			vertAxis = Input.GetAxisRaw("Vertical");
+		}
+
 
 		motion.direction = new Vector2(
 		    Mathf.Abs(horiAxis) > deadZone ? horiAxis : 0,

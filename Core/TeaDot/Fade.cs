@@ -13,9 +13,11 @@ public class Fade : MonoBehaviour
 {
 	public BoolReactiveProp Show = new BoolReactiveProp(true);
 
-	[Header("Config")]
+	[Header("Fade In")]
 	public Color fadeInColor = Color.white;
 	public float fadeInDuration = 0.20f;
+
+	[Header("Fade Out")]
 	public Color fadeOutColor = Color.clear;
 	public float fadeOutDuration = 1;
 

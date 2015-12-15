@@ -192,4 +192,33 @@ public class Vector3ReactiveProp : ReactiveProp<Vector3>
 #endif
 
 	}
+
+
+	[Serializable]
+	public class Vector2ReactiveProp : ReactiveProp<Vector2>
+	{
+		[SerializeField]
+		private Vector2 vector2Value;
+
+
+		public Vector2ReactiveProp(Vector2 initialValue)
+		{
+			Suscribe(x => vector2Value = x);
+			Value = initialValue;
+		}
+
+
+		/// <summary>
+		/// Value = Value shown in the inspector.
+		/// </summary>
+		public void SyncWithInspector()
+		{
+
+#if UNITY_EDITOR
+			if (Value != vector2Value)
+				Value = vector2Value;
+#endif
+
+		}
+	}
 }

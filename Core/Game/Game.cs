@@ -11,7 +11,7 @@ using System.Collections;
 
 public class Game : MonoBehaviour
 {
-	// = Tag.Player
+	// == Tag.Player
 	private static Transform _player;
 	public static Transform player
 	{

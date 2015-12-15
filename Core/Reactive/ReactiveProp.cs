@@ -47,7 +47,7 @@ public class ReactiveProp<T>
 
 
 // ^
-// Specialized properties can can be seeing in Unity inspector.
+// Specialized properties can be seeing on the Unity inspector.
 
 
 [Serializable]

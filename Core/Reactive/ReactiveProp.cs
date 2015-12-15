@@ -1,5 +1,5 @@
 ﻿
-// Reactive properties!
+// Experimental reactive properties!
 
 // @matnesis
 // 2015/12/12 02:40 PM
@@ -11,7 +11,7 @@ using System;
 
 
 /// <summary>
-/// Core.
+/// Reactive properties core.
 /// </summary>
 public class ReactiveProp<T>
 {
@@ -65,16 +65,12 @@ public class BoolReactiveProp : ReactiveProp<bool>
 
 
 	/// <summary>
-	/// Value = Value shown in the inspector.
+	/// Value = Value in the inspector.
 	/// </summary>
 	public void SyncWithInspector()
 	{
-
-#if UNITY_EDITOR
 		if (Value != boolValue)
 			Value = boolValue;
-#endif
-
 	}
 }
 
@@ -94,16 +90,12 @@ public class StringReactiveProp : ReactiveProp<string>
 
 
 	/// <summary>
-	/// Value = Value shown in the inspector.
+	/// Value = Value in the inspector.
 	/// </summary>
-	public void SyncWithInspector()
+	public void SyncWithInspector(bool force = false)
 	{
-
-#if UNITY_EDITOR
 		if (Value != stringValue)
 			Value = stringValue;
-#endif
-
 	}
 }
 
@@ -123,16 +115,12 @@ public class IntReactiveProp : ReactiveProp<int>
 
 
 	/// <summary>
-	/// Value = Value shown in the inspector.
+	/// Value = Value in the inspector.
 	/// </summary>
 	public void SyncWithInspector()
 	{
-
-#if UNITY_EDITOR
 		if (Value != intValue)
 			Value = intValue;
-#endif
-
 	}
 }
 
@@ -152,16 +140,12 @@ public class FloatReactiveProp : ReactiveProp<float>
 
 
 	/// <summary>
-	/// Value = Value shown in the inspector.
+	/// Value = Value in the inspector.
 	/// </summary>
 	public void SyncWithInspector()
 	{
-
-#if UNITY_EDITOR
 		if (Value != floatValue)
 			Value = floatValue;
-#endif
-
 	}
 }
 
@@ -181,16 +165,12 @@ public class Vector3ReactiveProp : ReactiveProp<Vector3>
 
 
 	/// <summary>
-	/// Value = Value shown in the inspector.
+	/// Value = Value in the inspector.
 	/// </summary>
 	public void SyncWithInspector()
 	{
-
-#if UNITY_EDITOR
 		if (Value != vector3Value)
 			Value = vector3Value;
-#endif
-
 	}
 }
 
@@ -210,15 +190,11 @@ public class Vector2ReactiveProp : ReactiveProp<Vector2>
 
 
 	/// <summary>
-	/// Value = Value shown in the inspector.
+	/// Value = Value in the inspector.
 	/// </summary>
 	public void SyncWithInspector()
 	{
-
-#if UNITY_EDITOR
 		if (Value != vector2Value)
 			Value = vector2Value;
-#endif
-
 	}
 }

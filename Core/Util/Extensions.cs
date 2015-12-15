@@ -20,9 +20,6 @@ public static class Extensions
         return go.transform;
     }
 
-    /// <summary>
-    /// GetComponent shortcut.
-    /// </summary>
     public static T _<T>(this MonoBehaviour instance)
     {
         return instance.GetComponent<T>();

@@ -12,7 +12,11 @@ using UnityEngine;
 public class Fade : MonoBehaviour
 {
 	public BoolReactiveProp Show = new BoolReactiveProp(true);
+
+	[Header("Config")]
+	public Color fadeInColor = Color.white;
 	public float fadeInDuration = 0.20f;
+	public Color fadeOutColor = Color.clear;
 	public float fadeOutDuration = 1;
 
 	private Renderer render;
@@ -27,14 +31,18 @@ public class Fade : MonoBehaviour
 		{
 			render.material.DOKill();
 
-			if (x) render.material.DOColor(Color.white, fadeInDuration);
-			else render.material.DOColor(Color.clear, fadeOutDuration);
+			if (x) render.material.DOColor(fadeInColor, fadeInDuration);
+			else render.material.DOColor(fadeOutColor, fadeOutDuration);
 		});
+
+		Show.SyncWithInspector();
 	}
 
 
+#if UNITY_EDITOR
 	void Update()
 	{
 		Show.SyncWithInspector();
 	}
+#endif
 }

@@ -12,12 +12,6 @@ public class SimpleRPG : MonoBehaviour
 
 	void Start()
 	{
-		SyncAll();
-	}
-
-
-	void SyncAll()
-	{
 		hp.SyncWithInspector();
 		stamina.SyncWithInspector();
 		xp.SyncWithInspector();
@@ -27,7 +21,7 @@ public class SimpleRPG : MonoBehaviour
 #if UNITY_EDITOR
 	void Update()
 	{
-		SyncAll();
+		Start();
 	}
 #endif
 }

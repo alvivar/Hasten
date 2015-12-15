@@ -46,7 +46,7 @@ public class ReactFollower : ReactBase
 		motion.actions.target = target;
 		motion.actions.doFollowTarget.Play();
 
-		yield return null;
+		yield return new WaitForSeconds(0.10f);
 	}
 
 

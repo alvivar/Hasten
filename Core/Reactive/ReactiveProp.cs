@@ -1,5 +1,8 @@
 ﻿
-// Experimental reactive properties!
+// ^
+// Experimental Reactive Properties!
+
+// Soon.
 
 // @matnesis
 // 2015/12/12 02:40 PM
@@ -13,6 +16,7 @@ using System;
 /// <summary>
 /// Reactive properties core.
 /// </summary>
+[System.Serializable]
 public class ReactiveProp<T>
 {
 	private T _value = default(T);

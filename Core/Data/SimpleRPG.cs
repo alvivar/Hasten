@@ -8,10 +8,6 @@ using matnesis.TeaTime;
 public class SimpleRPG : MonoBehaviour
 {
 	public IntReactiveProp hp = new IntReactiveProp(3);
-
-
-	void Start()
-	{
-		// hp.Value = 9;
-	}
+	public IntReactiveProp stamina = new IntReactiveProp(3);
+	public IntReactiveProp coins = new IntReactiveProp(0);
 }

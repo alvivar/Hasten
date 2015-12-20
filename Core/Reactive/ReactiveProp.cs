@@ -19,24 +19,25 @@ using System;
 [Serializable]
 public class ReactiveProp<T>
 {
+	[SerializeField]
 	private T _value = default(T);
 	public T Value
 	{
+		get { return _value; }
+
 		set
 		{
-			// if (_value != null && _value.Equals(value))
-			// return;
+			if (_value != null && _value.Equals(value))
+				return;
 
 			_value = value;
 
-			if (Suscribers != null)
-				Suscribers(_value);
+			CallSuscribers();
 		}
-
-		get { return _value; }
 	}
 
 	private Action<T> Suscribers;
+	private T _valueSent = default(T);
 
 
 	/// <summary>
@@ -45,6 +46,19 @@ public class ReactiveProp<T>
 	public void Suscribe(Action<T> callback)
 	{
 		Suscribers += callback;
+
+		if (_valueSent != null)
+			callback(Value);
+	}
+
+	public void CallSuscribers()
+	{
+		if (_valueSent != null && _valueSent.Equals(_value))
+			return;
+
+		_valueSent = _value;
+		if (Suscribers != null)
+			Suscribers(_value);
 	}
 }
 
@@ -100,20 +114,9 @@ public class StringReactiveProp : ReactiveProp<string>
 [Serializable]
 public class IntReactiveProp : ReactiveProp<int>
 {
-	[SerializeField]
-	private int intValue;
-
-
 	public IntReactiveProp(int initialValue)
 	{
-		Suscribe(x => intValue = x);
 		Value = initialValue;
-	}
-
-	public void SyncWithInspector()
-	{
-		if (Value != intValue)
-			Value = intValue;
 	}
 }
 

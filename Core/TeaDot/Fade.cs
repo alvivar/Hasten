@@ -9,6 +9,7 @@ using DG.Tweening;
 using UnityEngine;
 
 
+[Reactive]
 public class Fade : MonoBehaviour
 {
 	public BoolReactiveProp Show = new BoolReactiveProp(true);
@@ -36,15 +37,5 @@ public class Fade : MonoBehaviour
 			if (x) render.material.DOColor(fadeInColor, fadeInDuration);
 			else render.material.DOColor(fadeOutColor, fadeOutDuration);
 		});
-
-		Show.SyncWithInspector();
 	}
-
-
-#if UNITY_EDITOR
-	void Update()
-	{
-		Show.SyncWithInspector();
-	}
-#endif
 }

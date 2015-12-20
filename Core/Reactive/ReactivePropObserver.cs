@@ -82,7 +82,7 @@ class ReactivePropObserver
 
 					// Int
 					else if (t.FieldType.Equals(typeof(IntReactiveProp)))
-						(t.GetValue(mono) as IntReactiveProp).SyncWithInspector();
+						(t.GetValue(mono) as IntReactiveProp).CallSuscribers();
 						// SetPropertyToField(mono, t, "Value", "intValue");
 
 					// Float

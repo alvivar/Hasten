@@ -7,11 +7,11 @@ using matnesis.TeaTime;
 [Reactive]
 public class SimpleRPG : MonoBehaviour
 {
-	public IntReactiveProp hp = new IntReactiveProp(0);
+	public IntReactiveProp hp = new IntReactiveProp(3);
 
 
 	void Start()
 	{
-		hp.SyncWithInspector();
+		// hp.Value = 9;
 	}
 }

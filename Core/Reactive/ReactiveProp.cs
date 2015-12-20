@@ -1,6 +1,6 @@
 ﻿
 // ^
-// Experimental Reactive Properties!
+// Reactive Properties!
 
 // Soon.
 
@@ -14,11 +14,14 @@ using System;
 
 
 /// <summary>
-/// Reactive properties core.
+/// Generic Reactive Property.
 /// </summary>
 [Serializable]
 public class ReactiveProp<T>
 {
+	private Action<T> suscribers;
+	private T valueSent = default(T);
+
 	[SerializeField]
 	private T _value = default(T);
 	public T Value
@@ -36,29 +39,30 @@ public class ReactiveProp<T>
 		}
 	}
 
-	private Action<T> Suscribers;
-	private T _valueSent = default(T);
+
+	public ReactiveProp(T initialValue)
+	{
+		Value = initialValue;
+	}
 
 
-	/// <summary>
-	/// Suscribe an Action that will be called when .Value changes.
-	/// </summary>
 	public void Suscribe(Action<T> callback)
 	{
-		Suscribers += callback;
+		suscribers += callback;
 
-		if (_valueSent != null)
-			callback(Value);
+		if (valueSent != null)
+			callback(_value);
 	}
+
 
 	public void CallSuscribers()
 	{
-		if (_valueSent != null && _valueSent.Equals(_value))
+		if (valueSent != null && valueSent.Equals(_value))
 			return;
 
-		_valueSent = _value;
-		if (Suscribers != null)
-			Suscribers(_value);
+		valueSent = _value;
+		if (suscribers != null)
+			suscribers(_value);
 	}
 }
 
@@ -70,118 +74,40 @@ public class ReactiveProp<T>
 [Serializable]
 public class BoolReactiveProp : ReactiveProp<bool>
 {
-	[SerializeField]
-	private bool boolValue;
-
-
-	public BoolReactiveProp(bool initialValue)
-	{
-		Suscribe(x => boolValue = x);
-		Value = initialValue;
-	}
-
-
-	public void SyncWithInspector()
-	{
-		if (Value != boolValue)
-			Value = boolValue;
-	}
+	public BoolReactiveProp(bool initialValue) : base(initialValue) { }
 }
 
 
 [Serializable]
 public class StringReactiveProp : ReactiveProp<string>
 {
-	[SerializeField]
-	private string stringValue;
-
-
-	public StringReactiveProp(string initialValue)
-	{
-		Suscribe(x => stringValue = x);
-		Value = initialValue;
-	}
-
-
-	public void SyncWithInspector()
-	{
-		if (Value != stringValue)
-			Value = stringValue;
-	}
+	public StringReactiveProp(string initialValue) : base(initialValue) { }
 }
 
 
 [Serializable]
 public class IntReactiveProp : ReactiveProp<int>
 {
-	public IntReactiveProp(int initialValue)
-	{
-		Value = initialValue;
-	}
+	public IntReactiveProp(int initialValue) : base(initialValue) { }
 }
 
 
 [Serializable]
 public class FloatReactiveProp : ReactiveProp<float>
 {
-	[SerializeField]
-	private float floatValue;
-
-
-	public FloatReactiveProp(float initialValue)
-	{
-		Suscribe(x => floatValue = x);
-		Value = initialValue;
-	}
-
-
-	public void SyncWithInspector()
-	{
-		if (Value != floatValue)
-			Value = floatValue;
-	}
+	public FloatReactiveProp(float initialValue) : base(initialValue) { }
 }
 
 
 [Serializable]
 public class Vector3ReactiveProp : ReactiveProp<Vector3>
 {
-	[SerializeField]
-	private Vector3 vector3Value;
-
-
-	public Vector3ReactiveProp(Vector3 initialValue)
-	{
-		Suscribe(x => vector3Value = x);
-		Value = initialValue;
-	}
-
-
-	public void SyncWithInspector()
-	{
-		if (Value != vector3Value)
-			Value = vector3Value;
-	}
+	public Vector3ReactiveProp(Vector3 initialValue) : base(initialValue) { }
 }
 
 
 [Serializable]
 public class Vector2ReactiveProp : ReactiveProp<Vector2>
 {
-	[SerializeField]
-	private Vector2 vector2Value;
-
-
-	public Vector2ReactiveProp(Vector2 initialValue)
-	{
-		Suscribe(x => vector2Value = x);
-		Value = initialValue;
-	}
-
-
-	public void SyncWithInspector()
-	{
-		if (Value != vector2Value)
-			Value = vector2Value;
-	}
+	public Vector2ReactiveProp(Vector2 initialValue) : base(initialValue) { }
 }

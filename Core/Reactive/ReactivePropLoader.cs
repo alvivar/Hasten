@@ -42,7 +42,7 @@ public class ReactivePropLoader : MonoBehaviour
 
 	public void LoadIntProp(IntReactiveProp prop)
 	{
-		firstReactiveLoad += () => prop.SyncWithInspector();
+		// firstReactiveLoad += () => prop.SyncWithInspector();
 	}
 
 

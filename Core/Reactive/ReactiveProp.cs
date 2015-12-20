@@ -16,7 +16,7 @@ using System;
 /// <summary>
 /// Reactive properties core.
 /// </summary>
-[System.Serializable]
+[Serializable]
 public class ReactiveProp<T>
 {
 	private T _value = default(T);
@@ -24,8 +24,8 @@ public class ReactiveProp<T>
 	{
 		set
 		{
-			if (_value != null && _value.Equals(value))
-				return;
+			// if (_value != null && _value.Equals(value))
+			// return;
 
 			_value = value;
 
@@ -49,7 +49,6 @@ public class ReactiveProp<T>
 }
 
 
-
 // ^
 // Specialized properties can be seeing on the Unity inspector.
 
@@ -68,9 +67,6 @@ public class BoolReactiveProp : ReactiveProp<bool>
 	}
 
 
-	/// <summary>
-	/// Value = Value in the inspector.
-	/// </summary>
 	public void SyncWithInspector()
 	{
 		if (Value != boolValue)
@@ -93,10 +89,7 @@ public class StringReactiveProp : ReactiveProp<string>
 	}
 
 
-	/// <summary>
-	/// Value = Value in the inspector.
-	/// </summary>
-	public void SyncWithInspector(bool force = false)
+	public void SyncWithInspector()
 	{
 		if (Value != stringValue)
 			Value = stringValue;
@@ -117,10 +110,6 @@ public class IntReactiveProp : ReactiveProp<int>
 		Value = initialValue;
 	}
 
-
-	/// <summary>
-	/// Value = Value in the inspector.
-	/// </summary>
 	public void SyncWithInspector()
 	{
 		if (Value != intValue)
@@ -143,9 +132,6 @@ public class FloatReactiveProp : ReactiveProp<float>
 	}
 
 
-	/// <summary>
-	/// Value = Value in the inspector.
-	/// </summary>
 	public void SyncWithInspector()
 	{
 		if (Value != floatValue)
@@ -168,9 +154,6 @@ public class Vector3ReactiveProp : ReactiveProp<Vector3>
 	}
 
 
-	/// <summary>
-	/// Value = Value in the inspector.
-	/// </summary>
 	public void SyncWithInspector()
 	{
 		if (Value != vector3Value)
@@ -193,9 +176,6 @@ public class Vector2ReactiveProp : ReactiveProp<Vector2>
 	}
 
 
-	/// <summary>
-	/// Value = Value in the inspector.
-	/// </summary>
 	public void SyncWithInspector()
 	{
 		if (Value != vector2Value)

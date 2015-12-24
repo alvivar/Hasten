@@ -1,5 +1,5 @@
 ﻿
-// Automatic 2D flip effect.
+// Automatic 2D flip effect, assumes right orientation as default.
 
 // @matnesis
 // 2015/12/13 11:05 PM
@@ -13,6 +13,7 @@ using matnesis.TeaTime;
 public class Motion2DPaperFlip : MonoBehaviour
 {
 	[Header("Config")]
+	public bool invertX = false;
 	public bool enableXFlip = true;
 	public float flipDuration = 0.20f;
 
@@ -34,7 +35,7 @@ public class Motion2DPaperFlip : MonoBehaviour
 			{
 				this.tt("xFlip").Loop(flipDuration, (ttHandler t) =>
 				{
-					transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1, 1, 1), t.deltaTime);
+					transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(!invertX ? 1 : -1, 1, 1), t.deltaTime);
 				})
 				.Wait();
 			}
@@ -44,7 +45,7 @@ public class Motion2DPaperFlip : MonoBehaviour
 			{
 				this.tt("-xFlip").Loop(flipDuration, (ttHandler t) =>
 				{
-					transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(-1, 1, 1), t.deltaTime);
+					transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(!invertX ? -1 : 1, 1, 1), t.deltaTime);
 				})
 				.Wait();
 			}

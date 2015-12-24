@@ -10,14 +10,18 @@ using System.Collections;
 using matnesis.TeaTime;
 
 
+[Reactive]
 [RequireComponent(typeof(Motion2D))]
 public class Motion2DActions : MonoBehaviour
 {
 	[Header("Config")]
 	public Transform target;
+	public BoolReactiveProp doFollow = new BoolReactiveProp(false);
+	public BoolReactiveProp doRunAway = new BoolReactiveProp(false);
 
 	// TeaTime
-	public TeaTime doFollowTarget;
+	private TeaTime followTarget;
+	private TeaTime runAwayFromTarget;
 
 	private Motion2D motion;
 
@@ -27,7 +31,10 @@ public class Motion2DActions : MonoBehaviour
 		motion = GetComponent<Motion2D>();
 
 
-		doFollowTarget = this.tt().Add(0.10f, () =>
+		// ^
+		// Follow
+
+		followTarget = this.tt().Pause().Add(0.10f, (ttHandler t) =>
 		{
 			Vector3 dirToTarget = target.position - transform.position;
 			dirToTarget.z = 0;
@@ -35,5 +42,31 @@ public class Motion2DActions : MonoBehaviour
 			motion.direction = dirToTarget.normalized;
 		})
 		.Repeat();
+
+		doFollow.Suscribe(x =>
+		{
+			if (x) followTarget.Play();
+			else followTarget.Stop();
+		});
+
+
+
+		// ^
+		// Run away
+
+		runAwayFromTarget = this.tt().Pause().Add(0.10f, (ttHandler t) =>
+		{
+			Vector3 dirToTarget = transform.position - target.position;
+			dirToTarget.z = 0;
+
+			motion.direction = dirToTarget.normalized;
+		})
+		.Repeat();
+
+		doRunAway.Suscribe(x =>
+		{
+			if (x) runAwayFromTarget.Play();
+			else runAwayFromTarget.Stop();
+		});
 	}
 }

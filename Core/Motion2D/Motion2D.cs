@@ -158,10 +158,4 @@ public class Motion2D : MonoBehaviour
 	{
 		CalculateWallCollision();
 	}
-
-
-	void OnCollisionExit2D(Collision2D other)
-	{
-		//
-	}
 }

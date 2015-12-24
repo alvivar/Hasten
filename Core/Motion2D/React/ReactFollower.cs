@@ -14,12 +14,12 @@ using matnesis.TeaTime;
 [RequireComponent(typeof(Motion2DActions))]
 public class ReactFollower : ReactBase
 {
-	[Header("Info")]
-	public float distanceToTarget;
-
 	[Header("Config")]
 	public Transform target;
-	public float distanceToFollow;
+	public float distance;
+
+	[Header("Info")]
+	public float distanceToTarget;
 
 	private Motion2D motion;
 
@@ -27,6 +27,9 @@ public class ReactFollower : ReactBase
 	void Start()
 	{
 		motion = GetComponent<Motion2D>();
+
+		if (target == null)
+			target = GetComponent<React>().target;
 	}
 
 
@@ -34,7 +37,7 @@ public class ReactFollower : ReactBase
 	{
 		distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-		if (distanceToTarget > distanceToFollow)
+		if (distance != 0 && distanceToTarget > distance)
 			return true;
 
 		return false;
@@ -44,7 +47,7 @@ public class ReactFollower : ReactBase
 	public override IEnumerator Action()
 	{
 		motion.actions.target = target;
-		motion.actions.doFollowTarget.Play();
+		motion.actions.doFollow.Value = true;
 
 		yield return new WaitForSeconds(0.10f);
 	}
@@ -52,9 +55,9 @@ public class ReactFollower : ReactBase
 
 	public override void Stop()
 	{
-		if (motion.actions.doFollowTarget.IsPlaying)
+		if (motion.actions.doFollow.Value)
 		{
-			motion.actions.doFollowTarget.Stop();
+			motion.actions.doFollow.Value = false;
 			motion.direction = Vector3.zero;
 		}
 	}

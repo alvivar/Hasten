@@ -21,4 +21,7 @@ public class Palette : MonoBehaviour
 
 	[Header("Yellow")]
 	public Color yellowBlink;
+
+	[Header("Blue")]
+	public Color bluePale;
 }

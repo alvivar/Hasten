@@ -3,7 +3,7 @@
 	url = git@github.com:alvivar/TeaTime.git
 [submodule "GhostGrid"]
 	path = GhostGrid
-url=https://github.com/tzamora/GhostGrid.git
+	url = git@github.com:alvivar/GhostGrid.git
 [submodule "Liteprint"]
 	path = Liteprint
 url=https://github.com/alvivar/Liteprint.git

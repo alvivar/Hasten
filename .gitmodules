@@ -6,7 +6,7 @@
 	url = git@github.com:alvivar/GhostGrid.git
 [submodule "Liteprint"]
 	path = Liteprint
-url=https://github.com/alvivar/Liteprint.git
+	url = git@github.com:alvivar/Liteprint.git
 [submodule "React"]
 	path = React
 url=https://github.com/alvivar/React.git

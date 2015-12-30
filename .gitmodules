@@ -1,6 +1,6 @@
 [submodule "TeaTime"]
 	path = TeaTime
-url=https://github.com/alvivar/TeaTime.git
+	url = git@github.com:alvivar/TeaTime.git
 [submodule "GhostGrid"]
 	path = GhostGrid
 url=https://github.com/tzamora/GhostGrid.git

@@ -5,20 +5,15 @@
 
 
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 
 public static class RayUtil
 {
-	public static Transform GetTransformAt(Vector3 origin, Vector3 direction, float length, LayerMask layer)
+	public static RaycastHit Hit(Vector3 origin, Vector3 direction, float rayLength, LayerMask layer)
 	{
-		Transform t = null;
-
 		RaycastHit rayHit;
-		if (Physics.Raycast(origin, direction, out rayHit,  length, layer))
-			return rayHit.transform;
+		Physics.Raycast(origin, direction, out rayHit,  rayLength, layer);
 
-		return null;
+		return rayHit;
 	}
 }

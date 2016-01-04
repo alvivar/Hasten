@@ -4,9 +4,8 @@
 // @matnesis 2016/01/01 11:52 AM
 
 
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 
 public static class ListUtil

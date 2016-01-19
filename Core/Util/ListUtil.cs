@@ -17,9 +17,9 @@ public static class ListUtil
 	public static List<float> GetNumbersBetween(float number1, float number2, float divisor)
 	{
 		// Round numbers? <~
-		number1 = Mathf.Round(number1);
-		number2 = Mathf.Round(number2);
-		divisor = Mathf.Round(divisor);
+		number1 = Mathf.Round(number1 / divisor) * divisor;
+		number2 = Mathf.Round(number2 / divisor) * divisor;
+		divisor = Mathf.Round(divisor / divisor) * divisor;
 
 		List<float> result = new List<float>();
 		float min = Mathf.Min(number1, number2);

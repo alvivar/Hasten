@@ -1,17 +1,10 @@
 ﻿
 // Pool v0.1
-// The simplest semi-automatic Unity Transform pool I could make.
+// The simplest semi-automatic Unity Transform pool I could make :)
 
-
-// Creating a new pool:
-// Pool pool = new Pool(prefab).Cache(10);
-
-// Getting a Transform:
-// Trasform newTransform = pool.Pop(); // The pool grows 20% if empty
-
-// Recicling an instance:
-// pool.Push(someTransform); // Pushed transforms became inactive
-
+// New ~ Pool pool = new Pool(prefab).Cache(10);
+// Get ~ Trasform newTransform = pool.Get();
+// Recycle ~ pool.Recycle(someTransform);
 
 // @matnesis ~ 2016/02/08 08:45 PM
 
@@ -25,41 +18,46 @@ using System.Collections.Generic;
 [Serializable]
 public class Pool
 {
-	public Transform _prefab;
-	public List<Transform> _waiting;
-	public List<Transform> _used;
-
+	[Header("Config")]
+	public Transform _prefab; // Base for new elements
 	public string _name;
-	public Transform _parent;
+	public Transform _parent; // Reference to the default pool parent
+	public float _growFactor = 0.20f; // How much the pool grows if empty (size *= 0.20f)
 
-	private float _growRate = 0.20f;
+	[Header("Pool data")]
+	public List<Transform> _waiting; // Ready to be used
+	public List<Transform> _used; // Currently being used
+
 
 
 	/// <summary>
 	/// A pool with a Transform as prefab.
+	/// The pool will grow if empty his current size *= growFactor [0..1].
 	/// </summary>
-	public Pool(Transform prefab)
+	public Pool(Transform prefab, float growFactor = 0.20f)
 	{
 		_prefab = prefab;
 		_waiting = new List<Transform>();
 		_used = new List<Transform>();
 
-		_name =  "[Pool|Prefab:" + prefab.name + "]";
-		_parent = GetPoolParent();
+		_name =  "[Pool(" + prefab.name + ")]";
+		_parent = GetDefaultPoolParent();
+		_growFactor = Mathf.Clamp01(growFactor);
 	}
 
 
 	/// <summary>
-	/// Returns a reference to an special Transform used as parent for pool instances.
+	/// Returns the Transform that represents the Pool parent.
+	/// Used to store new pool elements.
 	/// </summary>
-	private Transform GetPoolParent()
+	private Transform GetDefaultPoolParent()
 	{
 		// Current
 		if (_parent != null)
 			return _parent;
 
 
-		// Or creates
+		// Or find / create
 		GameObject go = GameObject.Find(_name);
 		if (go == null)
 			_parent = new GameObject(_name).transform;
@@ -69,7 +67,7 @@ public class Pool
 
 
 	/// <summary>
-	/// Creates (if needed) new instances ready to Pop().
+	/// Creates (if needed) new inactive instances ready to used.
 	/// </summary>
 	public Pool Cache(int quantity)
 	{
@@ -81,7 +79,7 @@ public class Pool
 		while (quantity-- > 0)
 		{
 			Transform t = MonoBehaviour.Instantiate(_prefab, Vector3.zero, Quaternion.identity) as Transform;
-			t.SetParent(GetPoolParent());
+			t.SetParent(GetDefaultPoolParent());
 			t.gameObject.SetActive(false);
 			_waiting.Add(t);
 		}
@@ -92,9 +90,9 @@ public class Pool
 
 
 	/// <summary>
-	/// Adds a Transform into the pool, at the end, inactive.
+	/// Adds the Transform into the pool, at the end, inactive, ready to be used.
 	/// </summary>
-	public Pool Push(Transform transform, bool setParentToPoolDefault = false)
+	public Pool Recycle(Transform transform, bool setParentToDefault = false)
 	{
 		// Known transform
 		if (_used.Contains(transform) || _waiting.Contains(transform))
@@ -114,8 +112,8 @@ public class Pool
 		transform.gameObject.SetActive(false);
 
 		// Use the pool parent
-		if (setParentToPoolDefault)
-			transform.SetParent(GetPoolParent());
+		if (setParentToDefault)
+			transform.SetParent(GetDefaultPoolParent());
 
 
 		return this;
@@ -123,13 +121,13 @@ public class Pool
 
 
 	/// <summary>
-	/// Returns an active Transform from the pool.
+	/// Returns the next active Transform from the pool.
 	/// </summary>
-	public Transform Pop()
+	public Transform Get()
 	{
 		// If empty, grow
 		if (_waiting.Count < 1)
-			Cache(Mathf.FloorToInt(_used.Count * _growRate) + 2);
+			Cache(Mathf.FloorToInt(_used.Count * _growFactor) + 2); // This 2 is trying to speed up small sizes, I guess
 
 
 		// Choose the first
@@ -139,7 +137,7 @@ public class Pool
 		if (chosen == null)
 		{
 			_waiting.RemoveAt(0);
-			return this.Pop();
+			return this.Get();
 		}
 
 		// Swap the state

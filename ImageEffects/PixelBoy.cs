@@ -1,5 +1,5 @@
 
-// Created by @wtfmig, shared on twitter.
+// Created by @wtfmig, shared on Twitter.
 // 2015/12/20 02:13 AM
 
 

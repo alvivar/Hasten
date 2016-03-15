@@ -37,7 +37,7 @@ public class Motion2DPaperFlip : MonoBehaviour
 				{
 					transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(!invertX ? 1 : -1, 1, 1), t.deltaTime);
 				})
-				.Wait();
+				.Immutable();
 			}
 
 			// Right
@@ -47,7 +47,7 @@ public class Motion2DPaperFlip : MonoBehaviour
 				{
 					transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(!invertX ? -1 : 1, 1, 1), t.deltaTime);
 				})
-				.Wait();
+				.Immutable();
 			}
 		}
 	}

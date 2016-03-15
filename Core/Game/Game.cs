@@ -1,13 +1,9 @@
 ﻿
 // Core communication between important stuff.
-
-// @matnesis
-// 2015/10/19 04:29 PM
+// @matnesis ~ 2015/10/19 04:29 PM
 
 
 using UnityEngine;
-using System.Collections;
-
 
 public class Game : MonoBehaviour
 {
@@ -29,7 +25,7 @@ public class Game : MonoBehaviour
 	}
 
 
-	// ^
+	// ~
 	private static Camera2D _camera2d;
 	public static Camera2D camera2D
 	{
@@ -41,9 +37,22 @@ public class Game : MonoBehaviour
 			return _camera2d;
 		}
 	}
+    
+    
+    // ~
+    private static Whitescreen _whitescreen;
+	public static Whitescreen whitescreen
+	{
+		get
+		{
+			if (_whitescreen == null)
+				_whitescreen = GameObject.FindObjectOfType<Whitescreen>();
+			return _whitescreen;
+		}
+	}
 
 
-	// ^
+	// ~
 	private static Sounds _sounds;
 	public static Sounds sounds
 	{
@@ -57,7 +66,7 @@ public class Game : MonoBehaviour
 	}
 
 
-	// ^
+	// ~
 	private static Palette _palette;
 	public static Palette palette
 	{
@@ -71,7 +80,7 @@ public class Game : MonoBehaviour
 	}
 
 
-	// ^
+	// ~
 	private static Timeflux _timeflux;
 	public static Timeflux timeflux
 	{

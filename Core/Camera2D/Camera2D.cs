@@ -1,12 +1,11 @@
 ﻿
 // Custom 2D camera with some tricks.
 
-// Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
+// Andrés Villalobos ~ andresalvivar@gmail.com ~ twitter.com/matnesis
 // 2015/08/11 09:42 PM
 
 
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using matnesis.TeaTime;
 
@@ -22,9 +21,6 @@ public class Camera2D : MonoBehaviour
     public float speed = 3; // Speed
     public float layer = -10; // Camera Z position
     public float childrenZLayer = 1; // Local z position for children
-
-    [Header("White Screen")]
-    public Renderer whiteScreen; // Renderer used to fully cover the screen for special fx
 
 
     /// <summary>
@@ -42,28 +38,6 @@ public class Camera2D : MonoBehaviour
 
     void Start()
     {
-        // The whiteScreen could be disabled to avoid click over it while working
-		if (whiteScreen && whiteScreen.gameObject.activeSelf == false)
-            whiteScreen.gameObject.SetActive(true);
-
-
-        // White Screen adjustment
-        this.tt("WhiteScreenAdjustment").Add(() =>
-        {
-            if (whiteScreen != null)
-            {
-                Vector2 wh = Camera2D.GetWidthHeightScale(Camera.main);
-
-                float width = wh.x;
-                float height = wh.y;
-
-                whiteScreen.transform.localScale = new Vector3(width, height, 1) * 1.1f;
-                whiteScreen.sortingOrder = Mathf.Abs(Mathf.FloorToInt(layer));
-            }
-        })
-        .Add(1).Repeat();
-
-
         // Fix children layer
         Transform[] children = GetComponentsInChildren<Transform>();
         for (int i = 0; i < children.Length; i++)

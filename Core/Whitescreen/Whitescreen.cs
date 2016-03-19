@@ -8,11 +8,12 @@ using matnesis.TeaTime;
 
 public class Whitescreen : MonoBehaviour
 {
+    public int zLayer = 1;
+
     [Header("Automatic")]
     public Renderer render;
     public Material material;
     public Camera cam;
-    public int zLayer = 1;
 
 
     void Awake()
@@ -26,7 +27,7 @@ public class Whitescreen : MonoBehaviour
         if (cam == null)
             cam = Camera.main;
 
-        // Parenting & layers        
+        // Parenting & layers
         transform.SetParent(cam.transform);
         transform.localPosition = new Vector3(0, 0, zLayer);
 

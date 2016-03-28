@@ -145,7 +145,7 @@ public class Motion2D : MonoBehaviour
     }
 
 
-    
+
     Vector4 GetWallsColliding(Vector3 position, float radius, float rayLength, LayerMask layer)
     {
         Vector4 result = new Vector4(
@@ -162,5 +162,11 @@ public class Motion2D : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         wallsColliding = GetWallsColliding(transform.position, colliderRadius, raycastLength, wallLayer);
+    }
+
+
+    public void Reset()
+    {
+        rbody.velocity = movement = Vector2.zero;
     }
 }

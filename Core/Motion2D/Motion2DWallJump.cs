@@ -1,7 +1,7 @@
 ﻿
 // Experimental wall Jump+Crawl component for Motion2D.
 
-// Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
+// Andrés Villalobos ~ andresalvivar@gmail.com ~ twitter.com/matnesis
 // 2015/08/17 12:12 AM
 
 

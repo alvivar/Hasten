@@ -6,7 +6,6 @@
 
 using InControl;
 
-
 public class InControlActionSet : PlayerActionSet
 {
 	// Joystick

@@ -7,8 +7,6 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using matnesis.TeaTime;
-
 
 public class Camera2D : MonoBehaviour
 {
@@ -25,7 +23,7 @@ public class Camera2D : MonoBehaviour
 
     /// <summary>
     /// Returns a Vector2 where 'x' represents the width and 'y' represents the
-    /// heigh of the screen scale for the camera.
+    /// heigh of the screen as scale for the camera.
     /// </summary>
     public static Vector2 GetWidthHeightScale(Camera camera)
     {

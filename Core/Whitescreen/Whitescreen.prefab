@@ -31,6 +31,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &2341308
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -40,13 +41,14 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 2100000, guid: 4bf95ac51c9444c2783917d97cba9f04, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
-  m_ReflectionProbeUsage: 0
   m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
@@ -87,10 +89,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e694d795b5f4fd0b03632290354f86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  zLayer: 1
   render: {fileID: 0}
   material: {fileID: 0}
   cam: {fileID: 0}
-  zLayer: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

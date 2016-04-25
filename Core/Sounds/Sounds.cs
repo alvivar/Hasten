@@ -31,9 +31,9 @@ public class Sounds : MonoBehaviour
         int bgMark = 0;
         this.tt("backgroundPlay").Add((ttHandler t) =>
         {
+            t.WaitFor(backgroundClips[bgMark].length * 0.8f);
             background.PlayOneShot(backgroundClips[bgMark]);
             bgMark = (bgMark + 1) % backgroundClips.Length;
-            t.WaitFor(backgroundClips[bgMark].length * 0.8f);
         })
         .Repeat();
     }

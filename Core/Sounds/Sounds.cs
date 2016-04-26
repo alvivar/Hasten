@@ -1,5 +1,5 @@
 ﻿
-// Sound library.
+// Sound library, belongs to Game.
 
 // Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
 // 2015/10/19 04:48 PM
@@ -8,33 +8,89 @@
 using UnityEngine;
 using matnesis.TeaTime;
 
-
 public class Sounds : MonoBehaviour
 {
-    public AudioClip[] backgroundClips;
+    [Header("Background")]
+    public AudioClip[] bgLoop;
+    public AudioClip[] bgRandom;
 
+    [Header("Bullets")]
+    public AudioClip bulletShoot;
+    public AudioClip bulletExplosion;
+
+    [Header("Teleport")]
+    public AudioClip teleportIn;
+    public AudioClip teleportDuring;
+    public AudioClip teleportOut;
+
+
+    [Header("Audio sources")]
     public AudioSource background;
-    public AudioSource sounds;
+    public AudioSource[] sounds = new AudioSource[3];
+
+    private int soundsIndex = 0;
 
 
     void Start()
     {
+        // Audio sources are connected
         AudioSource[] audios = GetComponents<AudioSource>();
+
         background = audios[0];
-        sounds = audios[1];
+
+        sounds[0] = audios[1];
+        sounds[1] = audios[2];
+        sounds[2] = audios[3];
 
 
-        // Play the soundtrack sounds one after the other
-        if (backgroundClips.Length < 1)
-            return;
-
-        int bgMark = 0;
-        this.tt("backgroundPlay").Add((ttHandler t) =>
+        // @
+        // Bg sounds to loop
         {
-            t.WaitFor(backgroundClips[bgMark].length * 0.8f);
-            background.PlayOneShot(backgroundClips[bgMark]);
-            bgMark = (bgMark + 1) % backgroundClips.Length;
-        })
-        .Repeat();
+            int bgMark = 0;
+            this.tt("bgLoop").If(() => bgLoop.Length > 0).Add((ttHandler t) =>
+            {
+                // Wait for the sound to almost over
+                background.PlayOneShot(bgLoop[bgMark]);
+                t.WaitFor(bgLoop[bgMark].length * 0.8f);
+
+                // Next
+                bgMark = ++bgMark % bgLoop.Length;
+            })
+            .Repeat();
+        }
+
+
+        // @
+        // Random bg sounds
+        {
+            this.tt("bgRandom")
+            .Add(() => Random.Range(180f, 240f))
+            .If(() => bgRandom.Length > 0).Add((ttHandler t) =>
+            {
+                // Play a random bg sound
+                int randomBg = Random.Range(0, bgRandom.Length);
+                background.PlayOneShot(bgRandom[randomBg]);
+
+                // Waits the sound duration plus a random between 3m and 4m
+                t.WaitFor(bgRandom[randomBg].length);
+            })
+           .Repeat();
+        }
+    }
+
+
+    public AudioSource PlaySound(AudioClip clip, float volume = 1, float pitch = 1)
+    {
+        if (clip == null) return null;
+
+        AudioSource current = sounds[soundsIndex];
+        current.pitch = pitch;
+        current.PlayOneShot(clip, volume);
+
+        // Next audio source
+        soundsIndex = ++soundsIndex % sounds.Length;
+
+
+        return current;
     }
 }

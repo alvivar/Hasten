@@ -1,31 +1,30 @@
 ﻿
-// ^
-// Observer that syncronize ReactiveProps with the Inspector on classes with
-// the attribute [Reactive], classic reflection. This only happens on the
-// Unity Editor.
+// @
+// Observer that syncronizes ReactiveProps with the Inspector on classes with
+// the attribute [Reactive], classic reflection. This only happens on the Unity
+// Editor.
 
 // @matnesis
 // 2015/12/18 08:53 PM
 
 
-using System;
+#if UNITY_EDITOR
 using System.Reflection;
 using UnityEngine;
-
-#if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 
-// ^
+// @
 // [Reactive] is a custom Attribute that indicates that a class contains
-// ReactiveProps and need to be observed.
+// ReactiveProps and need to be watched for changes while the Editor is running.
 
+using System;
 [AttributeUsage(AttributeTargets.Class)]
 class Reactive : Attribute { }
 
 
-// ^
+// @
 // ReactiveProps Observer, runs only on the Editor, frame by frame,
 // automatically, syncing ReactiveProps with the Inspector on classes with the
 // Attribute [Reactive].

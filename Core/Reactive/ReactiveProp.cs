@@ -1,5 +1,5 @@
 ﻿
-// ^
+// @
 // Reactive Properties!
 
 // Soon.
@@ -9,9 +9,7 @@
 
 
 using UnityEngine;
-using System.Collections;
 using System;
-
 
 /// <summary>
 /// Generic Reactive Property.
@@ -50,8 +48,7 @@ public class ReactiveProp<T>
 	{
 		suscribers += callback;
 
-		if (valueSent != null)
-			callback(_value);
+		if (valueSent != null) callback(_value);
 	}
 
 
@@ -61,15 +58,13 @@ public class ReactiveProp<T>
 			return;
 
 		valueSent = _value;
-		if (suscribers != null)
-			suscribers(_value);
+		if (suscribers != null) suscribers(_value);
 	}
 }
 
 
-// ^
-// Specialized properties can be seeing on the Unity inspector.
-
+// @
+// Specialized properties that can be seeing on the Unity inspector.
 
 [Serializable]
 public class BoolReactiveProp : ReactiveProp<bool>

@@ -25,8 +25,8 @@ public class EyeBlink : MonoBehaviour
 			ts.Append(transform.DOScaleY(0.001f, 0.10f));
 			ts.Append(transform.DOScaleY(1, 0.10f));
 
-			t.WaitFor(ts.WaitForCompletion());
-			t.WaitFor(Random.Range(randomBetween.x, randomBetween.y));
+			t.Wait(ts.WaitForCompletion());
+			t.Wait(Random.Range(randomBetween.x, randomBetween.y));
 		})
 		.Repeat();
 	}

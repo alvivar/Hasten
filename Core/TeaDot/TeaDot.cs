@@ -43,7 +43,7 @@ public class TeaDot : MonoBehaviour
 			pump.Append(transform.DOScale(transform.localScale * hpGrowScale, hpAttack));
 			pump.Append(transform.DOScale(Vector3.one, hpDecay));
 
-			t.WaitFor(pump.WaitForCompletion());
+			t.Wait(pump.WaitForCompletion());
 		})
 		.Add(hpRepeat)
 		.Repeat();
@@ -58,7 +58,7 @@ public class TeaDot : MonoBehaviour
 			ts.Append(transform.DOMove(currentPos + fAddRemove, fDuration));
 			ts.Append(transform.DOMove(currentPos, fDuration));
 
-			t.WaitFor(ts.WaitForCompletion());
+			t.Wait(ts.WaitForCompletion());
 		})
 		.Repeat();
 	}

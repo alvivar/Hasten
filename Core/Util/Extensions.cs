@@ -1,9 +1,9 @@
 ﻿
+// 2016/05/14 12:58 AM
+
 
 using UnityEngine;
 using System.Collections;
-using System;
-
 
 public static class Extensions
 {

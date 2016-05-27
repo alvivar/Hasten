@@ -30,11 +30,11 @@ public class Motion2DWakySteps : MonoBehaviour
 		// Waky
 		wakyMovement = this.tt().Pause().Add((ttHandler t) =>
 		{
-			t.WaitFor(transform.DORotate(new Vector3(0, 0, angle), duration).WaitForCompletion());
+			t.Wait(transform.DORotate(new Vector3(0, 0, angle), duration).WaitForCompletion());
 		})
 		.Add((ttHandler t) =>
 		{
-			t.WaitFor(transform.DORotate(new Vector3(0, 0, -angle), duration).WaitForCompletion());
+			t.Wait(transform.DORotate(new Vector3(0, 0, -angle), duration).WaitForCompletion());
 		})
 		.Repeat();
 	}

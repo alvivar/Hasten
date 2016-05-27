@@ -10,7 +10,7 @@ public class Whitescreen : MonoBehaviour
 {
     public int zLayer = 1;
 
-    [Header("Automatic")]
+    [Header("Automatic references")]
     public Renderer render;
     public Material material;
     public Camera cam;
@@ -36,8 +36,8 @@ public class Whitescreen : MonoBehaviour
         if (gameObject.activeSelf == false)
             gameObject.SetActive(true);
 
-        // Auto adjustments
-        this.tt("AutoAdjustement").Add(() =>
+        // Auto scale
+        this.tt("@fillTheScreen").Add(() =>
         {
             // Scale
             float height = Camera.main.orthographicSize * 2.0f;

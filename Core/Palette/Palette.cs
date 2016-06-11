@@ -1,13 +1,11 @@
 ﻿
-// Simple color library.
+// Simple color collection.
 
-// Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
+// @matnesis
 // 2015/09/30 09:48 PM
 
 
 using UnityEngine;
-using System.Collections;
-
 
 public class Palette : MonoBehaviour
 {

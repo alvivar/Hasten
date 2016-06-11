@@ -13,6 +13,9 @@ using matnesis.TeaTime;
 [RequireComponent(typeof(CircleCollider2D))]
 public class Motion2D : MonoBehaviour
 {
+    public bool update = true;
+
+
     // Axis shortcut
     private Motion2DAxis _axis;
     public Motion2DAxis axis
@@ -113,6 +116,9 @@ public class Motion2D : MonoBehaviour
 
     void Update()
     {
+        if (!update) return;
+
+
         // Direction * magnitude
         movement = transform.TransformDirection(direction.normalized);
         movement *= magnitude;

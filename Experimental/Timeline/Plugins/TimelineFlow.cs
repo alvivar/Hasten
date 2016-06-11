@@ -1,7 +1,7 @@
 ﻿
 // Timeline animation flow using TeaTime.
 
-// @matnesis ~
+// @matnesis
 // 2016/05/14 12:15 AM
 
 

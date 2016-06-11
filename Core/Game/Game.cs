@@ -1,7 +1,7 @@
 ﻿
 // Game shared data & core communication between important stuff.
 
-// @matnesis ~
+// @matnesis
 // 2015/10/19 04:29 PM
 
 
@@ -9,13 +9,13 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-	// ~
-	// Important default data.
+    // ~
+    // Important default data.
     public static float defaultOrthographicSize = 0;
 
 
     // ~
-	// Tag.Player
+    // Tag.Player
     private static Transform _player;
     public static Transform player
     {
@@ -76,6 +76,18 @@ public class Game : MonoBehaviour
         {
             if (_palette == null) _palette = GameObject.FindObjectOfType<Palette>();
             return _palette;
+        }
+    }
+
+
+    // ~
+    private static Statistics _statistics;
+    public static Statistics statistics
+    {
+        get
+        {
+            if (_statistics == null) _statistics = GameObject.FindObjectOfType<Statistics>();
+            return _statistics;
         }
     }
 

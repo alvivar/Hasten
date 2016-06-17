@@ -35,14 +35,16 @@ public class TimelineFlow : MonoBehaviour
     /// <summary>
     /// Reseteable smooth transition to the selected Timeline index.
     /// </summary>
-    public void GoTo(int index, float seconds)
+    public TeaTime GoTo(int index, float seconds)
     {
+        // Allows to do this GoTo(index + 1, 2)
         index = index > timeline.positions.Count ? 0 : index;
         index = index < 0 ? timeline.positions.Count - 1 : index;
         this.index = index;
 
 
-        this.tt("@goto").Reset().Add((ttHandler t) =>
+        // @
+        return this.tt("@goto").Reset().Add((ttHandler t) =>
         {
             t.Wait(this.ttMove(transform, timeline.positions[index], seconds));
             t.Wait(this.ttRotate(transform, timeline.rotations[index], seconds));

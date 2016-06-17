@@ -1,8 +1,5 @@
 ﻿
 using UnityEngine;
-using System.Collections;
-using matnesis.TeaTime;
-
 
 [Reactive]
 public class SimpleRPG : MonoBehaviour

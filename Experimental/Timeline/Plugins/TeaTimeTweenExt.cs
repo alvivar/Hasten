@@ -1,5 +1,5 @@
 ﻿
-// TeaTime Tween Extensions!
+// TeaTime Tween Extensions! #experimental
 
 // @matnesis
 // 2016/05/14 01:00 AM

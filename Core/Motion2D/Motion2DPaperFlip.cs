@@ -8,47 +8,50 @@
 using UnityEngine;
 using matnesis.TeaTime;
 
-
 [RequireComponent(typeof(Motion2D))]
 public class Motion2DPaperFlip : MonoBehaviour
 {
-	[Header("Config")]
-	public bool invertX = false;
-	public bool enableXFlip = true;
-	public float flipDuration = 0.20f;
+    [Header("Config")]
+    public Transform target;
+    public bool invertX = false;
+    public bool enableXFlip = true;
+    public float flipDuration = 0.20f;
 
-	private Motion2D motion;
-
-
-	void Start()
-	{
-		motion = GetComponent<Motion2D>();
-	}
+    private Motion2D motion;
 
 
-	void Update()
-	{
-		if (enableXFlip)
-		{
-			// Left
-			if (motion.direction.x > 0)
-			{
-				this.tt("xFlip").Loop(flipDuration, (ttHandler t) =>
-				{
-					transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(!invertX ? 1 : -1, 1, 1), t.deltaTime);
-				})
-				.Immutable();
-			}
+    void Start()
+    {
+        motion = GetComponent<Motion2D>();
 
-			// Right
-			if (motion.direction.x < 0)
-			{
-				this.tt("-xFlip").Loop(flipDuration, (ttHandler t) =>
-				{
-					transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(!invertX ? -1 : 1, 1, 1), t.deltaTime);
-				})
-				.Immutable();
-			}
-		}
-	}
+        // If the target wasn't selected, use self
+        if (!target) target = transform;
+    }
+
+
+    void Update()
+    {
+        if (enableXFlip)
+        {
+            // Left
+            if (motion.direction.x < 0)
+            {
+                this.tt("@xFlipL").Loop(flipDuration, (ttHandler t) =>
+                {
+                    target.localScale = Vector3.Lerp(target.localScale, new Vector3(!invertX ? -1 : 1, 1, 1), t.deltaTime);
+                })
+                .Immutable();
+            }
+
+            // Right
+            if (motion.direction.x > 0)
+            {
+                this.tt("@xFlipR").Loop(flipDuration, (ttHandler t) =>
+                {
+                    target.localScale = Vector3.Lerp(target.localScale, new Vector3(!invertX ? 1 : -1, 1, 1), t.deltaTime);
+                })
+                .Immutable();
+            }
+        }
+    }
 }

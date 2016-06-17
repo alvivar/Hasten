@@ -9,11 +9,11 @@ using DG.Tweening;
 using UnityEngine;
 using matnesis.TeaTime;
 
-
 [RequireComponent(typeof(Motion2D))]
 public class Motion2DWakySteps : MonoBehaviour
 {
 	[Header("Config")]
+	public Transform target;
 	public bool enableWakySteps = true;
 	public float angle = 5;
 	public float duration = 0.20f;
@@ -26,15 +26,18 @@ public class Motion2DWakySteps : MonoBehaviour
 	{
 		motion = GetComponent<Motion2D>();
 
+		// Use yourself then
+		if (!target) target = transform;
+
 
 		// Waky
 		wakyMovement = this.tt().Pause().Add((ttHandler t) =>
 		{
-			t.Wait(transform.DORotate(new Vector3(0, 0, angle), duration).WaitForCompletion());
+			t.Wait(target.DORotate(new Vector3(0, 0, angle), duration).WaitForCompletion());
 		})
 		.Add((ttHandler t) =>
 		{
-			t.Wait(transform.DORotate(new Vector3(0, 0, -angle), duration).WaitForCompletion());
+			t.Wait(target.DORotate(new Vector3(0, 0, -angle), duration).WaitForCompletion());
 		})
 		.Repeat();
 	}

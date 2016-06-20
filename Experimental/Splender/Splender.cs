@@ -7,6 +7,7 @@
 
 
 using UnityEngine;
+// using matnesis.Liteprint;
 // using DG.Tweening;
 
 public class Splender : MonoBehaviour
@@ -14,7 +15,7 @@ public class Splender : MonoBehaviour
     // public static void BubbleExplosion(Transform explosion, Vector3 position, float radius, float duration, Color color)
     // {
     //     // Main explosion
-    //     Transform mainExplosion = explosion.lpSpawn(position, Quaternion.identity);
+    //     Transform mainExplosion = explosion.liteInstantiate(position, Quaternion.identity);
     //     mainExplosion.SetPosZ(Camera.main.transform.position.z + 1);
     //     MeshRenderer mainMesh = mainExplosion.GetComponent<MeshRenderer>();
 

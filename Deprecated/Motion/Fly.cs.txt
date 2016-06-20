@@ -164,7 +164,7 @@ public class Fly : MonoBehaviour
             motion.Jump();
 
             // Air blast effect
-            Transform fromPool = sprite.transform.lpSpawn(sprite.transform.position, Quaternion.identity);
+            Transform fromPool = sprite.transform.liteInstantiate(sprite.transform.position, Quaternion.identity);
 
             SpriteRenderer currentSprite = fromPool.GetComponent<SpriteRenderer>();
             currentSprite.color = Color.white;

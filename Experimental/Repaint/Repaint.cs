@@ -7,10 +7,8 @@
 
 
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 
 [ExecuteInEditMode]
 public class Repaint : MonoBehaviour

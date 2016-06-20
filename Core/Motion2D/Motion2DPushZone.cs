@@ -6,8 +6,6 @@
 
 
 using UnityEngine;
-using System.Collections;
-
 
 public class Motion2DPushZone : MonoBehaviour
 {

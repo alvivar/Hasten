@@ -1,14 +1,12 @@
 
-// Configurable Motion2D TeaTime behaviours.
+// Configurable Motion2D & TeaTime behaviours.
 
 // @matnesis
 // 2015/12/13 06:11 PM
 
 
 using UnityEngine;
-using System.Collections;
 using matnesis.TeaTime;
-
 
 [Reactive]
 [RequireComponent(typeof(Motion2D))]

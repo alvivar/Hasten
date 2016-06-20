@@ -16,7 +16,8 @@ public class Motion2D : MonoBehaviour
     public bool update = true;
 
 
-    // Axis shortcut
+    // ^
+    // Axis
     private Motion2DAxis _axis;
     public Motion2DAxis axis
     {
@@ -24,7 +25,17 @@ public class Motion2D : MonoBehaviour
     }
 
 
-    // Jump shortcut
+    // ^
+    // Impulse
+    private Motion2DImpulse _impulse;
+    public Motion2DImpulse impulse
+    {
+        get { return _impulse == null ? _impulse = GetComponent<Motion2DImpulse>() : _impulse; }
+    }
+
+
+    // ^
+    // Jump
     private Motion2DJump _jump;
     public Motion2DJump jump
     {
@@ -32,7 +43,8 @@ public class Motion2D : MonoBehaviour
     }
 
 
-    // Wall jump shortcut
+    // ^
+    // Wall jump
     private Motion2DWallJump _wallJump;
     public Motion2DWallJump wallJump
     {
@@ -40,7 +52,8 @@ public class Motion2D : MonoBehaviour
     }
 
 
-    // Actions shortcut
+    // ^
+    // Actions
     private Motion2DActions _actions;
     public Motion2DActions actions
     {
@@ -48,7 +61,8 @@ public class Motion2D : MonoBehaviour
     }
 
 
-    // Connection to Rigidbody2D.velocity
+    // ^
+    // Rigidbody2D.velocity connection
     public Vector2 velocity
     {
         get { return rbody.velocity; }

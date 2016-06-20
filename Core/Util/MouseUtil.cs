@@ -6,13 +6,11 @@
 
 
 using UnityEngine;
-using System.Collections;
-
 
 public class MouseUtil
 {
-	public static Vector3 GetMousePosition()
-	{
-		return Camera.main.ScreenToWorldPoint(Input.mousePosition);
-	}
+    public static Vector3 GetMousePosition()
+    {
+        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    }
 }

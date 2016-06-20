@@ -10,6 +10,11 @@ public static class Extensions
     // ^
     // MonoBehaviour
 
+    public static T _<T>(this MonoBehaviour instance)
+    {
+        return instance.GetComponent<T>();
+    }
+
     public static Transform GetOrCreateTransform(this MonoBehaviour self, string name)
     {
         GameObject go = GameObject.Find(name);
@@ -18,11 +23,6 @@ public static class Extensions
             go = new GameObject(name);
 
         return go.transform;
-    }
-
-    public static T _<T>(this MonoBehaviour instance)
-    {
-        return instance.GetComponent<T>();
     }
 
 

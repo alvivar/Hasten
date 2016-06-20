@@ -9,6 +9,8 @@ using UnityEngine;
 using System.Collections;
 
 
+[RequireComponent(typeof(Motion2D))]
+[RequireComponent(typeof(Motion2DActions))]
 public class ReactRunAway : ReactBase
 {
 	[Header("Config")]

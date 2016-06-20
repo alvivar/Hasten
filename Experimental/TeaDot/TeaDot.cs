@@ -6,10 +6,8 @@
 
 
 using UnityEngine;
-using System.Collections;
 using matnesis.TeaTime;
 using DG.Tweening;
-
 
 public class TeaDot : MonoBehaviour
 {

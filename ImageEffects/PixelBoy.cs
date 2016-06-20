@@ -1,10 +1,11 @@
 
 // Created by @wtfmig, shared on Twitter.
+// http://twitter.com/wtfmig/status/676883299495624704
+
 // 2015/12/20 02:13 AM
 
 
 using UnityEngine;
-using System.Collections;
 
 [ExecuteInEditMode]
 [AddComponentMenu("Image Effects/PixelBoy")]
@@ -20,11 +21,10 @@ public class PixelBoy : MonoBehaviour
             return;
         }
     }
-    void Update() {
-
+    void Update()
+    {
         float ratio = ((float)Camera.main.pixelHeight / (float)Camera.main.pixelWidth);
         h = Mathf.RoundToInt(w * ratio);
-
     }
     void OnRenderImage(RenderTexture source, RenderTexture destination)
     {

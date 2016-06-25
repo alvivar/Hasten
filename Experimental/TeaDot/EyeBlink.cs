@@ -12,22 +12,22 @@ using matnesis.TeaTime;
 
 public class EyeBlink : MonoBehaviour
 {
-	public Vector2 randomBetween = new Vector2(4, 8);
-	public TeaTime blink;
+    public Vector2 randomBetween = new Vector2(4, 8);
+    public TeaTime ttBlink;
 
 
-	void Start()
-	{
-		TeaTime blink = this.tt();
-		blink.Add((ttHandler t) =>
-		{
-			Sequence ts = DOTween.Sequence();
-			ts.Append(transform.DOScaleY(0.001f, 0.10f));
-			ts.Append(transform.DOScaleY(1, 0.10f));
+    void Start()
+    {
+        ttBlink = this.tt();
+        ttBlink.Add((ttHandler t) =>
+        {
+            Sequence ts = DOTween.Sequence();
+            ts.Append(transform.DOScaleY(0.001f, 0.10f));
+            ts.Append(transform.DOScaleY(1, 0.10f));
 
-			t.Wait(ts.WaitForCompletion());
-			t.Wait(Random.Range(randomBetween.x, randomBetween.y));
-		})
-		.Repeat();
-	}
+            t.Wait(ts.WaitForCompletion());
+            t.Wait(Random.Range(randomBetween.x, randomBetween.y));
+        })
+        .Repeat();
+    }
 }

@@ -29,18 +29,18 @@ public class Motion2DImpulse : MonoBehaviour
     }
 
 
-    public void DoImpulse(Vector2 force, float attack, float sustain, float decay)
+    public TeaTime DoImpulse(Vector2 force, float attack, float sustain, float decay)
     {
         this.force = force;
         this.attack = attack;
         this.sustain = sustain;
         this.decay = decay;
 
-        DoImpulse();
+        return DoImpulse();
     }
 
 
-    public void DoImpulse()
+    public TeaTime DoImpulse()
     {
         // @
         {
@@ -54,8 +54,6 @@ public class Motion2DImpulse : MonoBehaviour
                     force,
                     t.t
                 );
-
-                Debug.Log(force);
             })
             .Add(sustain).Loop(decay, (ttHandler t) =>
             {
@@ -65,9 +63,9 @@ public class Motion2DImpulse : MonoBehaviour
                     Vector2.zero,
                     t.t
                 );
-
-                Debug.Log(force);
             });
         }
+
+        return ttImpulse;
     }
 }

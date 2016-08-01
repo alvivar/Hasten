@@ -1,6 +1,8 @@
 ﻿
 // Semi-automatic effect layer for a 2D orthographic camera.
-// @matnesis ~ 2016/03/14 07:38 PM
+
+// @matnesis
+// 2016/03/14 07:38 PM
 
 
 using UnityEngine;
@@ -8,7 +10,7 @@ using matnesis.TeaTime;
 
 public class Whitescreen : MonoBehaviour
 {
-    public int zLayer = 1;
+    public int zOnCam = 1;
 
     [Header("Automatic references")]
     public Renderer render;
@@ -29,7 +31,7 @@ public class Whitescreen : MonoBehaviour
 
         // Parenting & layers
         transform.SetParent(cam.transform);
-        transform.localPosition = new Vector3(0, 0, zLayer);
+        transform.localPosition = new Vector3(0, 0, zOnCam);
 
 
         // Auto enable
@@ -44,7 +46,7 @@ public class Whitescreen : MonoBehaviour
             float width = height * Screen.width / Screen.height;
 
             transform.localScale = new Vector3(width, height, 1) * 1.1f;
-            render.sortingOrder = Mathf.Abs(Mathf.FloorToInt(zLayer));
+            render.sortingOrder = Mathf.Abs(Mathf.FloorToInt(zOnCam));
         })
         .Add(1).Repeat();
     }

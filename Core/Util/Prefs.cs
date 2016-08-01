@@ -7,9 +7,9 @@
 
 using UnityEngine;
 
-public class Prefs : MonoBehaviour
+public class Prefs
 {
-    // @
+    // ^
     // Boolean
 
     public static bool Bool(string id)
@@ -28,7 +28,7 @@ public class Prefs : MonoBehaviour
     }
 
 
-    // @
+    // ^
     // Int
 
     public static int Int(string id)
@@ -47,7 +47,7 @@ public class Prefs : MonoBehaviour
     }
 
 
-    // @
+    // ^
     // Float
 
     public static float Float(string id)

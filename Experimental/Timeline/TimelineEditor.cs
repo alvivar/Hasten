@@ -10,16 +10,18 @@ using UnityEditor;
 [CustomEditor(typeof(Timeline))]
 public class TimelineEditor : Editor
 {
-    Timeline transformData;
-    int selectedMarker = 0;
-    Vector3 selectedPos;
-    Vector3 selectedRot;
-    Vector3 selectedScale;
+    Timeline timeline;
+
+    int timelineIndex = 0;
+    Vector3 timelinePos;
+    Vector3 timelineRot;
+    Vector3 timelineSca;
+
+    int childrenIndex = 0;
 
     string message = "";
     char[] spinner = { '/', '-', '\\', '|' };
     int spinnerId = 0;
-
 
 
     void OnEnable()
@@ -27,7 +29,7 @@ public class TimelineEditor : Editor
         if (Application.isPlaying) return;
 
 
-        transformData = target as Timeline;
+        timeline = target as Timeline;
         message = "";
     }
 
@@ -38,14 +40,14 @@ public class TimelineEditor : Editor
 
 
         // Let's go to the first one at the end to avoid a wrong auto save
-        if (transformData && transformData.positions.Count < 1) return;
+        if (timeline && timeline.positions.Count < 1) return;
 
-        selectedMarker = 0;
+        timelineIndex = 0;
         SyncSelectedWithMarker();
 
-        transformData.transform.position = selectedPos;
-        transformData.transform.eulerAngles = selectedRot;
-        transformData.transform.localScale = selectedScale;
+        timeline.transform.position = timelinePos;
+        timeline.transform.eulerAngles = timelineRot;
+        timeline.transform.localScale = timelineSca;
     }
 
 
@@ -61,11 +63,11 @@ public class TimelineEditor : Editor
 
 
         // Auto Update
-        if (transformData.positions.Count > 0 && IsAutoUpdateNeeded())
+        if (timeline.positions.Count > 0 && IsAutoUpdateNeeded())
         {
-            transformData.positions[selectedMarker] = transformData.transform.position;
-            transformData.rotations[selectedMarker] = transformData.transform.eulerAngles;
-            transformData.scales[selectedMarker] = transformData.transform.localScale;
+            timeline.positions[timelineIndex] = timeline.transform.position;
+            timeline.rotations[timelineIndex] = timeline.transform.eulerAngles;
+            timeline.scales[timelineIndex] = timeline.transform.localScale;
 
             message = spinner[spinnerId++] + "";
             spinnerId %= spinner.Length;
@@ -77,55 +79,55 @@ public class TimelineEditor : Editor
 
         // Back
         GUILayout.BeginHorizontal();
-        if (transformData.positions.Count > 0 && GUILayout.Button("<~", GUILayout.ExpandWidth(false)))
+        if (timeline.positions.Count > 0 && GUILayout.Button("<~", GUILayout.ExpandWidth(false)))
         {
-            selectedMarker -= 1;
+            timelineIndex -= 1;
             SyncSelectedWithMarker();
 
             // Update
-            transformData.transform.position = selectedPos;
-            transformData.transform.eulerAngles = selectedRot;
-            transformData.transform.localScale = selectedScale;
+            timeline.transform.position = timelinePos;
+            timeline.transform.eulerAngles = timelineRot;
+            timeline.transform.localScale = timelineSca;
 
             message = "";
         }
 
         // Next
-        if (transformData.positions.Count > 0 && GUILayout.Button("~>", GUILayout.ExpandWidth(false)))
+        if (timeline.positions.Count > 0 && GUILayout.Button("~>", GUILayout.ExpandWidth(false)))
         {
-            selectedMarker += 1;
+            timelineIndex += 1;
             SyncSelectedWithMarker();
 
             // Update
-            transformData.transform.position = selectedPos;
-            transformData.transform.eulerAngles = selectedRot;
-            transformData.transform.localScale = selectedScale;
+            timeline.transform.position = timelinePos;
+            timeline.transform.eulerAngles = timelineRot;
+            timeline.transform.localScale = timelineSca;
 
             message = "";
         }
 
         // Marker info
-        if (transformData.positions.Count < 1) GUILayout.Label("Empty.");
-        else GUILayout.Label((selectedMarker + 1) + " of " + transformData.positions.Count);
+        if (timeline.positions.Count < 1) GUILayout.Label("Empty.");
+        else GUILayout.Label((timelineIndex + 1) + " of " + timeline.positions.Count);
         GUILayout.EndHorizontal();
 
 
         // ~
         // Index buttons
         GUILayout.BeginHorizontal();
-        for (int i = 0, len = transformData.positions.Count; i < len; i++)
+        for (int i = 0, len = timeline.positions.Count; i < len; i++)
         {
             // A button that works as index
-            string buttonName = selectedMarker == i ? "~" + (i + 1) + "~" : (i + 1) + "";
+            string buttonName = timelineIndex == i ? "~" + (i + 1) + "~" : (i + 1) + "";
             if (GUILayout.Button(buttonName, GUILayout.ExpandWidth(false)))
             {
-                selectedMarker = i;
+                timelineIndex = i;
                 SyncSelectedWithMarker();
 
                 // Update
-                transformData.transform.position = selectedPos;
-                transformData.transform.eulerAngles = selectedRot;
-                transformData.transform.localScale = selectedScale;
+                timeline.transform.position = timelinePos;
+                timeline.transform.eulerAngles = timelineRot;
+                timeline.transform.localScale = timelineSca;
 
                 message = "";
             }
@@ -140,13 +142,13 @@ public class TimelineEditor : Editor
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Clone+", GUILayout.ExpandWidth(false)))
         {
-            selectedMarker += 1;
-            if (transformData.positions.Count < 1) selectedMarker = 0; // First
+            timelineIndex += 1;
+            if (timeline.positions.Count < 1) timelineIndex = 0; // First
 
             // Insertion
-            transformData.positions.Insert(selectedMarker, transformData.transform.position);
-            transformData.rotations.Insert(selectedMarker, transformData.transform.eulerAngles);
-            transformData.scales.Insert(selectedMarker, transformData.transform.localScale);
+            timeline.positions.Insert(timelineIndex, timeline.transform.position);
+            timeline.rotations.Insert(timelineIndex, timeline.transform.eulerAngles);
+            timeline.scales.Insert(timelineIndex, timeline.transform.localScale);
 
             SyncSelectedWithMarker();
 
@@ -154,24 +156,72 @@ public class TimelineEditor : Editor
         }
 
         // Delete
-        if (transformData.positions.Count > 0 && GUILayout.Button("Delete?", GUILayout.ExpandWidth(false)))
+        if (timeline.positions.Count > 0 && GUILayout.Button("Delete?", GUILayout.ExpandWidth(false)))
         {
             // Remove
-            transformData.positions.RemoveAt(selectedMarker);
-            transformData.rotations.RemoveAt(selectedMarker);
-            transformData.scales.RemoveAt(selectedMarker);
+            timeline.positions.RemoveAt(timelineIndex);
+            timeline.rotations.RemoveAt(timelineIndex);
+            timeline.scales.RemoveAt(timelineIndex);
 
-            selectedMarker -= 1;
+            timelineIndex -= 1;
             SyncSelectedWithMarker();
 
             // Replace with the new
-            transformData.transform.position = selectedPos;
-            transformData.transform.eulerAngles = selectedRot;
-            transformData.transform.localScale = selectedScale;
+            timeline.transform.position = timelinePos;
+            timeline.transform.eulerAngles = timelineRot;
+            timeline.transform.localScale = timelineSca;
 
             message = "";
         }
         GUILayout.EndHorizontal();
+
+
+        // // ^^
+        // // SNAPSHOT
+
+
+        // // Title
+        // GUILayout.Label("");
+        // EditorGUILayout.LabelField("Snapshot System " + message, EditorStyles.boldLabel);
+
+
+        // // ^
+        // // Edition
+
+        // // Add
+        // GUILayout.BeginHorizontal();
+        // if (GUILayout.Button("Snapshot +", GUILayout.ExpandWidth(false)))
+        // {
+        //     timeline.AddSnapshot();
+
+        //     message = "";
+        // }
+
+        // // Delete
+        // if (timeline.positions.Count > 0 && GUILayout.Button("Delete?", GUILayout.ExpandWidth(false)))
+        // {
+
+
+        //     message = "";
+        // }
+        // GUILayout.EndHorizontal();
+
+
+        // // ^
+        // // Index buttons
+        // GUILayout.BeginHorizontal();
+        // for (int i = 0, len = timeline.childrenData.Count; i < len; i++)
+        // {
+        //     // A button that works as index
+        //     string buttonName = childrenIndex == i ? "~" + (i + 1) + "~" : (i + 1) + "";
+        //     if (GUILayout.Button(buttonName, GUILayout.ExpandWidth(false)))
+        //     {
+        //         childrenIndex = i;
+
+        //         message = "";
+        //     }
+        // }
+        // GUILayout.EndHorizontal();
 
 
         // Credits
@@ -183,29 +233,29 @@ public class TimelineEditor : Editor
     void SyncSelectedWithMarker()
     {
         // Only with items
-        if (!transformData || transformData.positions.Count < 1)
+        if (!timeline || timeline.positions.Count < 1)
         {
-            selectedMarker = 0;
+            timelineIndex = 0;
             return;
         }
 
         // Limits
-        selectedMarker = selectedMarker % transformData.positions.Count;
-        selectedMarker = selectedMarker < 0 ? transformData.positions.Count - 1 : selectedMarker;
+        timelineIndex = timelineIndex % timeline.positions.Count;
+        timelineIndex = timelineIndex < 0 ? timeline.positions.Count - 1 : timelineIndex;
 
         // Selected +1
-        selectedPos = transformData.positions[selectedMarker];
-        selectedRot = transformData.rotations[selectedMarker];
-        selectedScale = transformData.scales[selectedMarker];
+        timelinePos = timeline.positions[timelineIndex];
+        timelineRot = timeline.rotations[timelineIndex];
+        timelineSca = timeline.scales[timelineIndex];
     }
 
 
     bool IsAutoUpdateNeeded()
     {
         return
-            transformData.transform.position != transformData.positions[selectedMarker] ||
-            transformData.transform.eulerAngles != transformData.rotations[selectedMarker] ||
-            transformData.transform.localScale != transformData.scales[selectedMarker];
+            timeline.transform.position != timeline.positions[timelineIndex] ||
+            timeline.transform.eulerAngles != timeline.rotations[timelineIndex] ||
+            timeline.transform.localScale != timeline.scales[timelineIndex];
     }
 }
 #endif

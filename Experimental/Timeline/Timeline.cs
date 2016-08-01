@@ -9,6 +9,22 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+
+public class TimelineNode
+{
+    public Vector3 position;
+    public Vector3 rotation;
+    public Vector3 scale;
+
+    public TimelineNode(Vector3 position, Vector3 rotation, Vector3 scale)
+    {
+        this.position = position;
+        this.rotation = rotation;
+        this.scale = scale;
+    }
+}
+
+
 [ExecuteInEditMode]
 public class Timeline : MonoBehaviour
 {
@@ -24,6 +40,8 @@ public class Timeline : MonoBehaviour
     public List<Vector3> rotations;
     public List<Vector3> scales;
 
+    public List<List<TimelineNode>> childrenData = new List<List<TimelineNode>>();
+
 
     void Update()
     {
@@ -36,4 +54,26 @@ public class Timeline : MonoBehaviour
         Vector3 scl = transform.localScale;
         scale = scl.x + ", " + scl.y + ", " + scl.z;
     }
+
+
+    // public void AddSnapshot()
+    // {
+    //     // Extract all transforms
+
+    //     Transform[] allTrans = transform.GetComponents<Transform>();
+    //     var newNode = new List<TimelineNode>();
+
+    //     for (int i = 0, len = allTrans.Length; i < len; i++)
+    //     {
+    //         newNode.Add(new TimelineNode(
+    //             allTrans[i].position,
+    //             allTrans[i].eulerAngles,
+    //             allTrans[i].localScale
+    //         ));
+    //     }
+
+
+    //     // Add
+    //     childrenData.Add(newNode);
+    // }
 }

@@ -9,12 +9,12 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-    // ~
+    // ^
     // Important default data.
     public static float defaultOrthographicSize = 0;
 
 
-    // ~
+    // ^
     // Tag.Player
     private static Transform _player;
     public static Transform player
@@ -32,7 +32,19 @@ public class Game : MonoBehaviour
     }
 
 
-    // ~
+    // ^
+    private static Main _main;
+    public static Main main
+    {
+        get
+        {
+            if (_main == null) _main = GameObject.FindObjectOfType<Main>();
+            return _main;
+        }
+    }
+
+
+    // ^
     private static Camera2D _camera2d;
     public static Camera2D camera2D
     {
@@ -44,7 +56,7 @@ public class Game : MonoBehaviour
     }
 
 
-    // ~
+    // ^
     private static Whitescreen _whitescreen;
     public static Whitescreen whitescreen
     {
@@ -56,7 +68,7 @@ public class Game : MonoBehaviour
     }
 
 
-    // ~
+    // ^
     private static Sounds _sounds;
     public static Sounds sounds
     {
@@ -68,7 +80,7 @@ public class Game : MonoBehaviour
     }
 
 
-    // ~
+    // ^
     private static Palette _palette;
     public static Palette palette
     {
@@ -80,7 +92,7 @@ public class Game : MonoBehaviour
     }
 
 
-    // ~
+    // ^
     private static Statistics _statistics;
     public static Statistics statistics
     {
@@ -92,7 +104,7 @@ public class Game : MonoBehaviour
     }
 
 
-    // ~
+    // ^
     private static Timeflux _timeflux;
     public static Timeflux timeflux
     {
@@ -100,6 +112,18 @@ public class Game : MonoBehaviour
         {
             if (_timeflux == null) _timeflux = GameObject.FindObjectOfType<Timeflux>();
             return _timeflux;
+        }
+    }
+
+
+    // ^
+    private static Particles _particles;
+    public static Particles particles
+    {
+        get
+        {
+            if (_particles == null) _particles = GameObject.FindObjectOfType<Particles>();
+            return _particles;
         }
     }
 }

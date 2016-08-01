@@ -9,9 +9,9 @@ using UnityEngine;
 using matnesis.TeaTime;
 
 [Reactive]
-public class ttSimpleAura : MonoBehaviour
+public class TeaSimpleAura : MonoBehaviour
 {
-    public BoolReactiveProp enable = new BoolReactiveProp(true);
+    public BoolReactiveProp update = new BoolReactiveProp(true);
 
     [Header("Config")]
     public float time = 1;
@@ -52,8 +52,8 @@ public class ttSimpleAura : MonoBehaviour
         }
 
 
-        // Reactive activation
-        enable.Suscribe(x =>
+        // Reactive
+        update.Suscribe(x =>
         {
             if (x) simpleAura.Play();
             else simpleAura.Stop();

@@ -1,7 +1,7 @@
 ﻿
 // Sound library, belongs to Game.
 
-// Andrés Villalobos ~ andresalvivar@gmail.com ~ twitter.com/matnesis
+// @matnesis
 // 2015/10/19 04:48 PM
 
 
@@ -20,6 +20,7 @@ public class Sounds : MonoBehaviour
 
     [Header("Ambient")]
     public AudioClip ambientDarkSurprise;
+    public AudioClip ambientDarkStorm;
 
     [Header("Bullets")]
     public AudioClip bulletShoot;
@@ -109,11 +110,16 @@ public class Sounds : MonoBehaviour
 
         AudioSource current = sounds[soundsIndex];
         current.pitch = pitch;
-        current.PlayOneShot(clip, volume);
+
+        if (this.tt("@psLimit").Count < 2)
+        {
+            this.tt("@psLimit")
+            .Add((ttHandler t) => current.PlayOneShot(clip, volume))
+            .Add(0.10f).Consume();
+        }
 
         // Next
         soundsIndex = ++soundsIndex % sounds.Length;
-
 
         return current;
     }

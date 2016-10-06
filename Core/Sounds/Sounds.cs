@@ -135,4 +135,15 @@ public class Sounds : MonoBehaviour
 
         return current;
     }
+
+
+    public void VolumeFade(float fadeTo, float duration)
+    {
+        // #todo Optimize!
+        this.tt().Loop(duration, (ttHandler t) => background[0].volume = Mathf.Lerp(1, fadeTo, t.t));
+        this.tt().Loop(duration, (ttHandler t) => background[1].volume = Mathf.Lerp(1, fadeTo, t.t));
+        this.tt().Loop(duration, (ttHandler t) => sounds[0].volume = Mathf.Lerp(1, fadeTo, t.t));
+        this.tt().Loop(duration, (ttHandler t) => sounds[1].volume = Mathf.Lerp(1, fadeTo, t.t));
+        this.tt().Loop(duration, (ttHandler t) => sounds[2].volume = Mathf.Lerp(1, fadeTo, t.t));
+    }
 }

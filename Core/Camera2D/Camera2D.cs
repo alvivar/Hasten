@@ -13,12 +13,14 @@ public class Camera2D : MonoBehaviour
     [Header("Focus")]
     public Transform focus; // Main point of focus
     public Vector3 focusOffset; // Variation to the focus position
+    public Vector3 focusOffsetOverride;
     public List<Transform> focusGroup; // All transforms here share the camera focus
 
     [Header("Config")]
     public float speed = 3; // Speed
     public float layer = -10; // Camera Z position
     public float childrenZLayer = 1; // Local z position for children
+    public Transform[] listAffectedChildren; // List of children to be affected on z position
 
 
     /// <summary>
@@ -37,11 +39,11 @@ public class Camera2D : MonoBehaviour
     void Start()
     {
         // Fix children layer
-        Transform[] children = GetComponentsInChildren<Transform>();
-        for (int i = 0; i < children.Length; i++)
+        //Transform[] children = GetComponentsInChildren<Transform>();
+        for (int i = 0; i < listAffectedChildren.Length; i++)
         {
-            if (children[i] == transform) continue;
-            children[i].localPosition = new Vector3(children[i].localPosition.x, children[i].localPosition.y, childrenZLayer);
+            if (listAffectedChildren[i] == transform) continue;
+            listAffectedChildren[i].localPosition = new Vector3(listAffectedChildren[i].localPosition.x, listAffectedChildren[i].localPosition.y, childrenZLayer);
         }
     }
 
@@ -53,7 +55,10 @@ public class Camera2D : MonoBehaviour
 
         // Main focus
         if (focus)
-            pos = focus.position + focusOffset;
+        {
+            if (focusOffsetOverride != Vector3.zero) pos = focus.position + focusOffsetOverride;
+            else pos = focus.position + focusOffset;
+        }
 
 
         // Be at the center of everything

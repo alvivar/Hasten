@@ -184,6 +184,12 @@ public class Motion2D : MonoBehaviour
     }
 
 
+    public Vector4 ForceGetWallsColliding()
+    {
+        return wallsColliding = GetWallsColliding(transform.position, colliderRadius, raycastLength, wallLayer);
+    }
+
+
     public void Reset()
     {
         rbody.velocity = movement = Vector2.zero;

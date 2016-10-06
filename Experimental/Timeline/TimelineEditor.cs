@@ -109,11 +109,13 @@ public class TimelineEditor : Editor
         // Marker info
         if (timeline.positions.Count < 1) GUILayout.Label("Empty.");
         else GUILayout.Label((timelineIndex + 1) + " of " + timeline.positions.Count);
+
         GUILayout.EndHorizontal();
 
 
         // ~
         // Index buttons
+        int count = 0;
         GUILayout.BeginHorizontal();
         for (int i = 0, len = timeline.positions.Count; i < len; i++)
         {
@@ -130,6 +132,15 @@ public class TimelineEditor : Editor
                 timeline.transform.localScale = timelineSca;
 
                 message = "";
+            }
+
+            // Create a spacing between them
+            count += 1;
+            if (count > 8)
+            {
+                count = 0;
+                GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
             }
         }
         GUILayout.EndHorizontal();
@@ -172,6 +183,17 @@ public class TimelineEditor : Editor
             timeline.transform.localScale = timelineSca;
 
             message = "";
+        }
+        GUILayout.EndHorizontal();
+
+
+        // Reverse all lists
+        GUILayout.BeginHorizontal();
+        if (timeline.positions.Count > 0 && GUILayout.Button("Reverse", GUILayout.ExpandWidth(false)))
+        {
+            timeline.positions.Reverse();
+            timeline.rotations.Reverse();
+            timeline.scales.Reverse();
         }
         GUILayout.EndHorizontal();
 

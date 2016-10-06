@@ -6,6 +6,7 @@
 
 
 #if UNITY_EDITOR
+
 using UnityEngine;
 using UnityEditor;
 
@@ -17,4 +18,5 @@ public class UnityExtendedShortKeys : ScriptableObject
         EditorApplication.ExecuteMenuItem("Edit/Play");
     }
 }
+
 #endif

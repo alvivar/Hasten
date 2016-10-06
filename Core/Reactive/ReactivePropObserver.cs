@@ -83,6 +83,7 @@ class ReactivePropObserver
 	}
 
 
+	// I'm not using this, but it's a useful piece of code :)
 	static void SetPropertyToField(MonoBehaviour mono, FieldInfo field, string propertyName, string fieldValue)
 	{
 		// Current

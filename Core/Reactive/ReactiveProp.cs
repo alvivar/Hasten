@@ -47,6 +47,13 @@ public class ReactiveProp<T>
     }
 
 
+    public void Unsubscribe(Action<T> callback)
+    {
+        suscribers -= callback;
+    }
+
+
+    // #todo I need to check this.
     public void CallSuscribers()
     {
         if (valueSent != null && valueSent.Equals(_value))

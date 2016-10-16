@@ -8,8 +8,11 @@
 using UnityEngine;
 using matnesis.TeaTime;
 
+[Reactive]
 public class Camera2DOffsetCall : MonoBehaviour
 {
+    public BoolReactiveProp constantUpdate = new BoolReactiveProp(false);
+
     [Header("Config")]
     public Vector3 cameraOffset;
     public float transitionDuration = 8;
@@ -23,8 +26,38 @@ public class Camera2DOffsetCall : MonoBehaviour
     void Start()
     {
         cam = Game.camera2D;
-
         if (mono == null) mono = this;
+
+
+        // @
+        {
+            var focus = mono.tt("@focusTransition");
+            this.tt("@refresh").Pause().Add(0.1f, (ttHandler t) =>
+            {
+                if (!focus.IsPlaying) OnTriggerEnter2D();
+            })
+            .Repeat();
+        }
+
+
+
+        //@
+        {
+            var refresh = this.tt("@refresh");
+            constantUpdate.Suscribe(x =>
+            {
+                if (x)
+                {
+                    refresh.Play();
+                    Debug.Log("Play");
+                }
+                else
+                {
+                    refresh.Stop();
+                    Debug.Log("Stop");
+                }
+            });
+        }
     }
 
 
@@ -36,7 +69,7 @@ public class Camera2DOffsetCall : MonoBehaviour
             cam.focusOffsetOverride = Vector3.Lerp(
                 current,
                 cameraOffset,
-                Easef.Smootherstep(t.t)
+                Easef.EaseIn(t.t)
             );
         });
     }
@@ -50,7 +83,7 @@ public class Camera2DOffsetCall : MonoBehaviour
             cam.focusOffsetOverride = Vector3.Lerp(
                 current,
                 Vector3.zero,
-                Easef.Smootherstep(t.t)
+                Easef.EaseOut(t.t)
             );
         })
         .Add(() => cam.focusOffsetOverride = Vector3.zero);

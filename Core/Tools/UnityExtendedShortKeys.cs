@@ -7,10 +7,9 @@
 
 #if UNITY_EDITOR
 
-using UnityEngine;
 using UnityEditor;
 
-public class UnityExtendedShortKeys : ScriptableObject
+public class UnityExtendedShortKeys
 {
     [MenuItem("HotKey/Run _F5")]
     static void PlayGame()

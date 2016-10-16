@@ -1,17 +1,17 @@
 ﻿
+// Found here
+// http://answers.unity3d.com/questions/144453/reverting-several-gameobjects-to-prefab-settings-a.html
+
+
 #if UNITY_EDITOR
 
 using UnityEngine;
-using System.Collections.Generic;
 using UnityEditor;
+using System.Collections.Generic;
 
-/// <summary>
-/// Found here
-/// http://answers.unity3d.com/questions/144453/reverting-several-gameobjects-to-prefab-settings-a.html
-/// </summary>
-public class RevertPrefabInstance : UnityEditor.Editor
+public class RevertPrefabInstance
 {
-    [MenuItem("Tools/Revert Selected Prefabs")]
+    [MenuItem("Tools/Prefabs/Revert Selected")]
     static void Revert()
     {
         GameObject[] selection = Selection.gameObjects;
@@ -21,13 +21,16 @@ public class RevertPrefabInstance : UnityEditor.Editor
             int revertedCount = 0;
             Dictionary<UnityEngine.Object, bool> prefabsAlreadyReverted = new Dictionary<UnityEngine.Object, bool>();
 
-            //we tell the user that we're about to do an expensive operation, because otherwise they may think the editor is hanging
-            //additionally if the hotkey doesn't work (aka clash with another hotkey) they won't even know it failed to run!
+            //we tell the user that we're about to do an expensive operation,
+            //because otherwise they may think the editor is hanging
+            //additionally if the hotkey doesn't work (aka clash with another
+            //hotkey) they won't even know it failed to run!
             EditorUtility.DisplayDialog("Please wait", "Checking " + selection.Length + " objects and their children to revert prefab status -- this may take a while!", "OK");
             for (int i = 0; i < selection.Length; i++)
                 RecursiveRevertPrefabInstances(selection[i], ref revertedCount, ref prefabsAlreadyReverted);
 
-            //tell them we finished, because otherwise they have no easy way to notice if it takes a bit!
+            //tell them we finished, because otherwise they have no easy way to
+            //notice if it takes a bit!
             EditorUtility.DisplayDialog("All done!", "Performed " + revertedCount + " reversions.", "OK");
         }
         else
@@ -37,7 +40,8 @@ public class RevertPrefabInstance : UnityEditor.Editor
     }
 
     /// <summary>
-    /// This allows for both nested prefabs as well as simply going into object trees without having to expand the whole tree first.
+    /// This allows for both nested prefabs as well as simply going into object
+    /// trees without having to expand the whole tree first.
     /// </summary>
     static void RecursiveRevertPrefabInstances(GameObject obj, ref int revertedCount, ref Dictionary<UnityEngine.Object, bool> prefabsAlreadyReverted)
     {
@@ -54,7 +58,8 @@ public class RevertPrefabInstance : UnityEditor.Editor
     }
 
     /// <summary>
-    /// This keeps us from reverting the same prefab over and over, which otherwise happens when we're doing checks for nested prefabs.
+    /// This keeps us from reverting the same prefab over and over, which
+    /// otherwise happens when we're doing checks for nested prefabs.
     /// </summary>
     static bool IsAPrefabNotYetReverted(GameObject obj, ref Dictionary<UnityEngine.Object, bool> prefabsAlreadyReverted)
     {

@@ -6,6 +6,7 @@
 #if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 
 [CustomEditor(typeof(Timeline))]
 public class TimelineEditor : Editor
@@ -74,7 +75,7 @@ public class TimelineEditor : Editor
         }
 
 
-        // ~
+        // @
         // Cycle
 
         // Back
@@ -113,40 +114,7 @@ public class TimelineEditor : Editor
         GUILayout.EndHorizontal();
 
 
-        // ~
-        // Index buttons
-        int count = 0;
-        GUILayout.BeginHorizontal();
-        for (int i = 0, len = timeline.positions.Count; i < len; i++)
-        {
-            // A button that works as index
-            string buttonName = timelineIndex == i ? "~" + (i + 1) + "~" : (i + 1) + "";
-            if (GUILayout.Button(buttonName, GUILayout.ExpandWidth(false)))
-            {
-                timelineIndex = i;
-                SyncSelectedWithMarker();
-
-                // Update
-                timeline.transform.position = timelinePos;
-                timeline.transform.eulerAngles = timelineRot;
-                timeline.transform.localScale = timelineSca;
-
-                message = "";
-            }
-
-            // Create a spacing between them
-            count += 1;
-            if (count > 8)
-            {
-                count = 0;
-                GUILayout.EndHorizontal();
-                GUILayout.BeginHorizontal();
-            }
-        }
-        GUILayout.EndHorizontal();
-
-
-        // ~
+        // @
         // Edition
 
         // Add
@@ -187,13 +155,87 @@ public class TimelineEditor : Editor
         GUILayout.EndHorizontal();
 
 
+        // @
+        // Index buttons
+
+        int count = 0;
+        GUILayout.Label("");
+        GUILayout.BeginHorizontal();
+        for (int i = 0, len = timeline.positions.Count; i < len; i++)
+        {
+            // A button that works as index
+
+            string iName = i.ToString().PadLeft(len / 10, '0');
+            string buttonName = timelineIndex == i ? ">" + iName + "<" : iName;
+            if (GUILayout.Button(buttonName, GUILayout.ExpandWidth(false)))
+            {
+                timelineIndex = i;
+                SyncSelectedWithMarker();
+
+                // Update
+                timeline.transform.position = timelinePos;
+                timeline.transform.eulerAngles = timelineRot;
+                timeline.transform.localScale = timelineSca;
+
+                message = "";
+            }
+
+            // Create a spacing between them
+            if (++count >= 8)
+            {
+                count = 0;
+                GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
+            }
+        }
+        GUILayout.EndHorizontal();
+
+
+        // @
+        // Special
+
         // Reverse all lists
         GUILayout.BeginHorizontal();
+        if (timeline.positions.Count > 0 && GUILayout.Button("Clear", GUILayout.ExpandWidth(false)))
+        {
+            timeline.positions.Clear();
+            timeline.rotations.Clear();
+            timeline.scales.Clear();
+        }
+
+
+        // Reverse all lists
         if (timeline.positions.Count > 0 && GUILayout.Button("Reverse", GUILayout.ExpandWidth(false)))
         {
             timeline.positions.Reverse();
             timeline.rotations.Reverse();
             timeline.scales.Reverse();
+        }
+
+
+        // Append a reversed self
+        if (timeline.positions.Count > 0 && GUILayout.Button("Symmetry", GUILayout.ExpandWidth(false)))
+        {
+            var positions = new List<Vector3>();
+            positions.AddRange(timeline.positions);
+            positions.Reverse();
+            positions.RemoveAt(0);
+            positions.RemoveAt(positions.Count - 1);
+            timeline.positions.AddRange(positions);
+
+            var rotations = new List<Vector3>();
+            rotations.AddRange(timeline.rotations);
+            rotations.Reverse();
+            rotations.RemoveAt(0);
+            rotations.RemoveAt(rotations.Count - 1);
+            timeline.rotations.AddRange(rotations);
+
+            var scales = new List<Vector3>();
+            scales.AddRange(timeline.scales);
+            scales.Reverse();
+            scales.RemoveAt(0);
+            scales.RemoveAt(scales.Count - 1);
+            timeline.scales.AddRange(scales);
         }
         GUILayout.EndHorizontal();
 

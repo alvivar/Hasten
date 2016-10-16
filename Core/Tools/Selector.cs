@@ -1,6 +1,6 @@
 
 // Selector v0.1
-// A helper to select GameObjects on the Editor.
+// A helper to select GameObjects the Editor.
 
 // @matnesis
 // 2016/10/02 02:30 PM
@@ -13,13 +13,9 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
 
-public class Selector : UnityEditor.Editor
+public class Selector
 {
-    // @
-    // MENU
-
-
-    [MenuItem("Tools/Selector/+ All Children")]
+    [MenuItem("Tools/Selector/All Children")]
     static void SelectAllChildren()
     {
         var allChildren = new List<Transform>();
@@ -32,7 +28,20 @@ public class Selector : UnityEditor.Editor
     }
 
 
-    [MenuItem("Tools/Selector/+ All With Similar Name And Parent Structure")]
+    [MenuItem("Tools/Selector/All Parents")]
+    static void SelectAllParents()
+    {
+        var allChildren = new List<Transform>();
+        foreach (var t in Selection.transforms)
+        {
+            allChildren.AddRange(t.GetComponentsInParent<Transform>());
+        }
+
+        Selection.objects = allChildren.Select(x => x.gameObject).ToArray();
+    }
+
+
+    [MenuItem("Tools/Selector/All With Similar Name And Parent Structure")]
     static void SelectSimilarChildren()
     {
         Transform selected = Selection.activeTransform;
@@ -62,8 +71,9 @@ public class Selector : UnityEditor.Editor
     }
 
 
+    //
     // @
-    // MISC
+    //
 
 
     static string OnlyLetters(string word)
@@ -80,6 +90,7 @@ public class Selector : UnityEditor.Editor
             // Until they don't have parents
             if (one.parent == null || two.parent == null)
             {
+                // Same for both
                 if (one.parent == null && two.parent == null) return true;
                 else return false;
             }

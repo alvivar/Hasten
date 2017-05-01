@@ -9,8 +9,6 @@ using UnityEngine;
 using matnesis.TeaTime;
 
 
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(CircleCollider2D))]
 public class Motion2D : MonoBehaviour
 {
     public bool update = true;
@@ -86,6 +84,7 @@ public class Motion2D : MonoBehaviour
     public Vector2 gravity;
     public Vector2 gravityOverride;
     public Vector2 force;
+    public Vector2 forceRaw;
     public float forceLimit;
 
     [Header("Walls Detection")]
@@ -95,7 +94,7 @@ public class Motion2D : MonoBehaviour
 
     private float colliderRadius;
 
-    private Rigidbody2D rbody;
+    public Rigidbody2D rbody;
     private Collider2D collidr;
     private Vector2 movement;
 
@@ -128,7 +127,7 @@ public class Motion2D : MonoBehaviour
     }
 
 
-    void Update()
+    void FixedUpdate()
     {
         if (!update) return;
 
@@ -157,6 +156,10 @@ public class Motion2D : MonoBehaviour
             movement += Vector2.ClampMagnitude(force, forceLimit);
         else
             movement += force;
+
+
+        // Raw, unfiltered
+        movement += forceRaw;
 
 
         // Velocity

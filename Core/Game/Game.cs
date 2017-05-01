@@ -33,18 +33,6 @@ public class Game : MonoBehaviour
 
 
     // ^
-    private static Main _main;
-    public static Main main
-    {
-        get
-        {
-            if (_main == null) _main = GameObject.FindObjectOfType<Main>();
-            return _main;
-        }
-    }
-
-
-    // ^
     private static Camera2D _camera2d;
     public static Camera2D camera2D
     {
@@ -116,14 +104,27 @@ public class Game : MonoBehaviour
     }
 
 
+    // TODO
+    // We need a particle manager!
+    // private static Particles _particles;
+    // public static Particles particles
+    // {
+    //     get
+    //     {
+    //         if (_particles == null) _particles = GameObject.FindObjectOfType<Particles>();
+    //         return _particles;
+    //     }
+    // }
+
+
     // ^
-    private static Particles _particles;
-    public static Particles particles
+    private static Camera2DOffsetCaster _offsetCaster;
+    public static Camera2DOffsetCaster offsetCaster
     {
         get
         {
-            if (_particles == null) _particles = GameObject.FindObjectOfType<Particles>();
-            return _particles;
+            if (_offsetCaster == null) _offsetCaster = GameObject.FindObjectOfType<Camera2DOffsetCaster>();
+            return _offsetCaster;
         }
     }
 }

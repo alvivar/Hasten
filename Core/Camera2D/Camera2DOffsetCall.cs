@@ -7,11 +7,12 @@
 
 using UnityEngine;
 using matnesis.TeaTime;
+using matnesis.Reactive;
 
-[Reactive]
+[ReactiveInEditMode]
 public class Camera2DOffsetCall : MonoBehaviour
 {
-    public BoolReactiveProp constantUpdate = new BoolReactiveProp(false);
+    public ReactiveBool constantUpdate = new ReactiveBool(false);
 
     [Header("Config")]
     public Vector3 cameraOffset;
@@ -44,7 +45,7 @@ public class Camera2DOffsetCall : MonoBehaviour
         //@
         {
             var refresh = this.tt("@refresh");
-            constantUpdate.Suscribe(x =>
+            constantUpdate.Subscribe(x =>
             {
                 if (x)
                 {

@@ -13,40 +13,51 @@ using matnesis.TeaTime;
 
 public class Camera2DOffsetCaster : MonoBehaviour
 {
-    public float tolerance = 16; // Search every 32 units of distance
-    public LayerMask layerThatBlocks; // The layers that will block the activate
+    [Header("Config")]
+    public bool forceDetection = false; // On true, it will force the detection of near cams and apply again the transition
+    public float tolerance = 16; // Units of distance to search between movement
+    public float changeDuration = 2;
+    public LayerMask layerThatBlocks; // The layers that blocks detections
+    public bool executeInterpolation = true;
 
     [Header("Info")]
-    public Vector3 lastPosition;
+    public Vector3 lastSnapPos;
     public List<Camera2DOffsetData> offsets;
 
-    private Camera2D cam;
-    private static MonoBehaviour mono;
+    Camera2D cam;
 
 
     void Start()
     {
         cam = Game.camera2D;
-        if (mono == null) mono = this;
 
 
         // @
-        // This sequence updates the Camera2D offset with the closest
+        // This sequence updates the Camera2D with the info from the closest
         // Camera2DOffsetData.
         {
             Camera2DOffsetData latest = null;
-            lastPosition = Vector3.zero;
+            lastSnapPos = Vector3.zero;
 
             this.tt().Add(0.50f, (ttHandler t) =>
             {
+                if (!executeInterpolation)
+                    return;
+
+
                 // Do they exists?
-                if (Camera2DOffsetData.all == null) return;
+                if (Camera2DOffsetData.all == null)
+                {
+                    ResetCameraInterpolationOffset();
+                    return;
+                }
+
 
                 // Are we in a new position?
-                var snapPos = SnapVector(transform.position, tolerance);
-                if (snapPos != lastPosition)
+                var snapPos = Snap(transform.position, tolerance);
+                if (snapPos != lastSnapPos || forceDetection)
                 {
-                    lastPosition = snapPos;
+                    lastSnapPos = snapPos;
 
                     // Sort them
                     offsets = Camera2DOffsetData.all
@@ -54,24 +65,27 @@ public class Camera2DOffsetCaster : MonoBehaviour
                         .ToList();
 
                     // Update if new
-                    if (offsets.Count > 0 && offsets[0] != latest)
+                    if (offsets.Count > 0 && (offsets[0] != latest || forceDetection))
                     {
-                        // Ignore if there is something between us
+                        // Calculations
                         var tPos = transform.position;
                         var oPos = offsets[0].transform.position;
                         var dir = (oPos - tPos).normalized;
                         var distance = Vector3.Distance(oPos, tPos);
 
+                        // Ignore if there is something between us
                         if (Physics2D.Raycast(transform.position, dir, distance, layerThatBlocks))
                             return;
 
-
                         // Interpolate
                         latest = offsets[0];
-                        InterpolateCamera2DOffsetOverride(offsets[0].offset);
+                        offsets[0].InterpolateCamera2DOffsetOverride();
+                        offsets[0].transform.SetAsFirstSibling(); // Move up in the list
+                        Debug.Log("Cam2D Offset Caster :: Override -> " + offsets[0].offset, transform);
 
-                        Debug.Log("Camera2D :: New Override Offset = " + offsets[0].offset);
-                    };
+                        // Just once
+                        forceDetection = false;
+                    }
                 }
             })
             .Repeat();
@@ -79,27 +93,27 @@ public class Camera2DOffsetCaster : MonoBehaviour
     }
 
 
-    private void InterpolateCamera2DOffsetOverride(Vector3 newOffset)
+    private void ResetCameraInterpolationOffset()
     {
         // Interpolation
         Vector3 current = cam.focusOffsetOverride;
-        mono.tt("@InterpolateCamera2DOffsetOverride").Reset().Loop(3f, (ttHandler t) =>
+        this.tt("@InterpolateCamera2DOffsetOverride").Reset().Loop(changeDuration, (ttHandler t) =>
         {
             cam.focusOffsetOverride = Vector3.Lerp(
                 current,
-                newOffset,
-                Easef.EaseIn(t.t)
+                Vector3.zero,
+                Easef.Smootherstep(t.t)
             );
         });
     }
 
 
-    public static Vector3 SnapVector(Vector3 vector, float gridSize)
+    public static Vector3 Snap(Vector3 vector, float size)
     {
         return new Vector3(
-            Mathf.Round(vector.x / gridSize) * gridSize,
-            Mathf.Round(vector.y / gridSize) * gridSize,
-            Mathf.Round(vector.z / gridSize) * gridSize
+            Mathf.Round(vector.x / size) * size,
+            Mathf.Round(vector.y / size) * size,
+            Mathf.Round(vector.z / size) * size
         );
     }
 }

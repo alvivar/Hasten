@@ -13,14 +13,17 @@ public class Camera2D : MonoBehaviour
     [Header("Focus")]
     public Transform focus; // Main point of focus
     public Vector3 focusOffset; // Variation to the focus position
-    public Vector3 focusOffsetOverride;
+    public Vector3 focusOffsetOverride; // This overrides the previous
+    public Vector3 focusOffsetFixed = new Vector3(0, 10, 0); // This offset is added always at the end (to help with custom perspectives)
     public List<Transform> focusGroup; // All transforms here share the camera focus
 
     [Header("Config")]
     public float speed = 3; // Speed
     public float layer = -10; // Camera Z position
+
+    [Header("Children")]
+    public Transform[] affectedChildren; // List of children to be affected
     public float childrenZLayer = 1; // Local z position for children
-    public Transform[] listAffectedChildren; // List of children to be affected on z position
 
 
     /// <summary>
@@ -40,10 +43,10 @@ public class Camera2D : MonoBehaviour
     {
         // Fix children layer
         //Transform[] children = GetComponentsInChildren<Transform>();
-        for (int i = 0; i < listAffectedChildren.Length; i++)
+        for (int i = 0; i < affectedChildren.Length; i++)
         {
-            if (listAffectedChildren[i] == transform) continue;
-            listAffectedChildren[i].localPosition = new Vector3(listAffectedChildren[i].localPosition.x, listAffectedChildren[i].localPosition.y, childrenZLayer);
+            if (affectedChildren[i] == transform) continue;
+            affectedChildren[i].localPosition = new Vector3(affectedChildren[i].localPosition.x, affectedChildren[i].localPosition.y, childrenZLayer);
         }
     }
 
@@ -58,6 +61,9 @@ public class Camera2D : MonoBehaviour
         {
             if (focusOffsetOverride != Vector3.zero) pos = focus.position + focusOffsetOverride;
             else pos = focus.position + focusOffset;
+
+            // Obligatory offset
+            pos += focusOffsetFixed;
         }
 
 

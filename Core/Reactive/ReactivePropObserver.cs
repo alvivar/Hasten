@@ -1,8 +1,7 @@
 ﻿
-// @
 // Observer that syncronizes ReactiveProps with the Inspector on classes with
-// the attribute [Reactive], classic reflection. This only happens on the Unity
-// Editor.
+// the attribute [ReactiveInEditMode], classic reflection. This only happens on
+// the Unity Editor.
 
 // @matnesis
 // 2015/12/18 08:53 PM
@@ -12,90 +11,90 @@
 using System.Reflection;
 using UnityEngine;
 using UnityEditor;
+using matnesis.Reactive;
 #endif
 
 
-// @
-// [Reactive] is a custom Attribute that indicates that a class contains
-// ReactiveProps and need to be watched for changes while the Editor is running.
+// [ReactiveInEditMode] is a custom Attribute that indicates that a class
+// contains ReactiveProps and need to be watched for changes while the Editor is
+// running.
 
 using System;
 [AttributeUsage(AttributeTargets.Class)]
-class Reactive : Attribute { }
+class ReactiveInEditMode : Attribute { }
 
 
-// @
 // ReactiveProps Observer, runs only on the Editor, frame by frame,
 // automatically, syncing ReactiveProps with the Inspector on classes with the
-// Attribute [Reactive].
+// Attribute [ReactiveInEditMode].
 
 #if UNITY_EDITOR
 [InitializeOnLoad] // Editor autorun
 class ReactivePropObserver
 {
-	static ReactivePropObserver()
-	{
-		EditorApplication.update += Update;
-	}
+    static ReactivePropObserver()
+    {
+        EditorApplication.update += Update;
+    }
 
 
-	static void Update()
-	{
-		// For all MonoBehaviours
-		MonoBehaviour[] allMonoBehaviours = GameObject.FindObjectsOfType<MonoBehaviour>();
-		foreach (MonoBehaviour mono in allMonoBehaviours)
-		{
-			// On classes with the [Reactive] attribute
-			Type monoType = mono.GetType();
-			if (Attribute.GetCustomAttribute(monoType, typeof(Reactive)) != null)
-			{
-				// On public fields
-				foreach (FieldInfo field in monoType.GetFields(BindingFlags.Public | BindingFlags.Instance))
-				{
-					// On Reactive Properties
+    static void Update()
+    {
+        // For all MonoBehaviours
+        MonoBehaviour[] allMonoBehaviours = GameObject.FindObjectsOfType<MonoBehaviour>();
+        foreach (MonoBehaviour mono in allMonoBehaviours)
+        {
+            // On classes with the [ReactiveInEditMode] attribute
+            Type monoType = mono.GetType();
+            if (Attribute.GetCustomAttribute(monoType, typeof(ReactiveInEditMode)) != null)
+            {
+                // On public fields
+                foreach (FieldInfo field in monoType.GetFields(BindingFlags.Public | BindingFlags.Instance))
+                {
+                    // On Reactive Properties
 
-					// Bool
-					if (field.FieldType.Equals(typeof(BoolReactiveProp)))
-						(field.GetValue(mono) as BoolReactiveProp).CallSuscribers();
+                    // Bool
+                    if (field.FieldType.Equals(typeof(ReactiveBool)))
+                        (field.GetValue(mono) as ReactiveBool).CallSubscribers();
 
-					// String
-					else if (field.FieldType.Equals(typeof(StringReactiveProp)))
-						(field.GetValue(mono) as StringReactiveProp).CallSuscribers();
+                    // String
+                    else if (field.FieldType.Equals(typeof(ReactiveString)))
+                        (field.GetValue(mono) as ReactiveString).CallSubscribers();
 
-					// Int
-					else if (field.FieldType.Equals(typeof(IntReactiveProp)))
-						(field.GetValue(mono) as IntReactiveProp).CallSuscribers();
+                    // Int
+                    else if (field.FieldType.Equals(typeof(ReactiveInt)))
+                        (field.GetValue(mono) as ReactiveInt).CallSubscribers();
 
-					// Float
-					else if (field.FieldType.Equals(typeof(FloatReactiveProp)))
-						(field.GetValue(mono) as FloatReactiveProp).CallSuscribers();
+                    // Float
+                    else if (field.FieldType.Equals(typeof(ReactiveFloat)))
+                        (field.GetValue(mono) as ReactiveFloat).CallSubscribers();
 
-					// Vector3
-					else if (field.FieldType.Equals(typeof(Vector3ReactiveProp)))
-						(field.GetValue(mono) as Vector3ReactiveProp).CallSuscribers();
+                    // Vector3
+                    else if (field.FieldType.Equals(typeof(ReactiveVector3)))
+                        (field.GetValue(mono) as ReactiveVector3).CallSubscribers();
 
-					// Vector2
-					else if (field.FieldType.Equals(typeof(Vector2ReactiveProp)))
-						(field.GetValue(mono) as Vector2ReactiveProp).CallSuscribers();
-				}
-			}
-		}
-	}
+                    // Vector2
+                    else if (field.FieldType.Equals(typeof(ReactiveVector2)))
+                        (field.GetValue(mono) as ReactiveVector2).CallSubscribers();
+                }
+            }
+        }
+    }
 
 
-	// I'm not using this, but it's a useful piece of code :)
-	static void SetPropertyToField(MonoBehaviour mono, FieldInfo field, string propertyName, string fieldValue)
-	{
-		// Current
-		System.Object currentObject = field.GetValue(mono);
-		Type currentType = currentObject.GetType();
+    // I'm not using this, but it's a useful piece of code :)
+    // static void SetPropertyToField(MonoBehaviour mono, FieldInfo field, string propertyName, string fieldValue)
+    // {
+    //     // Current
+    //     System.Object currentObject = field.GetValue(mono);
+    //     Type currentType = currentObject.GetType();
 
-		// Get
-		PropertyInfo p = currentType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
-		FieldInfo f = currentType.GetField(fieldValue, BindingFlags.NonPublic | BindingFlags.Instance);
+    //     // Get
+    //     PropertyInfo p = currentType.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
+    //     FieldInfo f = currentType.GetField(fieldValue, BindingFlags.NonPublic | BindingFlags.Instance);
 
-		// Set
-		p.SetValue(currentObject, f.GetValue(currentObject), null);
-	}
+    //     // Set
+    //     p.SetValue(currentObject, f.GetValue(currentObject), null);
+    // }
 }
 #endif

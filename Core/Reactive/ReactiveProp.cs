@@ -1,110 +1,126 @@
 ﻿
 // Reactive Properties!
 
+// There is a ReactiveBool, Float, Int, String, Vector2, and Vector3. You can
+// .Subscribe Actions to the Property and they will be called when his .Value
+// changes.
+
+
 // @matnesis
 // 2015/12/12 02:40 PM
 
 
-using UnityEngine;
-using System;
-
-[Serializable]
-public class ReactiveProp<T>
+namespace matnesis.Reactive
 {
-    private Action<T> suscribers;
-    private T valueSent = default(T);
+    using System;
+    using UnityEngine;
 
-    [SerializeField]
-    private T _value = default(T);
-    public T Value
+
+    [Serializable]
+    public class ReactiveProp<T>
     {
-        get { return _value; }
+        Action<T> subscribers;
+        T callValue = default(T);
 
-        set
+        [SerializeField]
+        T value = default(T);
+        public T Value
         {
-            if (_value != null && _value.Equals(value))
-                return;
+            get { return value; }
 
-            _value = value;
+            set
+            {
+                // Avoid if it's the same value
+                if (this.value != null && this.value.Equals(value)) return;
 
-            CallSuscribers();
+                this.value = value;
+
+                CallSubscribers();
+            }
+        }
+
+
+        public ReactiveProp(T initialValue)
+        {
+            Value = initialValue;
+        }
+
+
+        /// <summary>
+        /// Subscribes the callback to Value changes, returns an Action that
+        /// unsubscribes it.
+        /// </summary>
+        public Action Subscribe(Action<T> callback, bool callOnSubscribe = true)
+        {
+            subscribers += callback;
+
+            // What does is this callValue validation?
+            if (callOnSubscribe && callValue != null) callback(value);
+
+            return new Action(() => subscribers -= callback);
+        }
+
+
+        public void Unsubscribe(Action<T> callback)
+        {
+            subscribers -= callback;
+        }
+
+
+        public T CallSubscribers()
+        {
+            // Avoid if it's the same value
+            if (callValue != null && callValue.Equals(value)) return default(T);
+
+            // Send
+            callValue = value;
+            if (subscribers != null) subscribers(callValue);
+
+            return callValue;
         }
     }
 
 
-    public ReactiveProp(T initialValue)
+    // Specialized properties that can be seeing on the Unity inspector.
+
+    [Serializable]
+    public class ReactiveBool : ReactiveProp<bool>
     {
-        Value = initialValue;
+        public ReactiveBool(bool value) : base(value) { }
     }
 
 
-    public void Suscribe(Action<T> callback, bool callOnSuscription = true)
+    [Serializable]
+    public class ReactiveString : ReactiveProp<string>
     {
-        suscribers += callback;
-
-        if (callOnSuscription && valueSent != null)
-            callback(_value);
+        public ReactiveString(string value) : base(value) { }
     }
 
 
-    public void Unsubscribe(Action<T> callback)
+    [Serializable]
+    public class ReactiveInt : ReactiveProp<int>
     {
-        suscribers -= callback;
+        public ReactiveInt(int value) : base(value) { }
     }
 
 
-    // #todo I need to check this.
-    public void CallSuscribers()
+    [Serializable]
+    public class ReactiveFloat : ReactiveProp<float>
     {
-        if (valueSent != null && valueSent.Equals(_value))
-            return;
-
-        valueSent = _value;
-        if (suscribers != null) suscribers(_value);
+        public ReactiveFloat(float value) : base(value) { }
     }
-}
 
 
-// ^
-// Specialized properties that can be seeing on the Unity inspector.
-
-[Serializable]
-public class BoolReactiveProp : ReactiveProp<bool>
-{
-    public BoolReactiveProp(bool initialValue) : base(initialValue) { }
-}
+    [Serializable]
+    public class ReactiveVector3 : ReactiveProp<Vector3>
+    {
+        public ReactiveVector3(Vector3 value) : base(value) { }
+    }
 
 
-[Serializable]
-public class StringReactiveProp : ReactiveProp<string>
-{
-    public StringReactiveProp(string initialValue) : base(initialValue) { }
-}
-
-
-[Serializable]
-public class IntReactiveProp : ReactiveProp<int>
-{
-    public IntReactiveProp(int initialValue) : base(initialValue) { }
-}
-
-
-[Serializable]
-public class FloatReactiveProp : ReactiveProp<float>
-{
-    public FloatReactiveProp(float initialValue) : base(initialValue) { }
-}
-
-
-[Serializable]
-public class Vector3ReactiveProp : ReactiveProp<Vector3>
-{
-    public Vector3ReactiveProp(Vector3 initialValue) : base(initialValue) { }
-}
-
-
-[Serializable]
-public class Vector2ReactiveProp : ReactiveProp<Vector2>
-{
-    public Vector2ReactiveProp(Vector2 initialValue) : base(initialValue) { }
+    [Serializable]
+    public class ReactiveVector2 : ReactiveProp<Vector2>
+    {
+        public ReactiveVector2(Vector2 value) : base(value) { }
+    }
 }

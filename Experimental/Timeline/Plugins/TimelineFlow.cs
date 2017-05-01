@@ -35,7 +35,7 @@ public class TimelineFlow : MonoBehaviour
     /// <summary>
     /// Reseteable smooth transition to the selected Timeline index.
     /// </summary>
-    public TeaTime FlowTo(int index, float seconds)
+    public TeaTime FlowTo(int index, float seconds, Vector3 extraPos)
     {
         // Allows to do this GoTo(index + 1, 2)
         index = index > timeline.positions.Count ? 0 : index;
@@ -45,9 +45,12 @@ public class TimelineFlow : MonoBehaviour
         // @
         return this.tt("@flowTo").Reset().Add((ttHandler t) =>
         {
-            t.Wait(this.ttMove(transform, timeline.positions[index], seconds));
-            t.Wait(this.ttRotate(transform, timeline.rotations[index], seconds));
-            t.Wait(this.ttScale(transform, timeline.scales[index], seconds));
+            // TODO
+            // This need to be fixed with some tween engine, so this component can work again
+
+            // t.Wait(this.ttMove(transform, timeline.positions[index] + extraPos, seconds));
+            // t.Wait(this.ttRotate(transform, timeline.rotations[index], seconds));
+            // t.Wait(this.ttScale(transform, timeline.scales[index], seconds));
         });
     }
 

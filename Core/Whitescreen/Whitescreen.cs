@@ -11,6 +11,7 @@ using matnesis.TeaTime;
 public class Whitescreen : MonoBehaviour
 {
     public int zOnCam = 1;
+    public bool autoOrthoAdjust = false; // Whitescreen will change his scale to the width and height of the scene
 
     [Header("Automatic references")]
     public Renderer render;
@@ -35,19 +36,26 @@ public class Whitescreen : MonoBehaviour
 
 
         // Auto enable
-        if (gameObject.activeSelf == false)
+        if (!gameObject.activeSelf)
             gameObject.SetActive(true);
 
-        // Auto scale
-        this.tt("@fillTheScreen").Add(() =>
-        {
-            // Scale
-            float height = Camera.main.orthographicSize * 2.0f;
-            float width = height * Screen.width / Screen.height;
+        if (!render.enabled)
+            render.enabled = true;
 
-            transform.localScale = new Vector3(width, height, 1) * 1.1f;
-            render.sortingOrder = Mathf.Abs(Mathf.FloorToInt(zOnCam));
-        })
-        .Add(1).Repeat();
+
+        // Auto scale
+        if (autoOrthoAdjust)
+        {
+            this.tt().Add(() =>
+            {
+                // Scale
+                float height = Camera.main.orthographicSize * 2.0f;
+                float width = height * Screen.width / Screen.height;
+
+                transform.localScale = new Vector3(width, height, 1) * 1.1f;
+                render.sortingOrder = Mathf.Abs(Mathf.FloorToInt(zOnCam));
+            })
+            .Add(1).Repeat();
+        }
     }
 }

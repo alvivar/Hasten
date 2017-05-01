@@ -46,7 +46,7 @@ public class Motion2DJump : MonoBehaviour
                 currentJumps = 0;
                 t.self.Stop();
             })
-			.Immutable();
+            .Immutable();
         }
     }
 
@@ -59,7 +59,6 @@ public class Motion2DJump : MonoBehaviour
 
         // Count up
         currentJumps += 1;
-
 
         // 0 is neutral as input
         Vector2 jumpForce = Vector2.zero;
@@ -85,7 +84,7 @@ public class Motion2DJump : MonoBehaviour
         });
 
 
-		// Wait until it touch the ground
-		jumpReset.Play();
+        // Wait until it touch the ground
+        jumpReset.Play();
     }
 }

@@ -44,7 +44,7 @@ public class MissingScripts : UnityEditor.Editor
 
 
     // This works, but Unity freezes after using it :( I keep it because it's
-    // interesting.
+    // interesting and useful.
 
     // [MenuItem("Tools/Missing Scripts/Clean Up Selected")]
     static void CleanUpSelectedMissingScripts()

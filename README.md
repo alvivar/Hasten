@@ -1,8 +1,8 @@
 # Hasten
 
-## Unity Game Dev Toolkit
-
 _[Download](http://github.com/alvivar/Hasten/raw/master/Hasten.zip)_
+
+## Unity Game Dev Toolkit
 
 This is the code I use in all [my games](http://matnesis.itch.io/). It's a
 collection of scripts, extensions, patterns and custom tools I made for Unity.

@@ -11,4 +11,4 @@ I have managed to create all my stuff with versions of this, and I'm constantly
 improving it with every new creation. Maybe you can find something useful, take
 a look!
 
-> [Andrés Villalobos](http://twitter.com/matnesis)
+> By [Andrés Villalobos](http://twitter.com/matnesis)

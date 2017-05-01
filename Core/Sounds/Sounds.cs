@@ -7,12 +7,43 @@
 
 using UnityEngine;
 using matnesis.TeaTime;
+using matnesis.Reactive;
 
-[Reactive]
+public class SoundsStrings
+{
+    // Character
+    public static string Checkpoint = "Checkpoint";
+    public static string JumpStart = "Jump_Start";
+    public static string Landing = "Landing";
+    public static string Run = "Run";
+    public static string SecondJump = "Second_Jump";
+    public static string SlidingOnWall = "SlidingOnWall";
+    public static string StopSlidingOnWall = "StopSlidingOnWall";
+    public static string TeleportClose = "Teleport_Close";
+    public static string TeleportLoop = "Teleport_Loop";
+    public static string TeleportLoopStop = "Teleport_Loop_Stop";
+    public static string TeleportOpen = "Teleport_Open";
+    public static string Walk = "Walk";
+    public static string WalkLand = "Walk_Land";
+    public static string WeaponSwing = "WeaponSwing";
+
+    // Enemies
+    public static string BulletExplosion = "BulletExplosion";
+    public static string EnemyDetectedPlay = "EnemyDetected_Play";
+    public static string EnemyDetectedStop = "EnemyDetected_Stop";
+    public static string Grumbling = "Grumbling";
+    public static string RockSmash = "RockSmash";
+    public static string ScreamingHive = "ScreamingHive";
+    public static string ShootBullet = "ShootBullet";
+    public static string WalkerWalkingPlay = "WalkerWalking_Play";
+    public static string WalkerWalkingStop = "WalkerWalking_Stop";
+}
+
+[ReactiveInEditMode]
 public class Sounds : MonoBehaviour
 {
-    public BoolReactiveProp enableBgLoop = new BoolReactiveProp(true);
-    public BoolReactiveProp enableBgRandom = new BoolReactiveProp(true);
+    public ReactiveBool enableBgLoop = new ReactiveBool(true);
+    public ReactiveBool enableBgRandom = new ReactiveBool(true);
 
     [Header("Background")]
     public AudioClip[] bgLoop;
@@ -69,7 +100,7 @@ public class Sounds : MonoBehaviour
 
 
             // + Reactive
-            enableBgLoop.Suscribe(x =>
+            enableBgLoop.Subscribe(x =>
             {
                 if (x) this.tt("@bgLoop").Play();
                 else this.tt("@bgLoop").Stop();
@@ -95,7 +126,7 @@ public class Sounds : MonoBehaviour
 
 
             // + Reactive
-            enableBgRandom.Suscribe(x =>
+            enableBgRandom.Subscribe(x =>
             {
                 if (x) this.tt("@bgRandom").Play();
                 else this.tt("@bgRandom").Stop();
@@ -135,7 +166,6 @@ public class Sounds : MonoBehaviour
 
         return current;
     }
-
 
     public void VolumeFade(float fadeTo, float duration)
     {

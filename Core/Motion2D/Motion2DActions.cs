@@ -7,64 +7,65 @@
 
 using UnityEngine;
 using matnesis.TeaTime;
+using matnesis.Reactive;
 
-[Reactive]
+[ReactiveInEditMode]
 [RequireComponent(typeof(Motion2D))]
 public class Motion2DActions : MonoBehaviour
 {
-	[Header("Config")]
-	public Transform target;
-	public BoolReactiveProp doFollow = new BoolReactiveProp(false);
-	public BoolReactiveProp doRunAway = new BoolReactiveProp(false);
+    [Header("Config")]
+    public Transform target;
+    public ReactiveBool doFollow = new ReactiveBool(false);
+    public ReactiveBool doRunAway = new ReactiveBool(false);
 
-	// TeaTime
-	private TeaTime followTarget;
-	private TeaTime runAwayFromTarget;
+    // TeaTime
+    private TeaTime followTarget;
+    private TeaTime runAwayFromTarget;
 
-	private Motion2D motion;
-
-
-	void Start()
-	{
-		motion = GetComponent<Motion2D>();
+    private Motion2D motion;
 
 
-		// ^
-		// Follow
-
-		followTarget = this.tt().Pause().Add(0.10f, (ttHandler t) =>
-		{
-			Vector3 dirToTarget = target.position - transform.position;
-			dirToTarget.z = 0;
-
-			motion.direction = dirToTarget.normalized;
-		})
-		.Repeat();
-
-		doFollow.Suscribe(x =>
-		{
-			if (x) followTarget.Play();
-			else followTarget.Stop();
-		});
+    void Start()
+    {
+        motion = GetComponent<Motion2D>();
 
 
+        // ^
+        // Follow
 
-		// ^
-		// Run away
+        followTarget = this.tt().Pause().Add(0.10f, (ttHandler t) =>
+        {
+            Vector3 dirToTarget = target.position - transform.position;
+            dirToTarget.z = 0;
 
-		runAwayFromTarget = this.tt().Pause().Add(0.10f, (ttHandler t) =>
-		{
-			Vector3 dirToTarget = transform.position - target.position;
-			dirToTarget.z = 0;
+            motion.direction = dirToTarget.normalized;
+        })
+        .Repeat();
 
-			motion.direction = dirToTarget.normalized;
-		})
-		.Repeat();
+        doFollow.Subscribe(x =>
+        {
+            if (x) followTarget.Play();
+            else followTarget.Stop();
+        });
 
-		doRunAway.Suscribe(x =>
-		{
-			if (x) runAwayFromTarget.Play();
-			else runAwayFromTarget.Stop();
-		});
-	}
+
+
+        // ^
+        // Run away
+
+        runAwayFromTarget = this.tt().Pause().Add(0.10f, (ttHandler t) =>
+        {
+            Vector3 dirToTarget = transform.position - target.position;
+            dirToTarget.z = 0;
+
+            motion.direction = dirToTarget.normalized;
+        })
+        .Repeat();
+
+        doRunAway.Subscribe(x =>
+        {
+            if (x) runAwayFromTarget.Play();
+            else runAwayFromTarget.Stop();
+        });
+    }
 }

@@ -6,16 +6,17 @@
 
 
 using UnityEngine;
+using matnesis.Reactive;
 
-[Reactive]
+[ReactiveInEditMode]
 public class SimpleRPG : MonoBehaviour
 {
-	[Header("Stats")]
-	public IntReactiveProp hp = new IntReactiveProp(3);
-	public IntReactiveProp stamina = new IntReactiveProp(5);
-	public IntReactiveProp coins = new IntReactiveProp(0);
+    [Header("Stats")]
+    public ReactiveInt hp = new ReactiveInt(3);
+    public ReactiveInt stamina = new ReactiveInt(5);
+    public ReactiveInt coins = new ReactiveInt(0);
 
-	[Header("Combat")]
-	public IntReactiveProp damage = new IntReactiveProp(1);
-	public IntReactiveProp knockback = new IntReactiveProp(1);
+    [Header("Combat")]
+    public ReactiveInt damage = new ReactiveInt(1);
+    public ReactiveInt knockback = new ReactiveInt(1);
 }

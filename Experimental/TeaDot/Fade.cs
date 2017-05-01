@@ -7,35 +7,36 @@
 
 using DG.Tweening;
 using UnityEngine;
+using matnesis.Reactive;
 
 
-[Reactive]
+[ReactiveInEditMode]
 public class Fade : MonoBehaviour
 {
-	public BoolReactiveProp Show = new BoolReactiveProp(true);
+    public ReactiveBool Show = new ReactiveBool(true);
 
-	[Header("Fade In")]
-	public Color fadeInColor = Color.white;
-	public float fadeInDuration = 0.20f;
+    [Header("Fade In")]
+    public Color fadeInColor = Color.white;
+    public float fadeInDuration = 0.20f;
 
-	[Header("Fade Out")]
-	public Color fadeOutColor = Color.clear;
-	public float fadeOutDuration = 1;
+    [Header("Fade Out")]
+    public Color fadeOutColor = Color.clear;
+    public float fadeOutDuration = 1;
 
-	private Renderer render;
-
-
-	void Start()
-	{
-		render = GetComponent<Renderer>();
+    private Renderer render;
 
 
-		Show.Suscribe(x =>
-		{
-			render.material.DOKill();
+    void Start()
+    {
+        render = GetComponent<Renderer>();
 
-			if (x) render.material.DOColor(fadeInColor, fadeInDuration);
-			else render.material.DOColor(fadeOutColor, fadeOutDuration);
-		});
-	}
+
+        Show.Subscribe(x =>
+        {
+            render.material.DOKill();
+
+            if (x) render.material.DOColor(fadeInColor, fadeInDuration);
+            else render.material.DOColor(fadeOutColor, fadeOutDuration);
+        });
+    }
 }

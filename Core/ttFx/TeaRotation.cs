@@ -7,11 +7,12 @@
 
 using UnityEngine;
 using matnesis.TeaTime;
+using matnesis.Reactive;
 
-[Reactive]
+[ReactiveInEditMode]
 public class TeaRotation : MonoBehaviour
 {
-    public BoolReactiveProp update = new BoolReactiveProp(false);
+    public ReactiveBool update = new ReactiveBool(false);
 
     [Header("Config")]
     public Vector3 eulerRangeA = new Vector3(0, 0, -30);
@@ -62,7 +63,7 @@ public class TeaRotation : MonoBehaviour
 
 
         // +R
-        update.Suscribe(x =>
+        update.Subscribe(x =>
         {
             if (x) randomRotation.Play();
             else randomRotation.Stop();

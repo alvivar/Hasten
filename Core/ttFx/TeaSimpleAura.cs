@@ -7,11 +7,12 @@
 
 using UnityEngine;
 using matnesis.TeaTime;
+using matnesis.Reactive;
 
-[Reactive]
+[ReactiveInEditMode]
 public class TeaSimpleAura : MonoBehaviour
 {
-    public BoolReactiveProp update = new BoolReactiveProp(true);
+    public ReactiveBool update = new ReactiveBool(true);
 
     [Header("Config")]
     public float time = 1;
@@ -26,7 +27,7 @@ public class TeaSimpleAura : MonoBehaviour
 
     void Start()
     {
-		render = GetComponent<Renderer>();
+        render = GetComponent<Renderer>();
 
 
         // @
@@ -53,7 +54,7 @@ public class TeaSimpleAura : MonoBehaviour
 
 
         // Reactive
-        update.Suscribe(x =>
+        update.Subscribe(x =>
         {
             if (x) simpleAura.Play();
             else simpleAura.Stop();

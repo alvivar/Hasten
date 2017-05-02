@@ -1,8 +1,6 @@
 # Hasten
 
-> _[Download](http://github.com/alvivar/Hasten/raw/master/Hasten.zip)_
-
-> _[Follow me](http://twitter.com/matnesis)_
+> _[Download](http://github.com/alvivar/Hasten/raw/master/Hasten.zip)_ | _[Say Hello](http://twitter.com/matnesis)_
 
 This is the code I use in all [my games](http://matnesis.itch.io/). It's a
 collection of scripts, extensions, patterns and custom tools I made for Unity.

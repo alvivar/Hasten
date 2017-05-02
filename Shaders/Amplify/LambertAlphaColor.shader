@@ -21,7 +21,7 @@ Shader "Hasten/Amplify/LambertAlphaColor"
 			fixed filler;
 		};
 
-		uniform fixed4 _Color;
+		uniform half4 _Color;
 
 		void surf( Input i , inout SurfaceOutput o )
 		{
@@ -103,9 +103,9 @@ Shader "Hasten/Amplify/LambertAlphaColor"
 /*ASEBEGIN
 Version=7102
 0;45;1440;851;666.8543;474.5124;1;True;True
-Node;AmplifyShaderEditor.ColorNode;1;-250.3714,-219.0238;Fixed;False;Property;_Color;Color;0;0;0.25,0.3333333,0.5,1;0;5;COLOR;FLOAT;FLOAT;FLOAT;FLOAT
-Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;30,-265;Fixed;False;True;2;Fixed;ASEMaterialInspector;0;Lambert;Hasten/Amplify/LambertAlphaColor;False;False;False;False;False;False;False;False;False;False;False;False;Back;0;0;False;0;0;Transparent;0.1;True;True;0;False;Transparent;Transparent;All;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;False;0;255;255;0;0;0;0;False;0;4;10;25;False;0.5;True;0;Zero;Zero;0;Zero;Zero;Add;Add;0;False;0;0,0,0,0;VertexOffset;False;Cylindrical;Relative;0;Standard;15;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT;0.0;False;4;FLOAT;0.0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0.0;False;9;FLOAT;0.0;False;10;OBJECT;0.0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;13;OBJECT;0.0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
+Node;AmplifyShaderEditor.ColorNode;1;-250.3714,-219.0238;Half;False;Property;_Color;Color;0;0;0.25,0.3333333,0.5,1;0;5;COLOR;FLOAT;FLOAT;FLOAT;FLOAT
+Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;30,-265;Half;False;True;2;Half;ASEMaterialInspector;0;Lambert;Hasten/Amplify/LambertAlphaColor;False;False;False;False;False;False;False;False;False;False;False;False;Back;0;0;False;0;0;Transparent;0.1;True;True;0;False;Transparent;Transparent;All;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;False;0;255;255;0;0;0;0;False;0;4;10;25;False;0.5;True;0;Zero;Zero;0;Zero;Zero;Add;Add;0;False;0;0,0,0,0;VertexOffset;False;Cylindrical;Relative;0;Standard;15;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT;0.0;False;4;FLOAT;0.0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0.0;False;9;FLOAT;0.0;False;10;OBJECT;0.0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;13;OBJECT;0.0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
 WireConnection;0;0;1;0
 WireConnection;0;9;1;4
 ASEEND*/
-//CHKSM=99E52EFB8EC7DC479BF1EEDE55F4AE4FEE001807
+//CHKSM=E320A5F80BC28166B038977628A1B504FEAAB50C

@@ -1,7 +1,5 @@
 # Hasten
 
-## Unity Game Dev Toolkit
-
 > _[Download](http://github.com/alvivar/Hasten/raw/master/Hasten.zip)_
 
 This is the code I use in all [my games](http://matnesis.itch.io/). It's a

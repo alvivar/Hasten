@@ -154,10 +154,10 @@ public class ChildrenTools
     }
 
 
-    // --- R E L O C A T E ------
+    // --- R E P O S I T I O N ------
 
 
-    [MenuItem("GameObject/Children Tools/Relocate/To Position 0", false, 10)]
+    [MenuItem("GameObject/Children Tools/Reposition/To Position 0", false, 10)]
     static void RelocateToPos0()
     {
         var selected = Selection.activeTransform;
@@ -173,7 +173,7 @@ public class ChildrenTools
     }
 
 
-    [MenuItem("GameObject/Children Tools/Relocate/To The Center Of All Children", false, 10)]
+    [MenuItem("GameObject/Children Tools/Reposition/To The Center Of All Children", false, 10)]
     static void RelocateToCenterOfChildren()
     {
         var selected = Selection.activeTransform;
@@ -203,8 +203,39 @@ public class ChildrenTools
     // --- S N A P ------
 
 
+    // ALL
+
     [MenuItem("GameObject/Children Tools/Snap/All To 0.01", false, 10)]
-    static void SnapToDot01()
+    static void SnapAllToDot01()
+    {
+        var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
+
+        foreach (var t in all)
+        {
+            t.localPosition = Snap(t.localPosition, 0.01f);
+            t.localEulerAngles = Snap(t.localEulerAngles, 0.01f);
+            t.localScale = Snap(t.localScale, 0.01f);
+        }
+    }
+
+
+    [MenuItem("GameObject/Children Tools/Snap/All To 0.1", false, 10)]
+    static void SnapAllToDot1()
+    {
+        var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
+
+        foreach (var t in all)
+        {
+            t.localPosition = Snap(t.localPosition, 0.1f);
+            t.localEulerAngles = Snap(t.localEulerAngles, 0.1f);
+            t.localScale = Snap(t.localScale, 0.1f);
+        }
+    }
+
+    // Position
+
+    [MenuItem("GameObject/Children Tools/Snap/Pos/All To 0.01", false, 10)]
+    static void SnapPosToDot01()
     {
         var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
 
@@ -213,13 +244,53 @@ public class ChildrenTools
     }
 
 
-    [MenuItem("GameObject/Children Tools/Snap/All To 0.1", false, 10)]
-    static void SnapToDot1()
+    [MenuItem("GameObject/Children Tools/Snap/Pos/All To 0.1", false, 10)]
+    static void SnapPosToDot1()
     {
         var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
 
         foreach (var t in all)
             t.localPosition = Snap(t.localPosition, 0.1f);
+    }
+
+    // Rotation
+
+    [MenuItem("GameObject/Children Tools/Snap/Rotation/All To 0.01", false, 10)]
+    static void SnapEulerToDot01()
+    {
+        var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
+
+        foreach (var t in all)
+            t.localEulerAngles = Snap(t.localEulerAngles, 0.01f);
+    }
+
+    [MenuItem("GameObject/Children Tools/Snap/Rotation/All To 0.1", false, 10)]
+    static void SnapEulerToDot1()
+    {
+        var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
+
+        foreach (var t in all)
+            t.localEulerAngles = Snap(t.localEulerAngles, 0.1f);
+    }
+
+    // Scale
+
+    [MenuItem("GameObject/Children Tools/Snap/Scale/All To 0.01", false, 10)]
+    static void SnapScaleToDot1()
+    {
+        var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
+
+        foreach (var t in all)
+            t.localScale = Snap(t.localScale, 0.01f);
+    }
+
+    [MenuItem("GameObject/Children Tools/Snap/Scale/All To 0.1", false, 10)]
+    static void SnapScaleToDot01()
+    {
+        var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
+
+        foreach (var t in all)
+            t.localScale = Snap(t.localScale, 0.1f);
     }
 
 
@@ -269,7 +340,7 @@ public class ChildrenTools
     }
 
 
-    [MenuItem("GameObject/Children Tools/Rename/Enumerate By Magnitude (And Sort)", false, 10)]
+    [MenuItem("GameObject/Children Tools/Rename/Enumerate And Sort By Magnitude", false, 10)]
     static void RenameEnumerateByMagnitudeAndSort()
     {
         var selected = Selection.activeTransform;
@@ -297,7 +368,30 @@ public class ChildrenTools
     }
 
 
-    // --- General ------
+    // --- G R O U P S ------
+
+
+    [MenuItem("GameObject/Children Tools/Group/Into New Game Object", false, 10)]
+    static void GroupIntoNewGameObject()
+    {
+        if (Selection.transforms.Length < 1) return;
+
+        var selected = Selection.activeTransform;
+
+        var name = "[New Group]";
+        var parent = GameObject.Find(name);
+        parent = !parent ? new GameObject(name) : parent;
+        parent.transform.SetParent(selected.parent);
+        parent.transform.SetAsLastSibling();
+
+        foreach (var t in Selection.transforms)
+            t.SetParent(parent.transform);
+
+        Selection.objects = new GameObject[] { parent };
+    }
+
+
+    // --- G E N E R A L ------
 
 
     public static string RemoveBetween(string text, char begin, char end)

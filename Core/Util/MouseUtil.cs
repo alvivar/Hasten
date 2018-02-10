@@ -1,7 +1,7 @@
 ﻿
 // Mouse stuff.
 
-// Andrés Villalobos ^ andresalvivar@gmail.com ^ twitter.com/matnesis
+// andresalvivar@gmail.com | twitter.com/matnesis
 // 2015/10/19 04:52 PM
 
 

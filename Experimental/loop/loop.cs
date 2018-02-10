@@ -16,7 +16,7 @@ public class loop
     private Sequence dotween = DOTween.Sequence();
 
 
-    public static loop lerp()
+    public static loop create()
     {
         return new loop();
     }
@@ -58,7 +58,7 @@ public class loop
     {
         dotween.AppendCallback(() =>
         {
-            loop.lerp()
+            loop.create()
                 .then(() => dotween.Pause())
                 .wait(callback())
                 .then(() => dotween.Play());

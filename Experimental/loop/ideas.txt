@@ -1,0 +1,14 @@
+
+
+this.lerp<float>(() => move.speedOverride, x => move.speedOverride = x, 0.2f, 1)
+    .wait(1)
+    .then(x => move.speedOverride = x, () => move.speedOverride, 0);
+
+
+this.loop<float>("slownDown", x => move.speedOverride = x)
+    .to(0)
+    .from(move.speedOverride)
+    .in(5);
+    .then(
+        this.loop<>
+    )

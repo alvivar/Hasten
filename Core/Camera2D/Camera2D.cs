@@ -1,7 +1,7 @@
 ﻿
 // Custom 2D camera with some tricks.
 
-// Andrés Villalobos ~ andresalvivar@gmail.com ~ twitter.com/matnesis
+// Andrés Villalobos | twitter.com/matnesis
 // 2015/08/11 09:42 PM
 
 
@@ -14,7 +14,7 @@ public class Camera2D : MonoBehaviour
     public Transform focus; // Main point of focus
     public Vector3 focusOffset; // Variation to the focus position
     public Vector3 focusOffsetOverride; // This overrides the previous
-    public Vector3 focusOffsetFixed = new Vector3(0, 10, 0); // This offset is added always at the end (to help with custom perspectives)
+    public Vector3 focusOffsetFixed = new Vector3(0, 0, 0); // This offset is added always at the end (to help with custom perspectives)
     public List<Transform> focusGroup; // All transforms here share the camera focus
 
     [Header("Config")]
@@ -42,7 +42,6 @@ public class Camera2D : MonoBehaviour
     void Start()
     {
         // Fix children layer
-        //Transform[] children = GetComponentsInChildren<Transform>();
         for (int i = 0; i < affectedChildren.Length; i++)
         {
             if (affectedChildren[i] == transform) continue;

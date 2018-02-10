@@ -21,4 +21,11 @@ public class LookAt : MonoBehaviour
             transform.eulerAngles += lookOffset;
         }
     }
+
+
+    [ContextMenu("Look at player")]
+    public void LookAtPlayer()
+    {
+        target = GameObject.FindWithTag("Player").transform;
+    }
 }

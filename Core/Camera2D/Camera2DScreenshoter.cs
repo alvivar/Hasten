@@ -53,7 +53,7 @@ public class Camera2DScreenshoter : MonoBehaviour
                 Debug.Log(screen + " " + Time.time);
 
                 yield return new WaitForEndOfFrame();
-                Application.CaptureScreenshot(screen);
+                ScreenCapture.CaptureScreenshot(screen);
             }
         }
 

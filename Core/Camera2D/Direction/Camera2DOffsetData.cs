@@ -264,7 +264,7 @@ public class Camera2DOffsetData : MonoBehaviour
             string name = "@icon";
 
             // Find
-            if (icon == null) icon = transform.FindChild(name);
+            if (icon == null) icon = transform.Find(name);
 
             // Or create
             if (icon == null)

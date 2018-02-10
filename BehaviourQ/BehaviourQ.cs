@@ -26,6 +26,7 @@ namespace matnesis.BehaviourQ
 
         List<BehaviourState> queue = new List<BehaviourState>();
         int index = 0;
+        bool active = true;
 
 
         BehaviourQ Add(BehaviourState state)
@@ -68,6 +69,9 @@ namespace matnesis.BehaviourQ
 
         public void Update()
         {
+            if (!active) return;
+
+
             var chosen = queue[index];
 
             if (chosen.Condition())
@@ -83,11 +87,23 @@ namespace matnesis.BehaviourQ
             else
             {
                 // Next
-                index = (index + 1) % queue.Count;
+                index = ++index % queue.Count;
 
                 // Maybe the current chosen was previouly active
                 if (chosen.Stop != null) chosen.Stop();
             }
+        }
+
+
+        public void Pause()
+        {
+            active = false;
+        }
+
+
+        public void Play()
+        {
+            active = true;
         }
     }
 }

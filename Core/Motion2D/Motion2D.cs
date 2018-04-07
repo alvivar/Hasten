@@ -95,7 +95,7 @@ public class Motion2D : MonoBehaviour
     private float colliderRadius;
 
     public Rigidbody2D rbody;
-    private Collider2D collidr;
+    public Collider2D collidr;
     private Vector2 movement;
 
     // tt
@@ -106,7 +106,7 @@ public class Motion2D : MonoBehaviour
     {
         // Required
         rbody = GetComponent<Rigidbody2D>();
-        collidr = GetComponent<Collider2D>();
+        if (collidr == null) collidr = GetComponent<Collider2D>();
 
 
         // Rigidbody2D defaults

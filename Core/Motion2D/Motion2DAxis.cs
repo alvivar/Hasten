@@ -11,44 +11,45 @@ using UnityEngine;
 [RequireComponent(typeof(Motion2D))]
 public class Motion2DAxis : MonoBehaviour
 {
-	[Header("Options")]
-	public bool update = true;
-	public bool enableHorizontal = true;
-	public bool enableVertical = true;
-	public float deadZone = 0.3f; // Ignore values less than the dead zone
+    [Header("Options")]
+    public bool update = true;
+    public bool enableHorizontal = true;
+    public bool enableVertical = true;
+    public float deadZone = 0.3f; // Ignore values less than the dead zone
 
-	[Header("Input")]
-	public bool enableSimpleInput = true; // Basically Input.GetAxisRaw
-	public float horizontalAxis = 0;
-	public float verticalAxis = 0;
+    [Header("Input")]
+    public bool enableSimpleInput = true; // Basically Input.GetAxisRaw
+    public float horizontalAxis = 0;
+    public float verticalAxis = 0;
 
-	private Motion2D motion;
-
-
-	void Start()
-	{
-		motion = GetComponent<Motion2D>();
-	}
+    private Motion2D motion;
 
 
-	void Update()
-	{
-		if (!update)
-			return;
-
-		float horiAxis = enableHorizontal ? horizontalAxis : 0;
-		float vertAxis = enableVertical ? verticalAxis : 0;
+    void Start()
+    {
+        motion = GetComponent<Motion2D>();
+    }
 
 
-		if (enableSimpleInput)
-		{
-			horiAxis = Input.GetAxisRaw("Horizontal");
-			vertAxis = Input.GetAxisRaw("Vertical");
-		}
+    void Update()
+    {
+        if (!update)
+            return;
+
+        float horiAxis = enableHorizontal ? horizontalAxis : 0;
+        float vertAxis = enableVertical ? verticalAxis : 0;
 
 
-		motion.direction = new Vector2(
-		    Mathf.Abs(horiAxis) > deadZone ? horiAxis : 0,
-		    Mathf.Abs(vertAxis) > deadZone ? vertAxis : 0);
-	}
+        if (enableSimpleInput)
+        {
+            horizontalAxis = horiAxis = Input.GetAxisRaw("Horizontal");
+            verticalAxis = vertAxis = Input.GetAxisRaw("Vertical");
+        }
+
+
+        motion.direction = new Vector2(
+            Mathf.Abs(horiAxis) > deadZone ? horiAxis : 0,
+            Mathf.Abs(vertAxis) > deadZone ? vertAxis : 0
+        );
+    }
 }

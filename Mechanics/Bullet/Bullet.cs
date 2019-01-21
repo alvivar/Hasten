@@ -1,45 +1,22 @@
-﻿
-// A flexible bullet.
-
-// @matnesis
-// 2017/03/27 11:44 am
-
+﻿// Andrés Villalobos * twitter.com/matnesis * andresalvivar@gmail.com
+// 2018/06/02 03:53 pm
 
 using UnityEngine;
 
-[ReactiveInEditMode]
 public class Bullet : MonoBehaviour
 {
-    [Header("Config")]
-    public float speed = 1;
+    public Transform target;
     public Vector3 direction;
+    public float speed;
+    public System.Action<Collision2D, Bullet> onCollision;
+    public float timer;
 
-    [Header("Required")]
-    public Rigidbody2D rbody;
-    public TrailRenderer trail;
-
-    [Header("Info")]
-    public Collision2D lastCollision;
-
-
-    public System.Action<Collision2D> OnCollision;
-
-
-    void Update()
+    public void Clean()
     {
-        var hasDirection = direction != Vector3.zero;
-
-        // Move towards
-        if (hasDirection) rbody.velocity = direction * speed;
-
-        // Motion trail
-        trail.enabled = hasDirection;
-    }
-
-
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        lastCollision = other;
-        if (OnCollision != null) OnCollision(other);
+        target = null;
+        direction = Vector3.zero;
+        speed = 0;
+        onCollision = null;
+        timer = 0;
     }
 }

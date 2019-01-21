@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4546502802073238}
-  - component: {fileID: 114930331061004352}
+  - component: {fileID: 114619015663089432}
   m_Layer: 0
   m_Name: BoxelStamper
   m_TagString: Untagged
@@ -72,7 +72,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1062696428417912}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 265.4, y: -150.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4589202086542546}
@@ -87,7 +87,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1743744042048704}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.5, y: -7.5, z: -7.5}
+  m_LocalPosition: {x: -6.399994, y: -6.800003, z: -7.5}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 4546502802073238}
@@ -100,7 +100,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1680360206483878}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.5, y: 7.5, z: 7.5}
+  m_LocalPosition: {x: 8.600006, y: 8.199997, z: 7.5}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 4546502802073238}
@@ -115,11 +115,12 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: e4ea9f8dedd734ff8b8aba69627f7170, type: 2}
+  - {fileID: 2100000, guid: 24a33435b48d5d64d844315a0cd09af6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -130,6 +131,7 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -147,11 +149,12 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: e4ea9f8dedd734ff8b8aba69627f7170, type: 2}
+  - {fileID: 2100000, guid: 24a33435b48d5d64d844315a0cd09af6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -162,6 +165,7 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -216,11 +220,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1680360206483878}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cce6257fa7474dbca11443126e9dfdc, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d86281785cebcc4ba9be876a01ee8e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stamper: {fileID: 114930331061004352}
---- !u!114 &114930331061004352
+  stamper: {fileID: 0}
+--- !u!114 &114619015663089432
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -228,12 +232,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1062696428417912}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c42ffea44fcca4aafb84590efc876986, type: 3}
+  m_Script: {fileID: 11500000, guid: aae1bf9d6e29788479d4bddd9ee4ca8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxelPrefab: {fileID: 494726, guid: a1e63f65c820b49cf98a571d1e3e0cf9, type: 2}
+  boxelPrefab: {fileID: 0}
   gridSize: 0.5
-  areaSize: {x: 10, y: 10, z: 10}
   parentName: '[BoxelStamp]'
   layer:
     serializedVersion: 2
@@ -248,7 +251,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1743744042048704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cce6257fa7474dbca11443126e9dfdc, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d86281785cebcc4ba9be876a01ee8e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stamper: {fileID: 114930331061004352}
+  stamper: {fileID: 0}

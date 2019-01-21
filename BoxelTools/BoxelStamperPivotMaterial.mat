@@ -7,10 +7,11 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: BoxelStamperPivotMaterial
-  m_Shader: {fileID: 4800000, guid: dd9e11893be684411ae959ceb30aa988, type: 3}
+  m_Shader: {fileID: 4800000, guid: a0b57c4803aa0f5409320243220cf3aa, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []

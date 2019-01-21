@@ -1,15 +1,14 @@
-﻿
-// Handles the states to make Motion2D fly in the sky!
+﻿// Handles the states to make Motion2D fly in the sky!
 
 // Andrés Villalobos | twitter.com/matnesis | andresalvivar@gmail.com
 // 2017/09/15 10:48 am
 
-
-using UnityEngine;
 using matnesis.TeaTime;
+using UnityEngine;
 
 public class Motion2DFly : MonoBehaviour
 {
+
     [Header("Config")]
     public Vector2 flyGravity;
     public float flySpeed;
@@ -21,15 +20,15 @@ public class Motion2DFly : MonoBehaviour
 
     private Motion2D motion;
 
-
     void Start()
     {
         motion = GetComponent<Motion2D>();
+        DoGround();
     }
-
 
     public void DoFly()
     {
+        if (isFlying) return;
         isFlying = true;
 
         motion.gravity = flyGravity;
@@ -38,10 +37,11 @@ public class Motion2DFly : MonoBehaviour
         this.tt("DoGroundReset").Stop();
     }
 
-
     public void DoGround()
     {
+        if (!isFlying) return;
         isFlying = false;
+
         motion.limit = groundSpeed;
 
         this.tt("DoGroundReset").Reset().Loop(t =>

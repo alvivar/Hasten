@@ -4,13 +4,13 @@ Shader "Hasten/Amplify/LambertAlphaColor"
 {
 	Properties
 	{
-		[HideInInspector] __dirty( "", Int ) = 1
 		_Color("Color", Color) = (0.25,0.3333333,0.5,1)
+		[HideInInspector] __dirty( "", Int ) = 1
 	}
 
 	SubShader
 	{
-		Tags{ "RenderType" = "Transparent"  "Queue" = "Transparent+0" "IgnoreProjector" = "True" }
+		Tags{ "RenderType" = "Opaque"  "Queue" = "Transparent+0" "IgnoreProjector" = "True" }
 		Cull Back
 		CGINCLUDE
 		#include "UnityPBSLighting.cginc"
@@ -21,7 +21,7 @@ Shader "Hasten/Amplify/LambertAlphaColor"
 			fixed filler;
 		};
 
-		uniform half4 _Color;
+		uniform fixed4 _Color;
 
 		void surf( Input i , inout SurfaceOutput o )
 		{
@@ -31,7 +31,7 @@ Shader "Hasten/Amplify/LambertAlphaColor"
 
 		ENDCG
 		CGPROGRAM
-		#pragma surface surf Lambert alpha:fade keepalpha fullforwardshadows noshadow 
+		#pragma surface surf Lambert keepalpha fullforwardshadows 
 
 		ENDCG
 		Pass
@@ -46,7 +46,7 @@ Shader "Hasten/Amplify/LambertAlphaColor"
 			#pragma multi_compile_shadowcaster
 			#pragma multi_compile UNITY_PASS_SHADOWCASTER
 			#pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
-			# include "HLSLSupport.cginc"
+			#include "HLSLSupport.cginc"
 			#if ( SHADER_API_D3D11 || SHADER_API_GLCORE || SHADER_API_GLES3 || SHADER_API_METAL || SHADER_API_VULKAN )
 				#define CAN_SKIP_VPOS
 			#endif
@@ -57,7 +57,7 @@ Shader "Hasten/Amplify/LambertAlphaColor"
 			struct v2f
 			{
 				V2F_SHADOW_CASTER;
-				float3 worldPos : TEXCOORD6;
+				float3 worldPos : TEXCOORD1;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 			v2f vert( appdata_full v )
@@ -67,7 +67,7 @@ Shader "Hasten/Amplify/LambertAlphaColor"
 				UNITY_INITIALIZE_OUTPUT( v2f, o );
 				UNITY_TRANSFER_INSTANCE_ID( v, o );
 				float3 worldPos = mul( unity_ObjectToWorld, v.vertex ).xyz;
-				half3 worldNormal = UnityObjectToWorldNormal( v.normal );
+				fixed3 worldNormal = UnityObjectToWorldNormal( v.normal );
 				o.worldPos = worldPos;
 				TRANSFER_SHADOW_CASTER_NORMALOFFSET( o )
 				return o;
@@ -97,15 +97,14 @@ Shader "Hasten/Amplify/LambertAlphaColor"
 		}
 	}
 	Fallback "Standard"
-	Fallback "Diffuse"
 	CustomEditor "ASEMaterialInspector"
 }
 /*ASEBEGIN
-Version=7102
-0;45;1440;851;666.8543;474.5124;1;True;True
-Node;AmplifyShaderEditor.ColorNode;1;-250.3714,-219.0238;Half;False;Property;_Color;Color;0;0;0.25,0.3333333,0.5,1;0;5;COLOR;FLOAT;FLOAT;FLOAT;FLOAT
-Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;30,-265;Half;False;True;2;Half;ASEMaterialInspector;0;Lambert;Hasten/Amplify/LambertAlphaColor;False;False;False;False;False;False;False;False;False;False;False;False;Back;0;0;False;0;0;Transparent;0.1;True;True;0;False;Transparent;Transparent;All;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;False;0;255;255;0;0;0;0;False;0;4;10;25;False;0.5;True;0;Zero;Zero;0;Zero;Zero;Add;Add;0;False;0;0,0,0,0;VertexOffset;False;Cylindrical;Relative;0;Standard;15;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT;0.0;False;4;FLOAT;0.0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0.0;False;9;FLOAT;0.0;False;10;OBJECT;0.0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;13;OBJECT;0.0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
+Version=15301
+7;29;1522;788;722.8543;399.0124;1;True;True
+Node;AmplifyShaderEditor.ColorNode;1;-250.3714,-219.0238;Half;False;Property;_Color;Color;0;0;Create;True;0;0;False;0;0.25,0.3333333,0.5,1;1,1,1,1;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;30,-265;Fixed;False;True;2;Fixed;ASEMaterialInspector;0;0;Lambert;Hasten/Amplify/LambertAlphaColor;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;False;False;False;False;False;Back;0;False;-1;0;False;-1;False;0;0;False;0;Translucent;0.1;True;True;0;False;Opaque;;Transparent;All;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;0;False;-1;False;0;False;-1;255;False;-1;255;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;False;0;4;10;25;False;0.5;True;0;5;False;-1;10;False;-1;0;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;0;0,0,0,0;VertexOffset;True;False;Cylindrical;False;Relative;0;Standard;-1;-1;-1;-1;0;0;0;False;0;0;0;False;-1;-1;0;False;-1;15;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT;0;False;4;FLOAT;0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;13;FLOAT3;0,0,0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
 WireConnection;0;0;1;0
 WireConnection;0;9;1;4
 ASEEND*/
-//CHKSM=E320A5F80BC28166B038977628A1B504FEAAB50C
+//CHKSM=25A8E5F735F8D8A8A5F105E65B1259E3B7122AE8

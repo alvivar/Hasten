@@ -1,9 +1,7 @@
-﻿
-// Custom 2D camera with some tricks.
+﻿// Custom 2D camera with some tricks.
 
 // Andrés Villalobos | twitter.com/matnesis
 // 2015/08/11 09:42 PM
-
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +15,13 @@ public class Camera2D : MonoBehaviour
     public Vector3 focusOffsetFixed = new Vector3(0, 0, 0); // This offset is added always at the end (to help with custom perspectives)
     public List<Transform> focusGroup; // All transforms here share the camera focus
 
+    [Header("Auto zoom")]
+    public Transform autoZoomTarget; // Camera will auto zoom to include them
+    public float zoomPaddingScale = 0.2f;
+    public float zoomDampUp = 10;
+    public float zoomDampDown = 10;
+    public float zoomMinSize = 45;
+
     [Header("Config")]
     public float speed = 3; // Speed
     public float layer = -10; // Camera Z position
@@ -24,7 +29,6 @@ public class Camera2D : MonoBehaviour
     [Header("Children")]
     public Transform[] affectedChildren; // List of children to be affected
     public float childrenZLayer = 1; // Local z position for children
-
 
     /// <summary>
     /// Returns a Vector2 where 'x' represents the width and 'y' represents the
@@ -38,7 +42,6 @@ public class Camera2D : MonoBehaviour
         return new Vector2(width, height);
     }
 
-
     void Start()
     {
         // Fix children layer
@@ -49,11 +52,9 @@ public class Camera2D : MonoBehaviour
         }
     }
 
-
     void Update()
     {
         Vector3 pos = Vector3.zero;
-
 
         // Main focus
         if (focus)
@@ -65,7 +66,6 @@ public class Camera2D : MonoBehaviour
             pos += focusOffsetFixed;
         }
 
-
         // Be at the center of everything
         if (focusGroup.Count > 0)
         {
@@ -76,12 +76,29 @@ public class Camera2D : MonoBehaviour
             pos /= (focusGroup.Count + (focus != null ? 1 : 0));
         }
 
-
         // Focus
         if (focus || focusGroup.Count > 0)
         {
             pos.z = layer;
             transform.position = Vector3.Lerp(transform.position, pos, Time.deltaTime * speed);
+        }
+
+        // Auto zoom
+        if (autoZoomTarget)
+        {
+            Vector3 screenPoint = Camera.main.WorldToViewportPoint(autoZoomTarget.position);
+            if (screenPoint.x > 0 + zoomPaddingScale &&
+                screenPoint.x < 1 - zoomPaddingScale &&
+                screenPoint.y > 0 + zoomPaddingScale &&
+                screenPoint.y < 1 - zoomPaddingScale)
+            {
+                if (Camera.main.orthographicSize > zoomMinSize)
+                    Camera.main.orthographicSize -= Time.deltaTime * zoomDampDown;
+            }
+            else
+            {
+                Camera.main.orthographicSize += Time.deltaTime * zoomDampUp;
+            }
         }
     }
 }

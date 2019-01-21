@@ -1,28 +1,45 @@
-﻿
-// This is basically a mouse cursor that looks at certain rotation towards an
+﻿// This is basically a mouse cursor that looks at certain rotation towards an
 // origin.
 
-// andresalvivar@gmail.com | twitter.com/matnesis
+// Andrés Villalobos | twitter.com/matnesis | andresalvivar@gmail.com
 // 2015/07/16 12:26 PM
-
 
 using UnityEngine;
 
 public class Cursor2D : MonoBehaviour
 {
     [Header("Config")]
-    public float zLayer = -9;
+    public float zLayer = 0;
     public bool rotateUponOrigin = false;
 
     [Header("Required")]
     public Transform origin;
 
+    public Vector3 position2D
+    {
+        get
+        {
+            var pos = transform.position;
+            pos.z = 0;
+            return pos;
+        }
+    }
+
+    private static Cursor2D instance;
+    public static Cursor2D Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = FindObjectOfType<Cursor2D>();
+            return instance;
+        }
+    }
 
     void Awake()
     {
         Cursor.visible = false;
     }
-
 
     void Update()
     {
@@ -31,7 +48,6 @@ public class Cursor2D : MonoBehaviour
 
         transform.position = mousepos;
 
-
         if (rotateUponOrigin)
         {
             Vector3 source = mousepos - origin.position;
@@ -39,9 +55,7 @@ public class Cursor2D : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
 
-
         // Don't go out of screen
-
         var bottomLeft = Camera.main.ScreenToWorldPoint(Vector3.zero);
         var topRight = Camera.main.ScreenToWorldPoint(new Vector3(Camera.main.pixelWidth, Camera.main.pixelHeight));
 

@@ -1,10 +1,7 @@
-# Hasten
+# Hasten2
 
-> _[Download](http://github.com/alvivar/Hasten/raw/master/Hasten.zip)_ | _[Say Hello](http://twitter.com/matnesis)_
+A minimalist Game Jam Toolkit.
 
-This is the code I use in all [my games](http://matnesis.itch.io/). It's a
-collection of scripts, extensions, patterns and custom tools I made for Unity.
+Includes:
 
-I have managed to create all my stuff with versions of this, and I'm constantly
-improving it with every new creation. Maybe you can find something useful, take
-a look!
+- *Hasten* A experimental Unity ECS for Game Jams and stuff, it works over MonoBehaviours and uses the classic mono tech. Beware of the performance, but I love it.

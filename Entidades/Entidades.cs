@@ -164,6 +164,7 @@ namespace Hasten2.Entidades
 }
 
 // TO DO
+// Read me tutorial
 // Check this out tailDrops = Entidades.Get<GridData>(typeof(TailDrop)); Make sure you understand why this works.
 // Validate that you cannot add more of the same components (?)
 // Query a singleton

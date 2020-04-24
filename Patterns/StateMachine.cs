@@ -17,7 +17,6 @@ public class StateMachine<TLabel>
             this.onStop = onStop;
             this.label = label;
         }
-
     }
 
     private readonly Dictionary<TLabel, State> stateDictionary;
@@ -38,9 +37,7 @@ public class StateMachine<TLabel>
     public void Update()
     {
         if (currentState != null && currentState.onUpdate != null)
-        {
             currentState.onUpdate();
-        }
     }
 
     public void AddState(TLabel label, Action onStart, Action onUpdate, Action onStop)
@@ -63,7 +60,9 @@ public class StateMachine<TLabel>
         AddState(label, null);
     }
 
-    public void AddState<TSubStateLabel>(TLabel label, StateMachine<TSubStateLabel> subMachine,
+    public void AddState<TSubStateLabel>(
+        TLabel label,
+        StateMachine<TSubStateLabel> subMachine,
         TSubStateLabel subMachineStartState)
     {
         AddState(
@@ -72,23 +71,19 @@ public class StateMachine<TLabel>
             subMachine.Update);
     }
 
-    public override string ToString()
-    {
-        return CurrentState.ToString();
-    }
-
     private void ChangeState(TLabel newState)
     {
         if (currentState != null && currentState.onStop != null)
-        {
             currentState.onStop();
-        }
 
         currentState = stateDictionary[newState];
 
         if (currentState.onStart != null)
-        {
             currentState.onStart();
-        }
+    }
+
+    public override string ToString()
+    {
+        return CurrentState.ToString();
     }
 }

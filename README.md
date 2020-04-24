@@ -1,6 +1,8 @@
 # Hasten2
 
-A minimalist Game Jam Toolkit.
+A minimalist Game Jam Toolkit for Unity.
+
+Basically code & tools things that make happy.
 
 Includes:
 

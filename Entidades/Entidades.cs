@@ -2,155 +2,164 @@
 using System.Linq;
 using UnityEngine;
 
-public class Entidades : MonoBehaviour
+namespace Hasten2.Entidades
 {
-    private static Dictionary<int, List<Entidad>> entities;
-
-    public static void Add(int id, Object obj)
+    public class Entidades : MonoBehaviour
     {
-        if (entities == null)
-            entities = new Dictionary<int, List<Entidad>>();
-
-        if (!entities.ContainsKey(id))
-            entities[id] = new List<Entidad>();
-
-        // @todo Validate that only exists once
-
-        entities[id].Add(new Entidad()
+        private struct Entidad
         {
-            type = obj.GetType(),
-                obj = obj
-        });
-    }
-
-    public static void Add(int id, GameObject obj, System.Type type)
-    {
-        if (entities == null)
-            entities = new Dictionary<int, List<Entidad>>();
-
-        if (!entities.ContainsKey(id))
-            entities[id] = new List<Entidad>();
-
-        // @todo Validate that only exists once
-
-        var objType = obj.AddComponent(type);
-
-        entities[id].Add(new Entidad()
-        {
-            type = type,
-                obj = objType
-        });
-    }
-
-    public static void Remove(int id, Object obj)
-    {
-        if (entities == null)
-            entities = new Dictionary<int, List<Entidad>>();
-
-        if (!entities.ContainsKey(id))
-        {
-            entities[id] = new List<Entidad>();
-            return;
+            public System.Type type;
+            public Object obj;
         }
 
-        int chosen = -1;
-        for (var i = 0; i < entities[id].Count; i += 1)
+        private static Dictionary<int, List<Entidad>> entities;
+
+        public static void Add(int id, Object obj)
         {
-            if (entities[id][i].obj == obj)
-                chosen = i;
-        }
+            if (entities == null)
+                entities = new Dictionary<int, List<Entidad>>();
 
-        if (chosen >= 0)
-            entities[id].RemoveAt(chosen);
-    }
+            if (!entities.ContainsKey(id))
+                entities[id] = new List<Entidad>();
 
-    public static void Remove(int id, GameObject obj, System.Type type)
-    {
-        if (entities == null)
-            entities = new Dictionary<int, List<Entidad>>();
+            // @todo Validate that only exists once
 
-        if (!entities.ContainsKey(id))
-        {
-            entities[id] = new List<Entidad>();
-            return;
-        }
-
-        var objType = obj.GetComponent(type);
-
-        int chosen = -1;
-        for (var i = 0; i < entities[id].Count; i += 1)
-        {
-            if (entities[id][i].obj == objType)
-                chosen = i;
-        }
-
-        if (chosen >= 0)
-            entities[id].RemoveAt(chosen);
-
-        Destroy(objType);
-    }
-
-    public static T[] Get<T>()
-    {
-        if (entities == null)
-            entities = new Dictionary<int, List<Entidad>>();
-
-        var result = new List<Object>();
-        foreach (var keyValue in entities)
-        {
-            int typeIndex = -1;
-            for (var i = 0; i < keyValue.Value.Count; i += 1)
+            entities[id].Add(new Entidad()
             {
-                if (keyValue.Value[i].type == typeof(T))
-                    typeIndex = i;
+                type = obj.GetType(),
+                    obj = obj
+            });
+        }
+
+        public static void Add(int id, GameObject obj, System.Type type)
+        {
+            if (entities == null)
+                entities = new Dictionary<int, List<Entidad>>();
+
+            if (!entities.ContainsKey(id))
+                entities[id] = new List<Entidad>();
+
+            // @todo Validate that only exists once
+
+            var objType = obj.AddComponent(type);
+
+            entities[id].Add(new Entidad()
+            {
+                type = type,
+                    obj = objType
+            });
+        }
+
+        public static void Remove(int id, Object obj)
+        {
+            if (entities == null)
+                entities = new Dictionary<int, List<Entidad>>();
+
+            if (!entities.ContainsKey(id))
+            {
+                entities[id] = new List<Entidad>();
+                return;
             }
 
-            if (typeIndex >= 0)
-                result.Add(keyValue.Value[typeIndex].obj);
+            int chosen = -1;
+            for (var i = 0; i < entities[id].Count; i += 1)
+            {
+                if (entities[id][i].obj == obj)
+                    chosen = i;
+            }
+
+            if (chosen >= 0)
+                entities[id].RemoveAt(chosen);
         }
 
-        return result.Cast<T>().ToArray();
-    }
-
-    public static T[] Get<T>(params System.Type[] types)
-    {
-        var result = new List<Object>();
-
-        // Entities dictionary
-        foreach (var keyValue in entities)
+        public static void Remove(int id, GameObject obj, System.Type type)
         {
-            var typeCount = 0;
-            var chosenComponent = 0;
+            if (entities == null)
+                entities = new Dictionary<int, List<Entidad>>();
 
-            var elementCount = 0;
-
-            // Entity component list
-            foreach (var obj in keyValue.Value)
+            if (!entities.ContainsKey(id))
             {
-                // Comparison againts types
-                foreach (var type in types)
+                entities[id] = new List<Entidad>();
+                return;
+            }
+
+            var objType = obj.GetComponent(type);
+
+            int chosen = -1;
+            for (var i = 0; i < entities[id].Count; i += 1)
+            {
+                if (entities[id][i].obj == objType)
+                    chosen = i;
+            }
+
+            if (chosen >= 0)
+                entities[id].RemoveAt(chosen);
+
+            Destroy(objType);
+        }
+
+        public static T[] Get<T>()
+        {
+            if (entities == null)
+                entities = new Dictionary<int, List<Entidad>>();
+
+            var result = new List<Object>();
+            foreach (var keyValue in entities)
+            {
+                int typeIndex = -1;
+                for (var i = 0; i < keyValue.Value.Count; i += 1)
                 {
-                    // Get index of the correct element
-                    if (obj.type == typeof(T))
-                    {
-                        chosenComponent = elementCount;
-                    }
-                    // Comparing if we have all components
-                    if (obj.type == type)
-                    {
-                        typeCount++;
-                        break;
-                    }
+                    if (keyValue.Value[i].type == typeof(T))
+                        typeIndex = i;
                 }
 
-                elementCount++;
+                if (typeIndex >= 0)
+                    result.Add(keyValue.Value[typeIndex].obj);
             }
 
-            if (typeCount >= types.Length)
-                result.Add(keyValue.Value[chosenComponent].obj);
+            return result.Cast<T>().ToArray();
         }
 
-        return result.Cast<T>().ToArray();
+        public static T[] Get<T>(params System.Type[] types)
+        {
+            var result = new List<Object>();
+
+            // Entities dictionary
+            foreach (var keyValue in entities)
+            {
+                var typeCount = 0;
+                var chosenComponent = 0;
+
+                var elementCount = 0;
+
+                // Entity component list
+                foreach (var obj in keyValue.Value)
+                {
+                    // Comparison againts types
+                    foreach (var type in types)
+                    {
+                        // Get index of the correct element
+                        if (obj.type == typeof(T))
+                        {
+                            chosenComponent = elementCount;
+                        }
+                        // Comparing if we have all components
+                        if (obj.type == type)
+                        {
+                            typeCount++;
+                            break;
+                        }
+                    }
+
+                    elementCount++;
+                }
+
+                if (typeCount >= types.Length)
+                    result.Add(keyValue.Value[chosenComponent].obj);
+            }
+
+            return result.Cast<T>().ToArray();
+        }
     }
 }
 

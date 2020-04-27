@@ -24,11 +24,7 @@ namespace Hasten2.Entidades
 
             // @todo Validate that only exists once
 
-            entities[id].Add(new Entidad()
-            {
-                type = obj.GetType(),
-                    obj = obj
-            });
+            entities[id].Add(new Entidad() { type = obj.GetType(), obj = obj });
         }
 
         public static void Add(int id, GameObject obj, System.Type type)
@@ -43,11 +39,7 @@ namespace Hasten2.Entidades
 
             var objType = obj.AddComponent(type);
 
-            entities[id].Add(new Entidad()
-            {
-                type = type,
-                    obj = objType
-            });
+            entities[id].Add(new Entidad() { type = type, obj = objType });
         }
 
         public static void Remove(int id, Object obj)
@@ -98,7 +90,7 @@ namespace Hasten2.Entidades
             Destroy(objType);
         }
 
-        public static T[] Get<T>()
+        public static IEnumerable<T> Get<T>()
         {
             if (entities == null)
                 entities = new Dictionary<int, List<Entidad>>();
@@ -117,53 +109,56 @@ namespace Hasten2.Entidades
                     result.Add(keyValue.Value[typeIndex].obj);
             }
 
-            return result.Cast<T>().ToArray();
+            return result.Cast<T>();
         }
 
-        public static T[] Get<T>(params System.Type[] types)
+        public static IEnumerable<T> Get<T>(params System.Type[] types)
         {
+            if (entities == null)
+                entities = new Dictionary<int, List<Entidad>>();
+
             var result = new List<Object>();
 
             // Entities dictionary
             foreach (var keyValue in entities)
             {
-                var typeCount = 0;
-                var chosenComponent = 0;
-
-                var elementCount = 0;
+                var objIndex = 0;
+                var typeMatches = 0;
+                var matchedEntityIndex = -1;
 
                 // Entity component list
                 foreach (var obj in keyValue.Value)
                 {
-                    // Comparison againts types
+                    // Types comparison
                     foreach (var type in types)
                     {
-                        // Get index of the correct element
+                        // Get index of the element that matches the type
                         if (obj.type == typeof(T))
-                        {
-                            chosenComponent = elementCount;
-                        }
+                            matchedEntityIndex = objIndex;
+
                         // Comparing if we have all components
                         if (obj.type == type)
                         {
-                            typeCount++;
+                            typeMatches++;
                             break;
                         }
                     }
 
-                    elementCount++;
+                    objIndex++;
                 }
 
-                if (typeCount >= types.Length)
-                    result.Add(keyValue.Value[chosenComponent].obj);
+                if (typeMatches >= types.Length)
+                    result.Add(keyValue.Value[matchedEntityIndex].obj);
             }
 
-            return result.Cast<T>().ToArray();
+            return result.Cast<T>();
         }
     }
 }
 
 // TO DO
+// Jobs & Burst
+// Replace everything to array
 // Read me tutorial
 // Check this out tailDrops = Entidades.Get<GridData>(typeof(TailDrop)); Make sure you understand why this works.
 // Validate that you cannot add more of the same components (?)

@@ -18,6 +18,7 @@
 !/[Aa]ssets/**/*.meta
 
 # FreeFileSync
+sync.ffs_db
 sync.ffs_db.meta
 
 # Uncomment this line if you wish to ignore the asset store tools plugin

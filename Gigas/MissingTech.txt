@@ -1,0 +1,12 @@
+
+// We are trying to simplify the Add with T.
+
+public static void Add<T>(int id, T obj) where T : MonoBehaviour
+{
+    var type = typeof(T);
+    if (type == typeof(EyeTag))
+    {
+        eyeTagId.Add(id);
+        eyeTag.Add((T) obj);
+    }
+}

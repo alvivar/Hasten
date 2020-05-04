@@ -1,22 +1,17 @@
-using System;
-
 public static class Gigas
 {
-    // static Arrayx<int> all = new Arrayx<int>();
-    // static Arrayx<int> result = new Arrayx<int>();
-
     public static Arrayx<T> Get<T>(Arrayx<int>[] idSources, Arrayx<T> source)
     {
-        // Just one array means just one source!
+        // Just one array means just one source, no interception!
         if (idSources.Length <= 1)
             return source;
 
-        // Create an array that contains the answers
+        // Create an array with enough space to contain the answers
         var maxSize = 0;
         for (int i = 0; i < idSources.Length; i++)
             maxSize += idSources[i].Length;
 
-        var result = new Arrayx<T>();
+        var result = new Arrayx<T>(); // @todo Could I squeeze more performance by caching this stuff?
         result.Size = result.Size < maxSize ? maxSize : result.Size;
         result.Length = 0;
 
@@ -66,107 +61,4 @@ public static class Gigas
 
         return result;
     }
-
-    // public static Arrayx<int> Intersect(params Arrayx<int>[] args)
-    // {
-    //     var maxSize = 0;
-    //     for (int i = 0; i < args.Length; i++)
-    //         maxSize += args[i].Length;
-
-    //     all.Size = all.Size < maxSize ? maxSize : all.Size;
-    //     all.Length = 0;
-
-    //     if (all.Elements == null)
-    //         all.Elements = new int[all.Size];
-
-    //     if (all.Elements.Length <= all.Size)
-    //         Array.Resize(ref all.Elements, all.Size);
-
-    //     for (int i = 0; i < args.Length; i++)
-    //     {
-    //         for (int j = 0; j < args[i].Length; j++)
-    //             all.Elements[all.Length++] = args[i].Elements[j];
-    //     }
-
-    //     result.Size = result.Size < maxSize ? maxSize : result.Size;
-    //     result.Length = 0;
-
-    //     if (result.Elements == null)
-    //         result.Elements = new int[result.Size];
-
-    //     if (result.Elements.Length <= result.Size)
-    //         Array.Resize(ref result.Elements, result.Size);
-
-    //     var validCount = args.Length;
-    //     for (int i = 0; i < all.Length; i++)
-    //     {
-    //         var currentCount = 0;
-    //         var current = all.Elements[i];
-    //         for (int j = 0; j < all.Length; j++)
-    //         {
-    //             if (current == all.Elements[j])
-    //                 currentCount++;
-    //         }
-
-    //         if (currentCount >= validCount)
-    //             result.Elements[result.Length++] = current;
-    //     }
-
-    //     return result;
-    // }
-
-    // public static Arrayx<T> Get<T>(Arrayx<int> indexValues, Arrayx<int> indexSource, Arrayx<T> dataSource)
-    // {
-    //     var result = new Arrayx<T>();
-    //     result.Size = indexValues.Length;
-    //     result.Length = 0;
-    //     result.Elements = new T[result.Size];
-
-    //     for (int i = 0; i < indexValues.Length; i++)
-    //     {
-    //         var value = indexValues.Elements[i];
-    //         var indexOfValue = -1;
-    //         for (int j = 0; j < indexSource.Length; j++)
-    //         {
-    //             if (indexSource.Elements[j] == value)
-    //             {
-    //                 indexOfValue = j;
-    //                 break;
-    //             }
-    //         }
-
-    //         result.Elements[result.Length++] = dataSource.Elements[indexOfValue];
-    //     }
-
-    //     return result;
-    // }
-
-    // public static void Remove<T>(int id, Arrayx<int> index, Arrayx<T> data)
-    // {
-    //     var dataIndex = index.IndexOf(id);
-    //     index.RemoveIndex(dataIndex);
-    //     data.RemoveIndex(dataIndex);
-    // }
-
-    // public static void Remove<T>(int id, Arrayx<int> index, Arrayx<T> data, UnityEngine.GameObject obj = null)
-    // {
-    //     var indexOfValue = -1;
-    //     for (int i = 0; i < index.Length; i++)
-    //     {
-    //         if (index.elements[i] == id)
-    //         {
-    //             indexOfValue = i;
-    //             break;
-    //         }
-    //     }
-
-    //     index.RemoveIndex(indexOfValue);
-    //     data.RemoveIndex(indexOfValue);
-
-    //     if (obj != null)
-    //     {
-    //         var objComp = obj.GetComponent(typeof(T));
-    //         UnityEngine.Object.Destroy(objComp);
-    //     }
-    // }
 }

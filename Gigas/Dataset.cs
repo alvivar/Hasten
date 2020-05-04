@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public static class Dataset
 {
@@ -143,7 +144,7 @@ public static class Dataset
         }
     }
 
-    public static void RemoveRandomInitialPosition<T>(int id, UnityEngine.GameObject obj)
+    public static void RemoveRandomInitialPosition<T>(int id, GameObject obj)
     {
         var indexToRemove = -1;
         for (int i = 0; i < randomInitialPositionId.Length; i++)
@@ -170,7 +171,7 @@ public static class Dataset
         if (obj != null)
         {
             var objComp = obj.GetComponent(typeof(T));
-            UnityEngine.Object.Destroy(objComp);
+            GameObject.Destroy(objComp);
         }
     }
 }

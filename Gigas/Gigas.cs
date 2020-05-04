@@ -46,10 +46,11 @@ public static class Gigas
                         {
                             currentCount++;
 
-                            // Assuming that 0 is the ids related to the source
+                            // Assuming that the ids related to the source are on 0
                             if (k == 0)
                                 idValue = source.Elements[l];
 
+                            // We found what we are looking for
                             break;
                         }
                     }

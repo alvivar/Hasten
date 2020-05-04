@@ -1,0 +1,70 @@
+
+Arrayx used to be super rich, trying to handle everything by itself. But the
+profiler didn 't like it.
+
+
+    using System;
+
+    public class Arrayx<T>
+    {
+        public int Size;
+        public int Length;
+        public T[] Elements;
+
+        public Arrayx(int size)
+        {
+            size = size < 1 ? 1 : size;
+            elements = new T[size];
+            this.Size = size;
+            Length = 0;
+        }
+
+        public void Add(T element)
+        {
+            elements[Length++] = element;
+
+            if (Length >= size)
+            {
+                size *= 2;
+                Array.Resize(ref elements, size);
+            }
+        }
+
+        public void Remove(T element)
+        {
+            var indexToRemove = Array.IndexOf(elements, element);
+            if (indexToRemove <= -1)
+                return;
+
+            Array.Copy(elements, indexToRemove + 1, elements, indexToRemove, elements.Length - indexToRemove - 1);
+            Length--;
+        }
+
+        public void RemoveIndex(int index)
+        {
+            Array.Copy(elements, index + 1, elements, index, elements.Length - index - 1);
+            Length--;
+        }
+
+        public T GetX(int index)
+        {
+            return elements[index];
+        }
+
+        public int IndexOf(T element)
+        {
+            return Array.IndexOf(elements, element);
+        }
+
+        public int Length()
+        {
+            return index;
+        }
+
+        public T[] ToArray()
+        {
+            var toArray = new T[Length];
+            Array.Copy(elements, 0, toArray, 0, Length);
+            return toArray;
+        }
+    }

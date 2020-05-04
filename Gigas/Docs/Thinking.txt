@@ -1,0 +1,20 @@
+
+Running over 3 different arrays that have only one element in coming. Basically
+running Get on my head to make it better.
+
+    [1 2 3 4 5 7]
+    [5 6 7 8 9]
+    [1 5 3 8]
+
+    0 [3]
+    0 [15]
+
+    [1 2 3 4 5 7 . 5 6 7 8 9 . 1 5 3 8]
+
+    1x1! 1x2 1x3 1x4 1x5 1x7
+    1x5 1x6 1x7 1x8 1x9
+    1x1! 1x6 1x3 1x8
+
+    5x1 5x2 5x3 5x4 5x5! 5x7    = 4
+    5x5! 5x6 5x7 5x8 5x9        = 0
+    5x1 5x5! 5x3 5x8            = 1

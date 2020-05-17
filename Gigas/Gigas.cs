@@ -1,10 +1,12 @@
 // Gigas is just a cool name.
 
+// Get is the main function to handle entities.
+
 public static class Gigas
 {
-    // Returns the *components* that belongs to the *entities* intersected.
-    // Let's assume that the first array on *entities* is the one related
-    // position by position to the *components* in the result.
+    // Returns the 'components' that belongs to the 'entities' intersected.
+    // Let's assume that the first array on 'entities' is the one related
+    // position by position to the 'components' in the result.
     public static Arrayx<T> Get<T>(Arrayx<int>[] entities, Arrayx<T> components)
     {
         // Just one array means just one source, no interception!
@@ -61,7 +63,6 @@ public static class Gigas
                 if (currentCount >= validCount)
                     result.Elements[result.Length++] = idValue;
             }
-
         }
 
         return result;

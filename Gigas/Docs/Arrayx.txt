@@ -1,6 +1,6 @@
 
 Arrayx used to be super rich, trying to handle everything by itself. But the
-profiler didn 't like it.
+profiler didn't like it.
 
 
     using System;

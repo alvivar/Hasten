@@ -1,8 +1,8 @@
 
-The previous Gigas used to have an Intersect and then a Get function, but that
-was condensed the new Get. A lot faster.
+The first iteration of Gigas used to have an Intersect and then a Get function,
+but that was condensed into the latest new Get, a lot faster.
 
-Also, it used to handle Add and Remove. Fun stuff.
+Also, it used to handle Add and Remove.
 
 
     using System;

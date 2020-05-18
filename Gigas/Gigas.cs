@@ -35,8 +35,8 @@ public static class Gigas
             for (int j = 0; j < entities[i].Length; j++)
             {
                 var current = entities[i].Elements[j];
-                var currentCount = 0;
-                T idValue = default;
+                var currentFoundCount = 0;
+                T matchedValue = default;
 
                 // Let's run over all the ids arrays
                 for (int k = 0; k < entities.Length; k++)
@@ -46,11 +46,12 @@ public static class Gigas
                     {
                         if (current == entities[k].Elements[l])
                         {
-                            currentCount++;
+                            currentFoundCount++;
 
-                            // Assuming that the ids related to the source are on 0
-                            if (k == 0)
-                                idValue = components.Elements[l];
+                            // Using 'i' because the match should happen only
+                            // once, also the ids related to the source are on 0
+                            if (i == 0 && k == 0)
+                                matchedValue = components.Elements[l];
 
                             // We found what we are looking for
                             break;
@@ -58,10 +59,10 @@ public static class Gigas
                     }
                 }
 
-                // Is the element repeated in all the arrays? Let's save the
-                // collected value
-                if (currentCount >= validCount)
-                    result.Elements[result.Length++] = idValue;
+                // Is the element repeated in all the arrays? Let's collect the
+                // value if exists
+                if (currentFoundCount >= validCount && matchedValue != null)
+                    result.Elements[result.Length++] = matchedValue;
             }
         }
 

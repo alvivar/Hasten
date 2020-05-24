@@ -114,8 +114,8 @@ public static class Femto
             writer.WriteLine("    {");
             foreach (var entityClass in entityClasses)
             {
-                var entityName = CamelCase(entityClass);
-                var entityId = $"{CamelCase(entityClass)}Id";
+                var entityName = $"{entityClass}s";
+                var entityId = $"{entityClass}Ids";
 
                 writer.WriteLine($"        public static Arrayx<int> {entityId} = new Arrayx<int>();");
                 writer.WriteLine($"        public static Arrayx<{entityClass}> {entityName} = new Arrayx<{entityClass}>();");
@@ -124,8 +124,8 @@ public static class Femto
             // Write the Add functions
             foreach (var entityClass in entityClasses)
             {
-                var entityName = CamelCase(entityClass);
-                var entityId = $"{CamelCase(entityClass)}Id";
+                var entityName = $"{entityClass}s";
+                var entityId = $"{entityClass}Ids";
 
                 writer.WriteLine();
                 writer.WriteLine($"        public static void Add{entityClass}({entityClass} component)");
@@ -166,8 +166,8 @@ public static class Femto
             // Write the Remove functions for GameObjects
             foreach (var entityClass in entityClasses)
             {
-                var entityName = CamelCase(entityClass);
-                var entityId = $"{CamelCase(entityClass)}Id";
+                var entityName = $"{entityClass}s";
+                var entityId = $"{entityClass}Ids";
 
                 writer.WriteLine();
                 writer.WriteLine($"        public static void Remove{entityClass}(GameObject gameObject)");
@@ -209,8 +209,8 @@ public static class Femto
             // Write the Remove functions
             foreach (var entityClass in entityClasses)
             {
-                var entityName = CamelCase(entityClass);
-                var entityId = $"{CamelCase(entityClass)}Id";
+                var entityName = $"{entityClass}s";
+                var entityId = $"{entityClass}Ids";
 
                 writer.WriteLine();
                 writer.WriteLine($"        public static void Remove{entityClass}({entityClass} component)");
@@ -420,8 +420,8 @@ public static class Femto
             // Write the Get functions for multiple components
             foreach (var entityClass in entityClasses)
             {
-                var entityName = CamelCase(entityClass);
-                var entityId = $"{CamelCase(entityClass)}Id";
+                var entityName = $"{entityClass}s";
+                var entityId = $"{entityClass}Ids";
 
                 writer.WriteLine();
                 writer.WriteLine($"        public static Arrayx<{entityClass}> Get{entityClass}(params Arrayx<int>[] ids)");
@@ -440,12 +440,12 @@ public static class Femto
             // Write the Get functions for single components
             foreach (var entityClass in entityClasses)
             {
-                var entityName = CamelCase(entityClass);
-                var entityId = $"{CamelCase(entityClass)}Id";
-                var entityIndex = $"{CamelCase(entityClass)}Index";
+                var entityName = $"{entityClass}s";
+                var entityId = $"{entityClass}Ids";
+                var entityIndex = $"{entityClass}Index";
 
                 writer.WriteLine();
-                writer.WriteLine($"        public static Dictionary<int, int> {entityIndex} = new Dictionary<int, int>();");
+                writer.WriteLine($"        private static Dictionary<int, int> {entityIndex} = new Dictionary<int, int>();");
                 writer.WriteLine($"        public static {entityClass} Get{entityClass}(GameObject gameObject)");
                 writer.WriteLine($"        {{");
                 writer.WriteLine($"            var id = gameObject.GetInstanceID();");

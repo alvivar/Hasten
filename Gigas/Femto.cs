@@ -446,9 +446,9 @@ public static class Femto
 
                 writer.WriteLine();
                 writer.WriteLine($"        private static Dictionary<int, int> {entityIndex} = new Dictionary<int, int>();");
-                writer.WriteLine($"        public static {entityClass} Get{entityClass}(GameObject gameObject)");
+                writer.WriteLine($"        public static {entityClass} Get{entityClass}(MonoBehaviour component)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            var id = gameObject.GetInstanceID();");
+                writer.WriteLine($"            var id = component.gameObject.GetInstanceID();");
                 writer.WriteLine();
                 writer.WriteLine($"            // Cache");
                 writer.WriteLine();

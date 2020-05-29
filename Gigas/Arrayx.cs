@@ -28,8 +28,6 @@ public class Arrayx<T>
 
     public static Arrayx<T> RemoveAt(Arrayx<T> arrx, int indexToRemove)
     {
-        // Overwrite
-
         Array.Copy(
             arrx.Elements, indexToRemove + 1,
             arrx.Elements, indexToRemove,

@@ -103,8 +103,8 @@ public static class Femto
             writer.WriteLine("// Refresh with the menu item 'Tools/Gigas/Generate EntitySet.cs'");
             writer.WriteLine();
             writer.WriteLine("using System;");
-            writer.WriteLine("using UnityEngine;");
             writer.WriteLine("using System.Collections.Generic;");
+            writer.WriteLine("using UnityEngine;");
             writer.WriteLine();
             writer.WriteLine("// namespace Gigas");
             writer.WriteLine("// {");

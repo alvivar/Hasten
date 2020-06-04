@@ -36,4 +36,14 @@ public class Arrayx<T>
 
         return arrx;
     }
+
+    public static Arrayx<T> ToArrayx(T[] arr)
+    {
+        var arrx = new Arrayx<T>();
+
+        for (int i = 0; i < arr.Length; i++)
+            arrx = Arrayx<T>.Add(arrx, arr[i]);
+
+        return arrx;
+    }
 }

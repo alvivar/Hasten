@@ -5,7 +5,6 @@
 // real subset.
 
 using System;
-using System.Collections.Generic;
 
 public class Arrayx<T>
 {
@@ -13,7 +12,7 @@ public class Arrayx<T>
     public int Size = 8;
     public int Length = 0;
 
-    // @todo Those functions below need a performance test
+    // @todo Those functions below need a performance test.
 
     public void Add(T component)
     {

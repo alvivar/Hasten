@@ -14,6 +14,9 @@ using UnityEngine;
 
 // Check out the menu item 'Tools/Gigas/Generate EntitySet.cs'
 
+// Truth
+// 1. The GameObject GetInstanceID() is the Entity id.
+
 public static class Femto
 {
     public static int arrayxSize = 8; // 1024 * 1;
@@ -106,8 +109,8 @@ public static class Femto
             writer.WriteLine("using System.Collections.Generic;");
             writer.WriteLine("using UnityEngine;");
             writer.WriteLine();
-            writer.WriteLine("// namespace Gigas");
-            writer.WriteLine("// {");
+            writer.WriteLine("//  namespace Gigas");
+            writer.WriteLine("//  {");
 
             // Write out the Arrayxs
             writer.WriteLine("    public static class EntitySet");
@@ -121,6 +124,8 @@ public static class Femto
                 var entityId = $"{entityClass}Ids";
                 var entityIndex = $"{entityClass}Index";
 
+                writer.WriteLine($"        // {entityClass}");
+                writer.WriteLine();
                 writer.WriteLine($"        public static Arrayx<int> {entityId} = new Arrayx<int>();");
                 writer.WriteLine($"        public static Arrayx<{entityClass}> {entityName} = new Arrayx<{entityClass}>();");
 
@@ -165,7 +170,7 @@ public static class Femto
                 writer.WriteLine();
                 writer.WriteLine($"        public static void Remove{entityClass}({entityClass} component)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            // Find the index");
+                writer.WriteLine($"            // Index");
                 writer.WriteLine();
                 writer.WriteLine($"            var id = component.gameObject.GetInstanceID();");
                 writer.WriteLine($"            var indexToRemove = -1;");
@@ -245,7 +250,7 @@ public static class Femto
             writer.WriteLine("    }");
 
             // End of namespace EntitySet
-            writer.WriteLine("// }");
+            writer.WriteLine("//  }");
         }
 
         // Refresh
@@ -267,7 +272,3 @@ public static class Femto
 }
 
 #endif
-
-// Truth
-
-// 1 The GameObject GetInstanceID() is the Entity id.

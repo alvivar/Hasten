@@ -112,20 +112,17 @@ public static class Femto
             // Write out the Arrayxs
             writer.WriteLine("    public static class EntitySet");
             writer.WriteLine("    {");
-            foreach (var entityClass in entityClasses)
+
+            // Write the Add functions
+            for (int i = 0; i < entityClasses.Count; i++)
             {
+                var entityClass = entityClasses[i];
                 var entityName = $"{entityClass}s";
                 var entityId = $"{entityClass}Ids";
+                var entityIndex = $"{entityClass}Index";
 
                 writer.WriteLine($"        public static Arrayx<int> {entityId} = new Arrayx<int>();");
                 writer.WriteLine($"        public static Arrayx<{entityClass}> {entityName} = new Arrayx<{entityClass}>();");
-            }
-
-            // Write the Add functions
-            foreach (var entityClass in entityClasses)
-            {
-                var entityName = $"{entityClass}s";
-                var entityId = $"{entityClass}Ids";
 
                 writer.WriteLine();
                 writer.WriteLine($"        public static void Add{entityClass}({entityClass} component)");
@@ -148,7 +145,6 @@ public static class Femto
                 writer.WriteLine();
                 writer.WriteLine($"            {entityId}.Elements[{entityId}.Length++] = component.gameObject.GetInstanceID();");
                 writer.WriteLine($"            {entityName}.Elements[{entityName}.Length++] = component;");
-                // writer.WriteLine($"            component.enabled = true; ");
                 writer.WriteLine();
                 writer.WriteLine($"            // Resize check");
                 writer.WriteLine();
@@ -160,62 +156,16 @@ public static class Femto
                 writer.WriteLine($"                {entityName}.Size *= 2;");
                 writer.WriteLine($"                Array.Resize(ref {entityName}.Elements, {entityName}.Size);");
                 writer.WriteLine($"            }}");
+                writer.WriteLine();
+                writer.WriteLine($"            // Enable");
+                writer.WriteLine();
+                writer.WriteLine($"            component.enabled = true; ");
                 writer.WriteLine($"        }}");
-            }
-
-            // Write the Remove functions for GameObjects
-            foreach (var entityClass in entityClasses)
-            {
-                var entityName = $"{entityClass}s";
-                var entityId = $"{entityClass}Ids";
-
-                writer.WriteLine();
-                writer.WriteLine($"        public static void Remove{entityClass}(GameObject gameObject)");
-                writer.WriteLine($"        {{");
-                writer.WriteLine($"            // Finding the index");
-                writer.WriteLine();
-                writer.WriteLine($"            var id = gameObject.GetInstanceID();");
-                writer.WriteLine($"            var indexToRemove = -1;");
-                writer.WriteLine($"            for (int i = 0; i < {entityId}.Length; i++)");
-                writer.WriteLine($"            {{");
-                writer.WriteLine($"                if ({entityId}.Elements[i] == id)");
-                writer.WriteLine($"                {{");
-                writer.WriteLine($"                    indexToRemove = i;");
-                writer.WriteLine($"                    break;");
-                writer.WriteLine($"                }}");
-                writer.WriteLine($"            }}");
-                writer.WriteLine();
-                writer.WriteLine($"            // Overwrite");
-                writer.WriteLine();
-                writer.WriteLine($"            Array.Copy(");
-                writer.WriteLine($"                {entityId}.Elements, indexToRemove + 1,");
-                writer.WriteLine($"                {entityId}.Elements, indexToRemove,");
-                writer.WriteLine($"                {entityId}.Length - indexToRemove - 1);");
-                writer.WriteLine($"            {entityId}.Length--;");
-                writer.WriteLine();
-                writer.WriteLine($"            Array.Copy(");
-                writer.WriteLine($"                {entityName}.Elements, indexToRemove + 1,");
-                writer.WriteLine($"                {entityName}.Elements, indexToRemove,");
-                writer.WriteLine($"                {entityName}.Length - indexToRemove - 1);");
-                writer.WriteLine($"            {entityName}.Length--;");
-                writer.WriteLine();
-                writer.WriteLine($"            // Component destruction");
-                writer.WriteLine();
-                writer.WriteLine($"            if (gameObject != null)");
-                writer.WriteLine($"                GameObject.Destroy(gameObject.GetComponent<{entityClass}>());");
-                writer.WriteLine($"        }}");
-            }
-
-            // Write the Remove functions
-            foreach (var entityClass in entityClasses)
-            {
-                var entityName = $"{entityClass}s";
-                var entityId = $"{entityClass}Ids";
 
                 writer.WriteLine();
                 writer.WriteLine($"        public static void Remove{entityClass}({entityClass} component)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            // Finding the index");
+                writer.WriteLine($"            // Find the index");
                 writer.WriteLine();
                 writer.WriteLine($"            var id = component.gameObject.GetInstanceID();");
                 writer.WriteLine($"            var indexToRemove = -1;");
@@ -242,186 +192,10 @@ public static class Femto
                 writer.WriteLine($"                {entityName}.Length - indexToRemove - 1);");
                 writer.WriteLine($"            {entityName}.Length--;");
                 writer.WriteLine();
-                writer.WriteLine($"            // Component destruction");
+                writer.WriteLine($"            // Disable");
                 writer.WriteLine();
-                writer.WriteLine($"            if (component != null)");
-                writer.WriteLine($"                GameObject.Destroy(component);");
+                writer.WriteLine($"            component.enabled = false;");
                 writer.WriteLine($"        }}");
-            }
-
-            // Write the Disable functions for GameObjects
-            // foreach (var entityClass in entityClasses)
-            // {
-            //     var entityName = CamelCase(entityClass);
-            //     var entityId = $"{CamelCase(entityClass)}Id";
-
-            //     writer.WriteLine();
-            //     writer.WriteLine($"        public static void Disable{entityClass}(GameObject gameObject)");
-            //     writer.WriteLine($"        {{");
-            //     writer.WriteLine($"            // Finding the index");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            var id = gameObject.GetInstanceID();");
-            //     writer.WriteLine($"            var indexToRemove = -1;");
-            //     writer.WriteLine($"            for (int i = 0; i < {entityId}.Length; i++)");
-            //     writer.WriteLine($"            {{");
-            //     writer.WriteLine($"                if ({entityId}.Elements[i] == id)");
-            //     writer.WriteLine($"                {{");
-            //     writer.WriteLine($"                    indexToRemove = i;");
-            //     writer.WriteLine($"                    break;");
-            //     writer.WriteLine($"                }}");
-            //     writer.WriteLine($"            }}");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            // Overwrite");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            Array.Copy(");
-            //     writer.WriteLine($"                {entityId}.Elements, indexToRemove + 1,");
-            //     writer.WriteLine($"                {entityId}.Elements, indexToRemove,");
-            //     writer.WriteLine($"                {entityId}.Length - indexToRemove - 1);");
-            //     writer.WriteLine($"            {entityId}.Length--;");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            Array.Copy(");
-            //     writer.WriteLine($"                {entityName}.Elements, indexToRemove + 1,");
-            //     writer.WriteLine($"                {entityName}.Elements, indexToRemove,");
-            //     writer.WriteLine($"                {entityName}.Length - indexToRemove - 1);");
-            //     writer.WriteLine($"            {entityName}.Length--;");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            // Disable");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            gameObject.GetComponent<{entityClass}>().enabled = false;");
-            //     writer.WriteLine($"        }}");
-            // }
-
-            // Write the Disable functions
-            // foreach (var entityClass in entityClasses)
-            // {
-            //     var entityName = CamelCase(entityClass);
-            //     var entityId = $"{CamelCase(entityClass)}Id";
-
-            //     writer.WriteLine();
-            //     writer.WriteLine($"        public static void Disable{entityClass}({entityClass} component)");
-            //     writer.WriteLine($"        {{");
-            //     writer.WriteLine($"            // Finding the index");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            var id = component.gameObject.GetInstanceID();");
-            //     writer.WriteLine($"            var indexToRemove = -1;");
-            //     writer.WriteLine($"            for (int i = 0; i < {entityId}.Length; i++)");
-            //     writer.WriteLine($"            {{");
-            //     writer.WriteLine($"                if ({entityId}.Elements[i] == id)");
-            //     writer.WriteLine($"                {{");
-            //     writer.WriteLine($"                    indexToRemove = i;");
-            //     writer.WriteLine($"                    break;");
-            //     writer.WriteLine($"                }}");
-            //     writer.WriteLine($"            }}");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            // Overwrite");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            Array.Copy(");
-            //     writer.WriteLine($"                {entityId}.Elements, indexToRemove + 1,");
-            //     writer.WriteLine($"                {entityId}.Elements, indexToRemove,");
-            //     writer.WriteLine($"                {entityId}.Length - indexToRemove - 1);");
-            //     writer.WriteLine($"            {entityId}.Length--;");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            Array.Copy(");
-            //     writer.WriteLine($"                {entityName}.Elements, indexToRemove + 1,");
-            //     writer.WriteLine($"                {entityName}.Elements, indexToRemove,");
-            //     writer.WriteLine($"                {entityName}.Length - indexToRemove - 1);");
-            //     writer.WriteLine($"            {entityName}.Length--;");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            // Disable");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            component.enabled = false;");
-            //     writer.WriteLine($"        }}");
-            // }
-
-            // Write the Enable functions for GameObjects
-            // foreach (var entityClass in entityClasses)
-            // {
-            //     var entityName = CamelCase(entityClass);
-            //     var entityId = $"{CamelCase(entityClass)}Id";
-
-            //     writer.WriteLine();
-            //     writer.WriteLine($"        public static void Enable{entityClass}(GameObject gameObject)");
-            //     writer.WriteLine($"        {{");
-            //     writer.WriteLine($"            // Finding the index");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            var id = gameObject.GetInstanceID();");
-            //     writer.WriteLine($"            var indexToRemove = -1;");
-            //     writer.WriteLine($"            for (int i = 0; i < {entityId}.Length; i++)");
-            //     writer.WriteLine($"            {{");
-            //     writer.WriteLine($"                if ({entityId}.Elements[i] == id)");
-            //     writer.WriteLine($"                {{");
-            //     writer.WriteLine($"                    indexToRemove = i;");
-            //     writer.WriteLine($"                    break;");
-            //     writer.WriteLine($"                }}");
-            //     writer.WriteLine($"            }}");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            // Overwrite");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            Array.Copy(");
-            //     writer.WriteLine($"                {entityId}.Elements, indexToRemove + 1,");
-            //     writer.WriteLine($"                {entityId}.Elements, indexToRemove,");
-            //     writer.WriteLine($"                {entityId}.Length - indexToRemove - 1);");
-            //     writer.WriteLine($"            {entityId}.Length--;");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            Array.Copy(");
-            //     writer.WriteLine($"                {entityName}.Elements, indexToRemove + 1,");
-            //     writer.WriteLine($"                {entityName}.Elements, indexToRemove,");
-            //     writer.WriteLine($"                {entityName}.Length - indexToRemove - 1);");
-            //     writer.WriteLine($"            {entityName}.Length--;");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            // Enable");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            gameObject.GetComponent<{entityClass}>().enabled = true;");
-            //     writer.WriteLine($"        }}");
-            // }
-
-            // Write the Enable functions
-            // foreach (var entityClass in entityClasses)
-            // {
-            //     var entityName = CamelCase(entityClass);
-            //     var entityId = $"{CamelCase(entityClass)}Id";
-
-            //     writer.WriteLine();
-            //     writer.WriteLine($"        public static void Enable{entityClass}({entityClass} component)");
-            //     writer.WriteLine($"        {{");
-            //     writer.WriteLine($"            // Finding the index");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            var id = component.gameObject.GetInstanceID();");
-            //     writer.WriteLine($"            var indexToRemove = -1;");
-            //     writer.WriteLine($"            for (int i = 0; i < {entityId}.Length; i++)");
-            //     writer.WriteLine($"            {{");
-            //     writer.WriteLine($"                if ({entityId}.Elements[i] == id)");
-            //     writer.WriteLine($"                {{");
-            //     writer.WriteLine($"                    indexToRemove = i;");
-            //     writer.WriteLine($"                    break;");
-            //     writer.WriteLine($"                }}");
-            //     writer.WriteLine($"            }}");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            // Overwrite");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            Array.Copy(");
-            //     writer.WriteLine($"                {entityId}.Elements, indexToRemove + 1,");
-            //     writer.WriteLine($"                {entityId}.Elements, indexToRemove,");
-            //     writer.WriteLine($"                {entityId}.Length - indexToRemove - 1);");
-            //     writer.WriteLine($"            {entityId}.Length--;");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            Array.Copy(");
-            //     writer.WriteLine($"                {entityName}.Elements, indexToRemove + 1,");
-            //     writer.WriteLine($"                {entityName}.Elements, indexToRemove,");
-            //     writer.WriteLine($"                {entityName}.Length - indexToRemove - 1);");
-            //     writer.WriteLine($"            {entityName}.Length--;");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            // Enable");
-            //     writer.WriteLine();
-            //     writer.WriteLine($"            component.enabled = true;");
-            //     writer.WriteLine($"        }}");
-            // }
-
-            // Write the Get functions for multiple components
-            foreach (var entityClass in entityClasses)
-            {
-                var entityName = $"{entityClass}s";
-                var entityId = $"{entityClass}Ids";
 
                 writer.WriteLine();
                 writer.WriteLine($"        public static Arrayx<{entityClass}> Get{entityClass}(params Arrayx<int>[] ids)");
@@ -435,14 +209,6 @@ public static class Femto
                 writer.WriteLine();
                 writer.WriteLine($"            return Gigas.Get<{entityClass}>(idsWith{entityClass}, EntitySet.{entityName});");
                 writer.WriteLine($"        }}");
-            }
-
-            // Write the Get functions for single components
-            foreach (var entityClass in entityClasses)
-            {
-                var entityName = $"{entityClass}s";
-                var entityId = $"{entityClass}Ids";
-                var entityIndex = $"{entityClass}Index";
 
                 writer.WriteLine();
                 writer.WriteLine($"        private static Dictionary<int, int> {entityIndex} = new Dictionary<int, int>();");
@@ -470,6 +236,9 @@ public static class Femto
                 writer.WriteLine();
                 writer.WriteLine($"            return {entityName}.Elements[index];");
                 writer.WriteLine($"        }}");
+
+                if (i < entityClasses.Count - 1)
+                    writer.WriteLine();
             }
 
             // End of class
@@ -498,3 +267,7 @@ public static class Femto
 }
 
 #endif
+
+// Truth
+
+// 1 The GameObject GetInstanceID() is the Entity id.

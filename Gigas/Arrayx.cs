@@ -13,37 +13,65 @@ public class Arrayx<T>
     public int Size = 8;
     public int Length = 0;
 
-    public static Arrayx<T> Add(Arrayx<T> arrx, T component)
+    // @todo Those functions below need a performance test
+
+    public void Add(T component)
     {
-        arrx.Elements[arrx.Length++] = component;
+        Elements[Length++] = component;
 
-        if (arrx.Length >= arrx.Size)
+        if (Length >= Size)
         {
-            arrx.Size *= 2;
-            Array.Resize(ref arrx.Elements, arrx.Size);
+            Size *= 2;
+            Array.Resize(ref Elements, Size);
         }
-
-        return arrx;
     }
 
-    public static Arrayx<T> RemoveAt(Arrayx<T> arrx, int indexToRemove)
+    public void RemoveAt(int index)
     {
         Array.Copy(
-            arrx.Elements, indexToRemove + 1,
-            arrx.Elements, indexToRemove,
-            arrx.Length - indexToRemove - 1);
-        arrx.Length--;
-
-        return arrx;
+            Elements, index + 1,
+            Elements, index,
+            Length - index - 1);
+        Length--;
     }
 
-    public static Arrayx<T> ToArrayx(T[] arr)
+    public void Append(T[] array)
     {
-        var arrx = new Arrayx<T>();
+        for (int i = 0; i < array.Length; i++)
+        {
+            Elements[Length++] = array[i];
 
-        for (int i = 0; i < arr.Length; i++)
-            arrx = Arrayx<T>.Add(arrx, arr[i]);
-
-        return arrx;
+            if (Length >= Size)
+            {
+                Size *= 2;
+                Array.Resize(ref Elements, Size);
+            }
+        }
     }
+
+    // @todo Are those below better that the self referenced way up ^ there?
+
+    // public static Arrayx<T> Add(Arrayx<T> arrx, T component)
+    // {
+    //     arrx.Elements[arrx.Length++] = component;
+
+    //     if (arrx.Length >= arrx.Size)
+    //     {
+    //         arrx.Size *= 2;
+    //         Array.Resize(ref arrx.Elements, arrx.Size);
+    //     }
+
+    //     return arrx;
+    // }
+
+    // public static Arrayx<T> RemoveAt(Arrayx<T> arrx, int indexToRemove)
+    // {
+    //     Array.Copy(
+    //         arrx.Elements, indexToRemove + 1,
+    //         arrx.Elements, indexToRemove,
+    //         arrx.Length - indexToRemove - 1);
+    //     arrx.Length--;
+
+    //     return arrx;
+    // }
 }

@@ -1,0 +1,219 @@
+
+I removed this API from Femto because I don't use it, but could be useful in the
+future maybe?
+
+
+// Write the Remove functions for GameObjects
+// foreach (var entityClass in entityClasses)
+// {
+//     var entityName = $"{entityClass}s";
+//     var entityId = $"{entityClass}Ids";
+
+//     writer.WriteLine();
+//     writer.WriteLine($"        public static void Remove{entityClass}(GameObject gameObject)");
+//     writer.WriteLine($"        {{");
+//     writer.WriteLine($"            // Find the index");
+//     writer.WriteLine();
+//     writer.WriteLine($"            var id = gameObject.GetInstanceID();");
+//     writer.WriteLine($"            var indexToRemove = -1;");
+//     writer.WriteLine($"            for (int i = 0; i < {entityId}.Length; i++)");
+//     writer.WriteLine($"            {{");
+//     writer.WriteLine($"                if ({entityId}.Elements[i] == id)");
+//     writer.WriteLine($"                {{");
+//     writer.WriteLine($"                    indexToRemove = i;");
+//     writer.WriteLine($"                    break;");
+//     writer.WriteLine($"                }}");
+//     writer.WriteLine($"            }}");
+//     writer.WriteLine();
+//     writer.WriteLine($"            // Overwrite");
+//     writer.WriteLine();
+//     writer.WriteLine($"            Array.Copy(");
+//     writer.WriteLine($"                {entityId}.Elements, indexToRemove + 1,");
+//     writer.WriteLine($"                {entityId}.Elements, indexToRemove,");
+//     writer.WriteLine($"                {entityId}.Length - indexToRemove - 1);");
+//     writer.WriteLine($"            {entityId}.Length--;");
+//     writer.WriteLine();
+//     writer.WriteLine($"            Array.Copy(");
+//     writer.WriteLine($"                {entityName}.Elements, indexToRemove + 1,");
+//     writer.WriteLine($"                {entityName}.Elements, indexToRemove,");
+//     writer.WriteLine($"                {entityName}.Length - indexToRemove - 1);");
+//     writer.WriteLine($"            {entityName}.Length--;");
+//     writer.WriteLine();
+//     writer.WriteLine($"            // Component destruction");
+//     writer.WriteLine();
+//     writer.WriteLine($"            if (gameObject != null)");
+//     writer.WriteLine($"                GameObject.Destroy(gameObject.GetComponent<{entityClass}>());");
+//     writer.WriteLine($"        }}");
+// }
+
+// Write the Remove functions
+// foreach (var entityClass in entityClasses)
+// {
+//     var entityName = $"{entityClass}s";
+//     var entityId = $"{entityClass}Ids";
+
+//     writer.WriteLine();
+//     writer.WriteLine($"        public static void Remove{entityClass}({entityClass} component)");
+//     writer.WriteLine($"        {{");
+//     writer.WriteLine($"            // Find the index");
+//     writer.WriteLine();
+//     writer.WriteLine($"            var id = component.gameObject.GetInstanceID();");
+//     writer.WriteLine($"            var indexToRemove = -1;");
+//     writer.WriteLine($"            for (int i = 0; i < {entityId}.Length; i++)");
+//     writer.WriteLine($"            {{");
+//     writer.WriteLine($"                if ({entityId}.Elements[i] == id)");
+//     writer.WriteLine($"                {{");
+//     writer.WriteLine($"                    indexToRemove = i;");
+//     writer.WriteLine($"                    break;");
+//     writer.WriteLine($"                }}");
+//     writer.WriteLine($"            }}");
+//     writer.WriteLine();
+//     writer.WriteLine($"            // Overwrite");
+//     writer.WriteLine();
+//     writer.WriteLine($"            Array.Copy(");
+//     writer.WriteLine($"                {entityId}.Elements, indexToRemove + 1,");
+//     writer.WriteLine($"                {entityId}.Elements, indexToRemove,");
+//     writer.WriteLine($"                {entityId}.Length - indexToRemove - 1);");
+//     writer.WriteLine($"            {entityId}.Length--;");
+//     writer.WriteLine();
+//     writer.WriteLine($"            Array.Copy(");
+//     writer.WriteLine($"                {entityName}.Elements, indexToRemove + 1,");
+//     writer.WriteLine($"                {entityName}.Elements, indexToRemove,");
+//     writer.WriteLine($"                {entityName}.Length - indexToRemove - 1);");
+//     writer.WriteLine($"            {entityName}.Length--;");
+//     writer.WriteLine();
+//     writer.WriteLine($"            // Component destruction");
+//     writer.WriteLine();
+//     writer.WriteLine($"            if (component != null)");
+//     writer.WriteLine($"                GameObject.Destroy(component);");
+//     writer.WriteLine($"        }}");
+// }
+
+// Write the Disable functions for GameObjects
+// foreach (var entityClass in entityClasses)
+// {
+//     var entityName = CamelCase(entityClass);
+//     var entityId = $"{CamelCase(entityClass)}Id";
+
+//     writer.WriteLine();
+//     writer.WriteLine($"        public static void Disable{entityClass}(GameObject gameObject)");
+//     writer.WriteLine($"        {{");
+//     writer.WriteLine($"            // Find the index");
+//     writer.WriteLine();
+//     writer.WriteLine($"            var id = gameObject.GetInstanceID();");
+//     writer.WriteLine($"            var indexToRemove = -1;");
+//     writer.WriteLine($"            for (int i = 0; i < {entityId}.Length; i++)");
+//     writer.WriteLine($"            {{");
+//     writer.WriteLine($"                if ({entityId}.Elements[i] == id)");
+//     writer.WriteLine($"                {{");
+//     writer.WriteLine($"                    indexToRemove = i;");
+//     writer.WriteLine($"                    break;");
+//     writer.WriteLine($"                }}");
+//     writer.WriteLine($"            }}");
+//     writer.WriteLine();
+//     writer.WriteLine($"            // Overwrite");
+//     writer.WriteLine();
+//     writer.WriteLine($"            Array.Copy(");
+//     writer.WriteLine($"                {entityId}.Elements, indexToRemove + 1,");
+//     writer.WriteLine($"                {entityId}.Elements, indexToRemove,");
+//     writer.WriteLine($"                {entityId}.Length - indexToRemove - 1);");
+//     writer.WriteLine($"            {entityId}.Length--;");
+//     writer.WriteLine();
+//     writer.WriteLine($"            Array.Copy(");
+//     writer.WriteLine($"                {entityName}.Elements, indexToRemove + 1,");
+//     writer.WriteLine($"                {entityName}.Elements, indexToRemove,");
+//     writer.WriteLine($"                {entityName}.Length - indexToRemove - 1);");
+//     writer.WriteLine($"            {entityName}.Length--;");
+//     writer.WriteLine();
+//     writer.WriteLine($"            // Disable");
+//     writer.WriteLine();
+//     writer.WriteLine($"            gameObject.GetComponent<{entityClass}>().enabled = false;");
+//     writer.WriteLine($"        }}");
+// }
+
+// Write the Enable functions for GameObjects
+// foreach (var entityClass in entityClasses)
+// {
+//     var entityName = CamelCase(entityClass);
+//     var entityId = $"{CamelCase(entityClass)}Id";
+
+//     writer.WriteLine();
+//     writer.WriteLine($"        public static void Enable{entityClass}(GameObject gameObject)");
+//     writer.WriteLine($"        {{");
+//     writer.WriteLine($"            // Find the index");
+//     writer.WriteLine();
+//     writer.WriteLine($"            var id = gameObject.GetInstanceID();");
+//     writer.WriteLine($"            var indexToRemove = -1;");
+//     writer.WriteLine($"            for (int i = 0; i < {entityId}.Length; i++)");
+//     writer.WriteLine($"            {{");
+//     writer.WriteLine($"                if ({entityId}.Elements[i] == id)");
+//     writer.WriteLine($"                {{");
+//     writer.WriteLine($"                    indexToRemove = i;");
+//     writer.WriteLine($"                    break;");
+//     writer.WriteLine($"                }}");
+//     writer.WriteLine($"            }}");
+//     writer.WriteLine();
+//     writer.WriteLine($"            // Overwrite");
+//     writer.WriteLine();
+//     writer.WriteLine($"            Array.Copy(");
+//     writer.WriteLine($"                {entityId}.Elements, indexToRemove + 1,");
+//     writer.WriteLine($"                {entityId}.Elements, indexToRemove,");
+//     writer.WriteLine($"                {entityId}.Length - indexToRemove - 1);");
+//     writer.WriteLine($"            {entityId}.Length--;");
+//     writer.WriteLine();
+//     writer.WriteLine($"            Array.Copy(");
+//     writer.WriteLine($"                {entityName}.Elements, indexToRemove + 1,");
+//     writer.WriteLine($"                {entityName}.Elements, indexToRemove,");
+//     writer.WriteLine($"                {entityName}.Length - indexToRemove - 1);");
+//     writer.WriteLine($"            {entityName}.Length--;");
+//     writer.WriteLine();
+//     writer.WriteLine($"            // Enable");
+//     writer.WriteLine();
+//     writer.WriteLine($"            gameObject.GetComponent<{entityClass}>().enabled = true;");
+//     writer.WriteLine($"        }}");
+// }
+
+// Write the Enable functions
+// foreach (var entityClass in entityClasses)
+// {
+//     var entityName = CamelCase(entityClass);
+//     var entityId = $"{CamelCase(entityClass)}Id";
+
+//     writer.WriteLine();
+//     writer.WriteLine($"        public static void Enable{entityClass}({entityClass} component)");
+//     writer.WriteLine($"        {{");
+//     writer.WriteLine($"            // Setup");
+//     writer.WriteLine();
+//     writer.WriteLine($"            if ({entityId}.Elements == null)");
+//     writer.WriteLine($"            {{");
+//     writer.WriteLine($"                {entityId}.Size = {arrayxSize};");
+//     writer.WriteLine($"                {entityId}.Elements = new int[{entityId}.Size];");
+//     writer.WriteLine($"            }}");
+//     writer.WriteLine();
+//     writer.WriteLine($"            if ({entityName}.Elements == null)");
+//     writer.WriteLine($"            {{");
+//     writer.WriteLine($"                {entityName}.Size = {arrayxSize};");
+//     writer.WriteLine($"                {entityName}.Elements = new {entityClass}[{entityName}.Size];");
+//     writer.WriteLine($"            }}");
+//     writer.WriteLine();
+//     writer.WriteLine($"            // Add");
+//     writer.WriteLine();
+//     writer.WriteLine($"            {entityId}.Elements[{entityId}.Length++] = component.gameObject.GetInstanceID();");
+//     writer.WriteLine($"            {entityName}.Elements[{entityName}.Length++] = component;");
+//     writer.WriteLine();
+//     writer.WriteLine($"            // Resize check");
+//     writer.WriteLine();
+//     writer.WriteLine($"            if ({entityId}.Length >= {entityId}.Size)");
+//     writer.WriteLine($"            {{");
+//     writer.WriteLine($"                {entityId}.Size *= 2;");
+//     writer.WriteLine($"                Array.Resize(ref {entityId}.Elements, {entityId}.Size);");
+//     writer.WriteLine();
+//     writer.WriteLine($"                {entityName}.Size *= 2;");
+//     writer.WriteLine($"                Array.Resize(ref {entityName}.Elements, {entityName}.Size);");
+//     writer.WriteLine($"            }}");
+//     writer.WriteLine();
+//     writer.WriteLine($"            // Resize check");
+//     writer.WriteLine();
+//     writer.WriteLine($"            component.enabled = true; ");
+//     writer.WriteLine($"        }}");
+// }

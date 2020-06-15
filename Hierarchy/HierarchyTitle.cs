@@ -3,21 +3,17 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class HierarchyTitle : MonoBehaviour
 {
-    public string title = "HierarchyTitle";
+    public string title = "Hierarchy Title";
     public int margin = 4;
 
 #if UNITY_EDITOR
     void Update()
     {
+        if (Application.isPlaying)
+            return;
+
         var left = new string('-', margin);
         transform.name = $" {left} {{ {title} }}";
-    }
-
-    [ContextMenu("Send Far Away")]
-    void SendFarAway()
-    {
-        var farAway = 99999;
-        transform.position = new Vector3(farAway, farAway, farAway);
     }
 #endif
 }

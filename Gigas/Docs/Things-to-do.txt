@@ -1,0 +1,10 @@
+
+    Things to do
+
+    Create a GameObject with all the Systems used on the scene
+    debugger: The Prefab system should contain in his name the count of Entities
+
+
+    2020 06 10
+
+    x Prototype version 3

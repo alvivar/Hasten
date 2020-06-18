@@ -112,17 +112,16 @@ public static class Femto
             writer.WriteLine("//  namespace Gigas");
             writer.WriteLine("//  {");
 
-            // Write out the Arrayxs
             writer.WriteLine("    public static class EntitySet");
             writer.WriteLine("    {");
 
-            // Write the Add functions
+            // The EntitySet API
             for (int i = 0; i < entityClasses.Count; i++)
             {
                 var entityClass = entityClasses[i];
                 var entityName = $"{entityClass}s";
                 var entityId = $"{entityClass}Ids";
-                var entityIndex = $"{entityClass}Index";
+                var entityIndex = $"{entityClass}IdCache";
 
                 writer.WriteLine($"        // {entityClass}");
                 writer.WriteLine();
@@ -219,7 +218,13 @@ public static class Femto
                 writer.WriteLine($"        private static Dictionary<int, int> {entityIndex} = new Dictionary<int, int>();");
                 writer.WriteLine($"        public static {entityClass} Get{entityClass}(MonoBehaviour component)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            var id = component.gameObject.GetInstanceID();");
+                writer.WriteLine($"            return Get{entityClass}(component.gameObject);");
+                writer.WriteLine($"        }}");
+
+                writer.WriteLine();
+                writer.WriteLine($"        public static {entityClass} Get{entityClass}(GameObject gameobject)");
+                writer.WriteLine($"        {{");
+                writer.WriteLine($"            var id = gameobject.GetInstanceID();");
                 writer.WriteLine();
                 writer.WriteLine($"            // Cache");
                 writer.WriteLine();
@@ -239,6 +244,9 @@ public static class Femto
                 writer.WriteLine($"                }}");
                 writer.WriteLine($"            }}");
                 writer.WriteLine();
+                writer.WriteLine($"            if (index < 0)");
+                writer.WriteLine($"                return null;");
+                writer.WriteLine();
                 writer.WriteLine($"            return {entityName}.Elements[index];");
                 writer.WriteLine($"        }}");
 
@@ -257,17 +265,17 @@ public static class Femto
         AssetDatabase.Refresh();
     }
 
-    private static string CamelCase(string text)
-    {
-        return $"{char.ToLowerInvariant(text[0])}{text.Substring(1)}";
-    }
-
     private static string MakeSafeForCode(string text)
     {
         text = Regex.Replace(text, "[^a-zA-Z0-9_]", "_", RegexOptions.None);
         if (char.IsDigit(text[0])) text = "_" + text;
 
         return text;
+    }
+
+    private static string CamelCase(string text)
+    {
+        return $"{char.ToLowerInvariant(text[0])}{text.Substring(1)}";
     }
 }
 

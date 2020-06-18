@@ -14,6 +14,8 @@ public class Arrayx<T>
 
     // @todo Those functions below need a performance test.
 
+    // @todo Would be better if those functions below become extensions?
+
     public void Add(T component)
     {
         Elements[Length++] = component;
@@ -46,6 +48,27 @@ public class Arrayx<T>
                 Array.Resize(ref Elements, Size);
             }
         }
+    }
+
+    public void ForEach(Action<T> callback)
+    {
+        for (int i = 0; i < Length; i++)
+            callback(Elements[i]);
+    }
+
+    public T[] Map(Func<T, T> callback)
+    {
+        var result = new T[Length];
+
+        for (int i = 0; i < Length; i++)
+            result[i] = callback(Elements[i]);
+
+        return result;
+    }
+
+    public void Clear()
+    {
+        Length = 0;
     }
 
     // @todo Are those below better that the self referenced way up ^ there?

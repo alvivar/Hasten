@@ -86,7 +86,7 @@ public static class Femto
         string directory = "";
         if (string.IsNullOrEmpty(filePath))
         {
-            directory = EditorUtility.OpenFolderPanel("Choose location for EntitySet.cs", Application.dataPath, "");
+            directory = EditorUtility.OpenFolderPanel("Choose the location for EntitySet.cs", Application.dataPath, "");
 
             // Canceled choose? Do nothing
             if (string.IsNullOrEmpty(directory))
@@ -121,7 +121,7 @@ public static class Femto
                 var entityClass = entityClasses[i];
                 var entityName = $"{entityClass}s";
                 var entityId = $"{entityClass}Ids";
-                var entityIndex = $"{entityClass}IdCache";
+                var entityCache = $"{entityClass}IdCache";
 
                 writer.WriteLine($"        // {entityClass}");
                 writer.WriteLine();
@@ -207,15 +207,15 @@ public static class Femto
                 writer.WriteLine($"            // {entityId} needs to be the first in the array parameter,");
                 writer.WriteLine($"            // that's how Gigas.Get relates the ids to the components");
                 writer.WriteLine();
-                writer.WriteLine($"            Arrayx<int>[] idsWith{entityClass} = new Arrayx<int>[ids.Length + 1];");
-                writer.WriteLine($"            idsWith{entityClass}[0] = {entityId};");
-                writer.WriteLine($"            Array.Copy(ids, 0, idsWith{entityClass}, 1, ids.Length);");
+                writer.WriteLine($"            Arrayx<int>[] {entityClass}PlusIds = new Arrayx<int>[ids.Length + 1];");
+                writer.WriteLine($"            {entityClass}PlusIds[0] = {entityId};");
+                writer.WriteLine($"            Array.Copy(ids, 0, {entityClass}PlusIds, 1, ids.Length);");
                 writer.WriteLine();
-                writer.WriteLine($"            return Gigas.Get<{entityClass}>(idsWith{entityClass}, EntitySet.{entityName});");
+                writer.WriteLine($"            return Gigas.Get<{entityClass}>({entityClass}PlusIds, EntitySet.{entityName});");
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
-                writer.WriteLine($"        private static Dictionary<int, int> {entityIndex} = new Dictionary<int, int>();");
+                writer.WriteLine($"        private static Dictionary<int, int> {entityCache} = new Dictionary<int, int>();");
                 writer.WriteLine($"        public static {entityClass} Get{entityClass}(MonoBehaviour component)");
                 writer.WriteLine($"        {{");
                 writer.WriteLine($"            return Get{entityClass}(component.gameObject);");
@@ -228,8 +228,8 @@ public static class Femto
                 writer.WriteLine();
                 writer.WriteLine($"            // Cache");
                 writer.WriteLine();
-                writer.WriteLine($"            if ({entityIndex}.ContainsKey(id))");
-                writer.WriteLine($"                return {entityName}.Elements[{entityIndex}[id]];");
+                writer.WriteLine($"            if ({entityCache}.ContainsKey(id))");
+                writer.WriteLine($"                return {entityName}.Elements[{entityCache}[id]];");
                 writer.WriteLine();
                 writer.WriteLine($"            // Index of");
                 writer.WriteLine();
@@ -239,10 +239,12 @@ public static class Femto
                 writer.WriteLine($"                if ({entityId}.Elements[i] == id)");
                 writer.WriteLine($"                {{");
                 writer.WriteLine($"                    index = i;");
-                writer.WriteLine($"                    {entityIndex}[id] = i; // Cache");
+                writer.WriteLine($"                    {entityCache}[id] = i; // Cache");
                 writer.WriteLine($"                    break;");
                 writer.WriteLine($"                }}");
                 writer.WriteLine($"            }}");
+                writer.WriteLine();
+                writer.WriteLine($"            // Value");
                 writer.WriteLine();
                 writer.WriteLine($"            if (index < 0)");
                 writer.WriteLine($"                return null;");
@@ -253,6 +255,24 @@ public static class Femto
                 if (i < entityClasses.Count - 1)
                     writer.WriteLine();
             }
+
+            // A function that clears all arrayxs
+            writer.WriteLine();
+            writer.WriteLine($"        public static void Clear()");
+            writer.WriteLine($"        {{");
+            for (int i = 0; i < entityClasses.Count; i++)
+            {
+                var entityClass = entityClasses[i];
+                var entityName = $"{entityClass}s";
+                var entityId = $"{entityClass}Ids";
+
+                writer.WriteLine($"            {entityId}.Length = 0;");
+                writer.WriteLine($"            {entityName}.Length = 0;");
+
+                if (i < entityClasses.Count - 1)
+                    writer.WriteLine();
+            }
+            writer.WriteLine($"        }}");
 
             // End of class
             writer.WriteLine("    }");

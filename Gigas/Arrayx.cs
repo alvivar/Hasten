@@ -15,6 +15,7 @@ public class Arrayx<T>
     // @todo Those functions below need a performance test.
 
     // @todo Would be better if those functions below become extensions?
+    // Performance wise?
 
     public void Add(T component)
     {
@@ -27,8 +28,33 @@ public class Arrayx<T>
         }
     }
 
+    public void Remove(T element)
+    {
+        var index = -1;
+        for (int i = 0; i < Length; i++)
+        {
+            if (Elements[i].Equals(element))
+            {
+                index = i;
+                break;
+            }
+        }
+
+        if (index < 0)
+            return;
+
+        Array.Copy(
+            Elements, index + 1,
+            Elements, index,
+            Length - index - 1);
+        Length--;
+    }
+
     public void RemoveAt(int index)
     {
+        if (index < 0 || index >= Length)
+            return;
+
         Array.Copy(
             Elements, index + 1,
             Elements, index,
@@ -56,12 +82,35 @@ public class Arrayx<T>
             callback(Elements[i]);
     }
 
-    public T[] Map(Func<T, T> callback)
+    public Arrayx<T> Map(Func<T, T> callback)
     {
-        var result = new T[Length];
+        var result = new Arrayx<T>();
 
         for (int i = 0; i < Length; i++)
-            result[i] = callback(Elements[i]);
+            result.Add(callback(Elements[i]));
+
+        return result;
+    }
+
+    public TR Reduce<TR>(TR accumulator, Func<TR, T, TR> callback)
+    {
+        TR result = accumulator;
+
+        for (int i = 0; i < Length; i++)
+            result = callback(result, Elements[i]);
+
+        return result;
+    }
+
+    public Arrayx<T> Filter(Func<T, bool> callback)
+    {
+        var result = new Arrayx<T>();
+
+        for (int i = 0; i < Length; i++)
+        {
+            if (callback(Elements[i]))
+                result.Add(Elements[i]);
+        }
 
         return result;
     }

@@ -21,10 +21,7 @@ public static class Gigas
         var result = new Arrayx<T>(); // @todo Could I squeeze more performance by caching this stuff?
         result.Size = result.Size < maxSize ? maxSize : result.Size;
         result.Length = 0;
-
-        // Arrayx does this: public T[] Elements = new T[8];
-        // if (result.Elements == null)
-        // result.Elements = new T[result.Size];
+        result.Elements = new T[result.Size];
 
         // The ids should repeat this much to detect being on each array
         var validCount = entities.Length;

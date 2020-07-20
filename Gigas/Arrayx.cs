@@ -8,9 +8,19 @@ using System;
 
 public class Arrayx<T>
 {
-    public T[] Elements = new T[8];
-    public int Size = 8;
-    public int Length = 0;
+    public int Size;
+    public int Length;
+    public T[] Elements;
+
+    public static Arrayx<T> New(int size)
+    {
+        var x = new Arrayx<T>();
+        x.Size = size < 2 ? 2 : size;
+        x.Length = 0;
+        x.Elements = new T[size];
+
+        return x;
+    }
 
     // @todo Those functions below need a performance test.
 
@@ -84,7 +94,7 @@ public class Arrayx<T>
 
     public Arrayx<T> Map(Func<T, T> callback)
     {
-        var result = new Arrayx<T>();
+        var result = Arrayx<T>.New(Length);
 
         for (int i = 0; i < Length; i++)
             result.Add(callback(Elements[i]));
@@ -104,7 +114,7 @@ public class Arrayx<T>
 
     public Arrayx<T> Filter(Func<T, bool> callback)
     {
-        var result = new Arrayx<T>();
+        var result = Arrayx<T>.New(Length);
 
         for (int i = 0; i < Length; i++)
         {

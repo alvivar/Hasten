@@ -218,13 +218,19 @@ public static class Femto
                 writer.WriteLine($"        private static Dictionary<int, int> {entityCache} = new Dictionary<int, int>();");
                 writer.WriteLine($"        public static {entityClass} Get{entityClass}(MonoBehaviour component)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            return Get{entityClass}(component.gameObject);");
+                writer.WriteLine($"            return Get{entityClass}(component.gameObject.GetInstanceID());");
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
                 writer.WriteLine($"        public static {entityClass} Get{entityClass}(GameObject gameobject)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            var id = gameobject.GetInstanceID();");
+                writer.WriteLine($"            return Get{entityClass}(gameobject.GetInstanceID());");
+                writer.WriteLine($"        }}");
+
+                writer.WriteLine();
+                writer.WriteLine($"        public static {entityClass} Get{entityClass}(int instanceID)");
+                writer.WriteLine($"        {{");
+                writer.WriteLine($"            var id = instanceID;");
                 writer.WriteLine();
                 writer.WriteLine($"            // Cache");
                 writer.WriteLine();

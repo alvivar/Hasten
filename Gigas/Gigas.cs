@@ -1,6 +1,6 @@
 // Gigas is just a cool name.
 
-// Get is the function that queries Entities to obtain components.
+// Get is the core, the function that queries Entities to obtain components.
 
 public static class Gigas
 {
@@ -20,8 +20,8 @@ public static class Gigas
 
         var result = new Arrayx<T>(); // @todo Could I squeeze more performance by caching this stuff?
         result.Size = result.Size < maxSize ? maxSize : result.Size;
-        result.Length = 0;
         result.Elements = new T[result.Size];
+        result.Length = 0;
 
         // The ids should repeat this much to detect being on each array
         var validCount = entities.Length;

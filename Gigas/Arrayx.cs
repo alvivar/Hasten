@@ -9,15 +9,15 @@ using System;
 public class Arrayx<T>
 {
     public int Size;
-    public int Length;
     public T[] Elements;
+    public int Length;
 
     public static Arrayx<T> New(int size)
     {
         var x = new Arrayx<T>();
         x.Size = size < 2 ? 2 : size;
-        x.Length = 0;
         x.Elements = new T[size];
+        x.Length = 0;
 
         return x;
     }

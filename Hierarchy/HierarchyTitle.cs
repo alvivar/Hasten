@@ -7,11 +7,14 @@ public class HierarchyTitle : MonoBehaviour
     public int margin = 4;
     public char character = '-';
 
+    private string lastTitle = "";
+
 #if UNITY_EDITOR
     void Update()
     {
-        if (Application.isPlaying)
+        if (title == lastTitle)
             return;
+        lastTitle = title;
 
         var left = new string(character, margin);
         transform.name = $" {left} {title}";

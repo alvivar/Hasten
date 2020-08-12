@@ -168,13 +168,14 @@ public class ChildrenTools
         var selected = Selection.activeTransform;
 
         var firstChildren = selected.GetComponentsInChildren<Transform>()
-            .Where(x => x.parent == selected);
+            .Where(x => x.parent == selected)
+            .Where(x => x != selected);
 
         // Calculate the average of all positions
         Vector3 averagePos = Vector3.zero;
         foreach (var t in firstChildren)
             averagePos += t.localPosition;
-        averagePos /= firstChildren.Count() + 1;
+        averagePos /= firstChildren.Count();
 
         // Center of everything
         averagePos += selected.localPosition;

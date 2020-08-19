@@ -72,7 +72,7 @@ public class Arrayx<T>
         Length--;
     }
 
-    public void Contains(T element)
+    public bool Contains(T element)
     {
         for (int i = 0; i < Length; i++)
         {

@@ -72,6 +72,17 @@ public class Arrayx<T>
         Length--;
     }
 
+    public void Contains(T element)
+    {
+        for (int i = 0; i < Length; i++)
+        {
+            if (Elements[i].Equals(element))
+                return true;
+        }
+
+        return false;
+    }
+
     public void Append(T[] array)
     {
         for (int i = 0; i < array.Length; i++)

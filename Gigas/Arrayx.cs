@@ -136,6 +136,17 @@ public class Arrayx<T>
         return result;
     }
 
+    // If this is called when the Length is 0, it fails.
+
+    // Check this for a solution
+    // https://stackoverflow.com/questions/302096/how-can-i-return-null-from-a-generic-method-in-c
+
+    // But returning default could be a problem with a list of ints.
+    public T LastElement()
+    {
+        return Elements[Length - 1];
+    }
+
     public void Clear()
     {
         Length = 0;

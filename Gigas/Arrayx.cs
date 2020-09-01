@@ -83,7 +83,7 @@ public class Arrayx<T>
         return false;
     }
 
-    public void Append(T[] array)
+    public Arrayx<T> Append(T[] array)
     {
         for (int i = 0; i < array.Length; i++)
         {
@@ -95,6 +95,8 @@ public class Arrayx<T>
                 Array.Resize(ref Elements, Size);
             }
         }
+
+        return this;
     }
 
     public void ForEach(Action<T> callback)
@@ -136,9 +138,21 @@ public class Arrayx<T>
         return result;
     }
 
+    public T[] ToArray()
+    {
+        var array = new T[Length];
+
+        Array.Copy(
+            Elements, 0,
+            array, 0,
+            Length);
+
+        return array;
+    }
+
     // If this is called when the Length is 0, it fails.
 
-    // Check this for a solution
+    // Check this for a possible solution
     // https://stackoverflow.com/questions/302096/how-can-i-return-null-from-a-generic-method-in-c
 
     // But returning default could be a problem with a list of ints.

@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -163,7 +162,7 @@ public static class Femto
                 writer.WriteLine();
                 writer.WriteLine($"            // Enable");
                 writer.WriteLine();
-                writer.WriteLine($"            component.enabled = true; ");
+                writer.WriteLine($"            component.enabled = true;");
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
@@ -289,19 +288,6 @@ public static class Femto
 
         // Refresh
         AssetDatabase.Refresh();
-    }
-
-    private static string MakeSafeForCode(string text)
-    {
-        text = Regex.Replace(text, "[^a-zA-Z0-9_]", "_", RegexOptions.None);
-        if (char.IsDigit(text[0])) text = "_" + text;
-
-        return text;
-    }
-
-    private static string CamelCase(string text)
-    {
-        return $"{char.ToLowerInvariant(text[0])}{text.Substring(1)}";
     }
 }
 

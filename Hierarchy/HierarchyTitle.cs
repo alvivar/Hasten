@@ -12,7 +12,7 @@ public class HierarchyTitle : MonoBehaviour
 #if UNITY_EDITOR
     void Update()
     {
-        if (title == lastTitle)
+        if (lastTitle == title)
             return;
         lastTitle = title;
 

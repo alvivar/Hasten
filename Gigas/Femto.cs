@@ -128,7 +128,7 @@ public static class Femto
                 writer.WriteLine($"        public static Arrayx<{entityClass}> {entityName} = new Arrayx<{entityClass}>();");
 
                 writer.WriteLine();
-                writer.WriteLine($"        public static void Add{entityClass}({entityClass} component)");
+                writer.WriteLine($"        public static void Add{entityClass}({entityClass} component, bool componentEnabled = true)");
                 writer.WriteLine($"        {{");
                 writer.WriteLine($"            // Setup");
                 writer.WriteLine();
@@ -162,11 +162,11 @@ public static class Femto
                 writer.WriteLine();
                 writer.WriteLine($"            // Enable");
                 writer.WriteLine();
-                writer.WriteLine($"            component.enabled = true;");
+                writer.WriteLine($"            component.enabled = componentEnabled;");
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
-                writer.WriteLine($"        public static void Remove{entityClass}({entityClass} component)");
+                writer.WriteLine($"        public static void Remove{entityClass}({entityClass} component, bool componentEnabled = false)");
                 writer.WriteLine($"        {{");
                 writer.WriteLine($"            // Index");
                 writer.WriteLine();
@@ -195,9 +195,13 @@ public static class Femto
                 writer.WriteLine($"                {entityName}.Length - indexToRemove - 1);");
                 writer.WriteLine($"            {entityName}.Length--;");
                 writer.WriteLine();
+                writer.WriteLine($"            // Cache clean up");
+                writer.WriteLine();
+                writer.WriteLine($"            {entityCache}.Remove(id);");
+                writer.WriteLine();
                 writer.WriteLine($"            // Disable");
                 writer.WriteLine();
-                writer.WriteLine($"            component.enabled = false;");
+                writer.WriteLine($"            component.enabled = componentEnabled;");
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();

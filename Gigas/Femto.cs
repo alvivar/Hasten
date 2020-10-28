@@ -197,7 +197,7 @@ public static class Femto
                 writer.WriteLine();
                 writer.WriteLine($"            // Cache clean up");
                 writer.WriteLine();
-                writer.WriteLine($"            {entityCache}.Remove(id);");
+                writer.WriteLine($"            {entityCache}.Clear();");
                 writer.WriteLine();
                 writer.WriteLine($"            // Disable");
                 writer.WriteLine();

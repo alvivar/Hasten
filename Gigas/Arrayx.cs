@@ -27,9 +27,9 @@ public class Arrayx<T>
     // @todo Would be better if those functions below become extensions?
     // Performance wise?
 
-    public void Add(T component)
+    public void Add(T element)
     {
-        Elements[Length++] = component;
+        Elements[Length++] = element;
 
         if (Length >= Size)
         {

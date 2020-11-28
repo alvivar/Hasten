@@ -1,0 +1,4 @@
+
+- gigas new [alt|c|s] SomeComponent
+- Find unused Alt links
+- Scan dependencies

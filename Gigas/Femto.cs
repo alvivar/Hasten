@@ -447,14 +447,13 @@ public static class Femto
 
                 writer.WriteLine($"            {entityId}.Length = 0;");
                 writer.WriteLine($"            {entityName}.Length = 0;");
-                writer.WriteLine($"            {entityId}.Length = 0;");
-                writer.WriteLine($"            {entityName}.Length = 0;");
 
                 if (i < entityClasses.Count - 1)
                     writer.WriteLine();
             }
             writer.WriteLine($"        }}");
 
+            // A function that clears all Alt entities
             writer.WriteLine();
             writer.WriteLine($"        public static void ClearAlt()");
             writer.WriteLine($"        {{");

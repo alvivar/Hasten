@@ -15,7 +15,7 @@ public class Arrayx<T>
     public static Arrayx<T> New(int size)
     {
         var x = new Arrayx<T>();
-        x.Size = size < 2 ? 2 : size;
+        x.Size = size < 1 ? 1 : size;
         x.Elements = new T[size];
         x.Length = 0;
 
@@ -125,14 +125,17 @@ public class Arrayx<T>
         return result;
     }
 
-    public Arrayx<T> Filter(Func<T, bool> callback)
+    public Arrayx<T> Filter(Func<T, bool> callback, bool first = false)
     {
         var result = Arrayx<T>.New(Length);
 
         for (int i = 0; i < Length; i++)
         {
             if (callback(Elements[i]))
+            {
                 result.Add(Elements[i]);
+                if (first) break;
+            }
         }
 
         return result;

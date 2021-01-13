@@ -7,17 +7,19 @@ public class HierarchyTitle : MonoBehaviour
     public int margin = 4;
     public char character = '-';
 
-    private string lastTitle = "";
+    private string lastName = "";
 
 #if UNITY_EDITOR
     void Update()
     {
-        if (lastTitle == title)
-            return;
-        lastTitle = title;
-
         var left = new string(character, margin);
-        transform.name = $" {left} {title}";
+        var name = $" {left} {title}";
+
+        if (lastName == name)
+            return;
+        lastName = name;
+
+        transform.name = name;
     }
 #endif
 }

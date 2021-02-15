@@ -20,7 +20,7 @@ public class AnalyticsData
 
 public class Analytics : MonoBehaviour
 {
-    public string app = "default";
+    public string user = "team.game.user";
 
     [Header("Info")]
     public string id; // SystemInfo.deviceUniqueIdentifier
@@ -47,7 +47,7 @@ public class Analytics : MonoBehaviour
         bite.OnError = OnError;
 
         id = SystemInfo.deviceUniqueIdentifier;
-        key = $"{app}.{id}";
+        key = $"{user}.{id}";
     }
 
     void Update()

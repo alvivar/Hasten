@@ -133,19 +133,19 @@ public class Bite
         callbacks.Add(callback);
     }
 
-    public static int IntOr(string str, int or)
+    public static int Int(string str, int or)
     {
         int n;
         return int.TryParse(str, out n) ? n : or;
     }
 
-    public static float FloatOr(string str, float or)
+    public static float Float(string str, float or)
     {
         float n;
         return float.TryParse(str, out n) ? n : or;
     }
 
-    public static long LongOr(string str, long or)
+    public static long Long(string str, long or)
     {
         long n;
         return long.TryParse(str, out n) ? n : or;

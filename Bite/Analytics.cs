@@ -34,10 +34,10 @@ public class Analytics : MonoBehaviour
     [Header("Optional")]
     public Transform position;
 
-    private Bite bite;
-
-    private bool connected = false;
+    private bool firstConnection = false;
     private bool lastPositionLoaded = false;
+
+    private Bite bite;
 
     void Start()
     {
@@ -58,7 +58,7 @@ public class Analytics : MonoBehaviour
         timer = Time.time + tick;
 
         // Ping until first response.
-        if (!connected)
+        if (!firstConnection)
         {
             bite.Send("g");
             return;
@@ -84,9 +84,9 @@ public class Analytics : MonoBehaviour
 
     void OnResponse(string response)
     {
-        if (!connected)
+        if (!firstConnection)
         {
-            connected = true;
+            firstConnection = true;
 
             Debug.Log($"Analytics Started.");
             Debug.Log($"> {response}");
@@ -122,7 +122,6 @@ public class Analytics : MonoBehaviour
                 Bite.Float($"{json.z}", 0));
 
             lastPositionLoaded = true;
-
         });
     }
 

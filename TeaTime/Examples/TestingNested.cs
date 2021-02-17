@@ -1,11 +1,10 @@
 // This tests a TeaTime that waits nested TeaTimes.
 
-// @matnesis
 // 2017/03/04 01:37 PM
 
 using UnityEngine;
 
-public class TeaTimeTestCase2 : MonoBehaviour
+public class TestingNested : MonoBehaviour
 {
     TeaTime queue;
 

@@ -41,13 +41,10 @@ public class Analytics : MonoBehaviour
 
     void Start()
     {
-        bite = new Bite("142.93.180.20", 1984);
-
-        bite.OnResponse = OnResponse;
-        bite.OnError = OnError;
-
         id = SystemInfo.deviceUniqueIdentifier;
         key = $"{user}.{id}";
+
+        Connect();
     }
 
     void Update()
@@ -72,6 +69,13 @@ public class Analytics : MonoBehaviour
         SaveLastPosition();
     }
 
+    void Connect()
+    {
+        bite = new Bite("142.93.180.20", 1984);
+        bite.OnResponse = OnResponse;
+        bite.OnError = OnError;
+    }
+
     void OnDestroy()
     {
         bite.Stop();
@@ -79,11 +83,13 @@ public class Analytics : MonoBehaviour
 
     void OnError(string error)
     {
-        Debug.Log($"{error}");
+        Debug.Log($"Bite Error: {error}");
     }
 
     void OnResponse(string response)
     {
+        Debug.Log($"> {response}");
+
         if (!firstConnection)
         {
             firstConnection = true;
@@ -164,7 +170,6 @@ public class Analytics : MonoBehaviour
     }
 
     public void SetName(string name)
-
     {
         data.name = name;
         bite.Send($"s {key}.name {data.name}");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
+using UnityEngine;
 
 // To connect.
 
@@ -26,16 +27,27 @@ using System.Threading;
 
 // That's it!
 
+public class BiteMsg
+{
+    public string message;
+    public Action<string> callback;
+
+    public BiteMsg(string message, Action<string> callback)
+    {
+        this.message = message;
+        this.callback = callback;
+    }
+}
+
 public class Bite
 {
-    public List<string> messages = new List<string>();
-    public List<Action<string>> callbacks = new List<Action<string>>();
-
     public Action<string> OnResponse;
     public Action<string> OnError;
 
-    private TcpClient socketConnection;
-    private Thread clientServerThread;
+    private Queue<BiteMsg> queue = new Queue<BiteMsg>();
+
+    private TcpClient tcpClient;
+    private Thread thread;
     private NetworkStream stream;
 
     private bool allowThread = false;
@@ -54,7 +66,26 @@ public class Bite
     public void Stop()
     {
         allowThread = false;
-        socketConnection.Close();
+
+        tcpClient.Close();
+    }
+
+    public void Send(string message, Action<string> callback = null)
+    {
+        if (tcpClient == null || !tcpClient.Connected)
+        {
+            if (OnError != null)
+                OnError($"Disconnected trying {message}");
+
+            return;
+        }
+
+        Debug.Log($"Queued {message}");
+
+        lock(queue)
+        {
+            queue.Enqueue(new BiteMsg(message, callback));
+        }
     }
 
     private void StartConnectionThread()
@@ -62,9 +93,10 @@ public class Bite
         try
         {
             allowThread = true;
-            clientServerThread = new Thread(new ThreadStart(HandleMessage));
-            clientServerThread.IsBackground = true;
-            clientServerThread.Start();
+
+            thread = new Thread(new ThreadStart(HandleConnection));
+            thread.IsBackground = true;
+            thread.Start();
         }
         catch (Exception e)
         {
@@ -73,41 +105,53 @@ public class Bite
         }
     }
 
-    private void HandleMessage()
+    private void HandleConnection()
     {
         try
         {
-            socketConnection = new TcpClient(host, port);
-            stream = socketConnection.GetStream();
+            tcpClient = new TcpClient(host, port);
+            stream = tcpClient.GetStream();
 
             while (allowThread)
             {
-                if (messages.Count <= 0 || callbacks.Count <= 0)
-                    continue;
+                BiteMsg some;
 
-                var reader = new StreamReader(stream);
-                var writer = new StreamWriter(stream);
+                lock(queue)
+                {
+                    if (queue.Count < 1)
+                        continue;
+
+                    some = queue.Dequeue();
+                }
+
+                if (some == null)
+                    continue;
 
                 // Send
 
-                var query = messages[0];
-                messages.RemoveAt(0);
+                var writer = new StreamWriter(stream);
 
-                var call = callbacks[0];
-                callbacks.RemoveAt(0);
-
-                writer.WriteLine(query);
+                writer.WriteLine(some.message);
                 writer.Flush();
 
                 // Receive
 
-                var response = reader.ReadLine();
+                Debug.Log($"{some.message}");
+                var isSubscription = some.message.Trim().ToLower().StartsWith("#");
 
-                if (call != null)
-                    call(response);
+                var reader = new StreamReader(stream);
 
-                if (OnResponse != null)
-                    OnResponse(response);
+                do
+                {
+                    var response = reader.ReadLine();
+
+                    if (some.callback != null)
+                        some.callback(response);
+
+                    if (OnResponse != null)
+                        OnResponse(response);
+                }
+                while (isSubscription && allowThread);
             }
         }
         catch (Exception e)
@@ -117,20 +161,6 @@ public class Bite
             if (OnError != null)
                 OnError($"{e}");
         }
-    }
-
-    public void Send(string message, Action<string> callback = null)
-    {
-        if (socketConnection == null || !socketConnection.Connected)
-        {
-            if (OnError != null)
-                OnError($"Disconnected trying {message}");
-
-            return;
-        }
-
-        messages.Add(message);
-        callbacks.Add(callback);
     }
 
     public static int Int(string str, int or)

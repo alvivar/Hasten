@@ -20,7 +20,7 @@ public class AnalyticsData
 
 public class Analytics : MonoBehaviour
 {
-    public string user = "team.game.user";
+    public string user = "team.game.analytics";
 
     [Header("Info")]
     public string id; // SystemInfo.deviceUniqueIdentifier
@@ -83,18 +83,16 @@ public class Analytics : MonoBehaviour
 
     void OnError(string error)
     {
-        Debug.Log($"Bite Error: {error}");
+        Debug.Log($"Analytics error: {error}");
     }
 
     void OnResponse(string response)
     {
-        Debug.Log($"> {response}");
-
         if (!firstConnection)
         {
             firstConnection = true;
 
-            Debug.Log($"Analytics Started.");
+            Debug.Log($"Analytics started!");
             Debug.Log($"> {response}");
 
             LoadDataFromServer();

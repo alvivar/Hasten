@@ -3,29 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-using UnityEngine;
-
-// To connect.
-
-// Bite bite = new Bite("127.0.0.1", 1984);
-
-// To send.
-
-// bite.Send("s author Andrés Villalobos");
-// bite.Send("j author");
-
-// You can use a System.Action callback on send to deal directly with the response.
-
-// bite.Send("g author", response => {
-//     // Handle your response.
-// });
-
-// You also have a couple System.Action to subscribe.
-
-// bite.OnResponse += YourOnResponse;
-// bite.OnError += YourOnError;
-
-// That's it!
 
 public class BiteMsg
 {
@@ -80,8 +57,6 @@ public class Bite
             return;
         }
 
-        Debug.Log($"Queued {message}");
-
         lock(queue)
         {
             queue.Enqueue(new BiteMsg(message, callback));
@@ -134,10 +109,9 @@ public class Bite
                 writer.WriteLine(some.message);
                 writer.Flush();
 
-                // Receive
+                // Receive or subscription?
 
-                Debug.Log($"{some.message}");
-                var isSubscription = some.message.Trim().ToLower().StartsWith("#");
+                var sub = some.message.Trim().ToLower().StartsWith("#");
 
                 var reader = new StreamReader(stream);
 
@@ -151,7 +125,7 @@ public class Bite
                     if (OnResponse != null)
                         OnResponse(response);
                 }
-                while (isSubscription && allowThread);
+                while (sub && allowThread);
             }
         }
         catch (Exception e)

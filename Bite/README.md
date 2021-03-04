@@ -1,6 +1,7 @@
 # C# Bite
 
-C# client library for [**Bite**](https://github.com/alvivar/bite). Compatible with Unity.
+C# client library for [**Bite**](https://github.com/alvivar/bite). Compatible
+with Unity.
 
 To **connect**.
 
@@ -9,9 +10,10 @@ To **connect**.
 To **send**.
 
     bite.Send("s author Andrés Villalobos");
-    bite.Send("j author");
+    bite.Send("g author");
 
-You can use a **System.Action<string>** callback on **send** to deal directly with the **response**.
+You can use a **System.Action<string>** callback on **Send** to deal directly
+with the **response**.
 
     bite.Send("g author", response => {
         // Handle your response.
@@ -22,4 +24,11 @@ You also have a couple **System.Action<string>** to subscribe.
     bite.OnResponse += YourOnResponse;
     bite.OnError += YourOnError;
 
-Check out the **Unity** [**Analytics.cs**](https://github.com/alvivar/bite/blob/master/.csharp/Analytics.cs) example!
+Bonus: There are some static utility to deal with string to ints, floats or
+longs.
+
+    int i = Bite.Int("Try or default ->", 1984);
+
+Check out the **Unity**
+[**Analytics.cs**](https://github.com/alvivar/bite/blob/master/.csharp/Analytics.cs)
+example!

@@ -1,29 +1,29 @@
 
-    THINGS TO DO
+    A class with // !Gigas on a second class in the file fails, a la Inventory / Equipment.
 
-        Probably a way to classify the Singleton pattern, for documentation
-        reasons, a way to analize it.
+    Probably a way to classify the Singleton pattern, for documentation
+    reasons, a way to analize it.
 
-        Cache needs to be optional, like // !gigas !nocache, on by default
+    Cache needs to be optional, like // !gigas !nocache, on by default
 
-        Get cache doesn't work with duplicated components on the same entity
+    Get cache doesn't work with duplicated components on the same entity
 
-        You can't be sure of RemoveComponent order when there are duplicated
-        components on the same entity
+    You can't be sure of RemoveComponent order when there are duplicated
+    components on the same entity
 
-        OnEnable / OnDisable pattern friction when the GameObject parent is turned
-        off, so OnEnable won't be called again
+    OnEnable / OnDisable pattern friction when the GameObject parent is turned
+    off, so OnEnable won't be called again
 
-        OnEnable can't be called after being removed from
+    OnEnable can't be called after being removed from
 
-        Document the pattern OnEnable / OnDisable to Add / Remove
+    Document the pattern OnEnable / OnDisable to Add / Remove
 
-        Pattern to how to call a particular code on Start, just after starting out,
-        OnEnable
+    Pattern to how to call a particular code on Start, just after starting out,
+    OnEnable
 
-        Automatically create a GameObject with all the Systems used on the scene
+    Automatically create a GameObject with all the Systems used on the scene
 
-        debugger: The Prefab system should contain in his name the count of Entities
+    debugger: The Prefab system should contain in his name the count of Entities
 
 
     2020.11.23

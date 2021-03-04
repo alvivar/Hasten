@@ -20,7 +20,7 @@ public class AnalyticsData
 
 public class Analytics : MonoBehaviour
 {
-    public string user = "team.game.analytics";
+    public string user = "team.game.user";
 
     [Header("Info")]
     public string id; // SystemInfo.deviceUniqueIdentifier
@@ -72,13 +72,19 @@ public class Analytics : MonoBehaviour
     void Connect()
     {
         bite = new Bite("142.93.180.20", 1984);
-        bite.OnResponse = OnResponse;
-        bite.OnError = OnError;
+        bite.OnResponse += OnResponse;
+        bite.OnError += OnError;
     }
 
     void OnDestroy()
     {
-        bite.Stop();
+        if (bite != null)
+        {
+            bite.Stop();
+
+            bite.OnResponse -= OnResponse;
+            bite.OnError -= OnError;
+        }
     }
 
     void OnError(string error)
@@ -93,7 +99,6 @@ public class Analytics : MonoBehaviour
             firstConnection = true;
 
             Debug.Log($"Analytics started!");
-            Debug.Log($"> {response}");
 
             LoadDataFromServer();
 
@@ -158,6 +163,9 @@ public class Analytics : MonoBehaviour
     void SaveLastPosition()
     {
         if (!position || !lastPositionLoaded)
+            return;
+
+        if (data.lastPosition == position.transform.position)
             return;
 
         data.lastPosition = position.transform.position;

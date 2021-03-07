@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Experimental AI Utility prototype.
+
 [Serializable]
 public class Rule
 {

@@ -18,7 +18,7 @@ public static class UnityConstantsGenerator
     [MenuItem("Tools/Code/Generate UnityConst.cs")]
     public static void Generate()
     {
-        // Try to find an existing file in the project called "UnityConst.cs"
+        // Try to find an existing file in the project called "UnityConst.cs".
         string filePath = string.Empty;
         foreach (var file in Directory.GetFiles(Application.dataPath, "*.cs", SearchOption.AllDirectories))
         {
@@ -29,12 +29,13 @@ public static class UnityConstantsGenerator
             }
         }
 
-        // If no such file exists already, use the save panel to get a folder in which the file will be placed
+        // If no such file exists already, use the save panel to get a folder in
+        // which the file will be placed.
         if (string.IsNullOrEmpty(filePath))
         {
             string directory = EditorUtility.OpenFolderPanel("Choose location for UnityConst.cs", Application.dataPath, "");
 
-            // Canceled choose? Do nothing
+            // Canceled choose? Do nothing.
             if (string.IsNullOrEmpty(directory))
             {
                 return;
@@ -43,7 +44,7 @@ public static class UnityConstantsGenerator
             filePath = Path.Combine(directory, "UnityConst.cs");
         }
 
-        // Write out our file
+        // Write out our file.
         using(var writer = new StreamWriter(filePath))
         {
             writer.WriteLine();
@@ -53,7 +54,7 @@ public static class UnityConstantsGenerator
             writer.WriteLine("namespace UnityConst");
             writer.WriteLine("{");
 
-            // Write out the tags
+            // Write out the tags.
             writer.WriteLine("    public static class Tag");
             writer.WriteLine("    {");
             foreach (var tag in UnityEditorInternal.InternalEditorUtility.tags)
@@ -64,7 +65,7 @@ public static class UnityConstantsGenerator
             writer.WriteLine();
             writer.WriteLine();
 
-            // Write out layers
+            // Write out layers.
             writer.WriteLine("    public static class Layer");
             writer.WriteLine("    {");
             for (int i = 0; i < 32; i++)
@@ -88,7 +89,7 @@ public static class UnityConstantsGenerator
             writer.WriteLine();
             writer.WriteLine();
 
-            // Write out sorting layers
+            // Write out sorting layers.
             writer.WriteLine("    public static class SortingLayer");
             writer.WriteLine("    {");
             foreach (var layer in SortingLayer.layers)
@@ -99,7 +100,7 @@ public static class UnityConstantsGenerator
             writer.WriteLine();
             writer.WriteLine();
 
-            // Write out scenes
+            // Write out scenes.
             writer.WriteLine("    public static class Scene");
             writer.WriteLine("    {");
             int sceneIndex = 0;
@@ -120,7 +121,7 @@ public static class UnityConstantsGenerator
             writer.WriteLine();
             writer.WriteLine();
 
-            // Write out Input axes
+            // Write out Input axes.
             writer.WriteLine("    public static class Axe");
             writer.WriteLine("    {");
             var axes = new HashSet<string>();
@@ -137,11 +138,11 @@ public static class UnityConstantsGenerator
             }
             writer.WriteLine("    }");
 
-            // End of namespace UnityConst
+            // End of namespace UnityConst.
             writer.WriteLine("}");
         }
 
-        // Refresh
+        // Refresh.
         AssetDatabase.Refresh();
     }
 

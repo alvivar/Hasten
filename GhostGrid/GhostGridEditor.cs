@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+
 using UnityEditor;
 using UnityEngine;
 
@@ -132,4 +133,5 @@ public class GhostGridEditor : Editor
         GUILayout.Label("\nGhostGrid v0.1.3.8 by @matnesis");
     }
 }
+
 #endif

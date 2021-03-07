@@ -2,7 +2,6 @@
 
 // Useful stuff for GameObjects on the Hierarchy right click menu.
 
-// @matnesis
 // 2016/10/10 01:26 PM
 
 #if UNITY_EDITOR
@@ -46,7 +45,7 @@ public class ChildrenTools
     {
         Transform selected = Selection.activeTransform;
 
-        // Get a list of all parents
+        // Get a list of all parents.
         var selectedParents = new List<Transform>();
         var current = selected;
         while (true)
@@ -59,7 +58,7 @@ public class ChildrenTools
             else break;
         }
 
-        // Get all transforms with the same name and the same parent
+        // Get all transforms with the same name and the same parent.
         var allNamed = GameObject.FindObjectsOfType<Transform>()
             .Where(
                 x => OnlyLetters(x.name) == OnlyLetters(selected.name) &&
@@ -423,10 +422,10 @@ public class ChildrenTools
 
     public static bool SameParentsName(Transform one, Transform two)
     {
-        // Test for the the same parents
+        // Test for the the same parents.
         while (true)
         {
-            // Until they don't have parents
+            // Until they don't have parents.
             if (one.parent == null || two.parent == null)
             {
                 // Equally orphans?
@@ -434,14 +433,14 @@ public class ChildrenTools
                 else return false;
             }
 
-            // Let's continue when having the same parent name
+            // Let's continue when having the same parent name.
             if (OnlyLetters(one.parent.name) == OnlyLetters(two.parent.name))
             {
                 // Next
                 one = one.parent;
                 two = two.parent;
             }
-            // Or we don't
+            // Or we don't.
             else
             {
                 return false;

@@ -6,11 +6,10 @@
 
 // Check out 'Tools/GhostGrid' in the menu for shortcuts!
 
-// Andrés Villalobos ~ twitter.com/@matnesis ~ andresalvivar@gmail.com
 // 07/01/2015 3:21 am
 
-// #todo
-// - Fails with just one element
+// @todo
+// Fails with one element.
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,8 +25,7 @@ public class GhostGrid : MonoBehaviour
     public float gridSize = 1f;
     public LayerMask layer;
 
-    // @
-    // Data shared with the editor script
+    // Data shared with the editor script.
 
     [HideInInspector]
     public int childrenCount = 0;
@@ -48,40 +46,39 @@ public class GhostGrid : MonoBehaviour
     private const string NOT_FOUND = "GhostGrid :: GhostGrid not found on selected GameObject (or parents).";
 
 #if UNITY_EDITOR
+
     void Update()
     {
         if (!doAutoSnap)
             return;
 
-        // Stop while playing
+        // Stop while playing.
         if (Application.isPlaying)
             doAutoSnap = false;
 
-        // On any changes
+        // On any changes.
         SnapAll();
     }
 
     void OnEnable()
     {
-        // Save the reference for menu items maneuvers
+        // Save the reference for menu items maneuvers.
         if (others == null)
             others = new List<GhostGrid>();
 
-        // Add yourself
+        // Add yourself.
         if (!others.Contains(this))
             others.Add(this);
     }
 
     void OnDisable()
     {
-        // Remove yourself
+        // Remove yourself.
         if (others.Contains(this))
             others.Remove(this);
     }
 
-    /// <summary>
-    /// Returns the snap position for the current vector on a simulated virtual grid.
-    /// </summary>
+    // Returns the snap position for the current vector on a simulated virtual grid.
     public static Vector3 GetSnapVector(Vector3 vector, float gridSize)
     {
         vector.x = Mathf.Round(vector.x / gridSize) * gridSize;
@@ -91,9 +88,7 @@ public class GhostGrid : MonoBehaviour
         return vector;
     }
 
-    /// <summary>
-    /// Returns the Transform with the name.
-    /// </summary>
+    // Returns the Transform with the name.
     public static Transform GetCreateTransform(string name)
     {
         GameObject go = GameObject.Find(name);
@@ -104,9 +99,7 @@ public class GhostGrid : MonoBehaviour
         return go.transform;
     }
 
-    /// <summary>
-    /// Snap all children to the grid.
-    /// </summary>
+    // Snap all children to the grid.
     public void SnapAll()
     {
         if (gridSize > 0)
@@ -119,10 +112,8 @@ public class GhostGrid : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Changes the parent of all overlapped children (with same position) to
-    /// [GhostGrid|Overlapped] and returns the excluded count.
-    /// </summary>
+    // Changes the parent of all overlapped children (with same position) to
+    // [GhostGrid|Overlapped] and returns the excluded count.
     public int ExcludeOverlappedChildren(bool alsoDeleteIt = false)
     {
         List<Transform> safeChildren = new List<Transform>();
@@ -166,37 +157,35 @@ public class GhostGrid : MonoBehaviour
         return excludedCount;
     }
 
-    /// <summary>
-    /// Enable all 2D colliders that are borders and disable all 2D colliders
-    /// that are sorrounded by other colliders. Returns the count of disabled
-    /// colliders.
-    /// </summary>
+    // Enable all 2D colliders that are borders and disable all 2D colliders
+    // that are sorrounded by other colliders. Returns the count of disabled
+    // colliders.
     public int TurnOffUnneededColliders2D()
     {
         // Children
         Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
         childrenCount = colliders.Length;
 
-        // Only if there is something in the list
+        // Only if there is something in the list.
         if (colliders.Length < 1)
             return 0;
 
-        // First, reactivate all
+        // First, reactivate all.
         for (int i = 0; i < childrenCount; i++)
             colliders[i].enabled = true;
 
-        // Assuming all colliders are squares and they have the same size
+        // Assuming all colliders are squares and they have the same size.
         float rayLength = colliders[1].bounds.extents.x * 1.2f;
 
-        // Assuming we all have the same layer
+        // Assuming we all have the same layer.
         if (layer == 0)
             layer = 1 << gameObject.layer;
 
-        // Collect the unneeded colliders by checking around them
+        // Collect the unneeded colliders by checking around them.
         List<Collider2D> unneededColliders = new List<Collider2D>();
         for (int i = 0; i < childrenCount; i++)
         {
-            // Test for adjacent colliders ignoring itself
+            // Test for adjacent colliders ignoring itself.
             int sorroundedCount = 0;
             Vector3 pos = colliders[i].transform.position;
 
@@ -216,21 +205,19 @@ public class GhostGrid : MonoBehaviour
 
             colliders[i].enabled = true;
 
-            // Colliders that are completely sorrounded
+            // Colliders that are completely sorrounded.
             if (sorroundedCount == 4)
                 unneededColliders.Add(colliders[i]);
         }
 
-        // Turn off unneeded
+        // Turn off unneeded.
         for (int i = 0; i < unneededColliders.Count; i++)
             unneededColliders[i].enabled = false;
 
         return unneededColliders.Count;
     }
 
-    /// <summary>
-    /// Rename all children, numerically, correctly padded.
-    /// </summary>
+    // Rename all children, numerically, correctly padded.
     public int RenameChildren()
     {
         children = GetComponentsInChildren<Transform>();
@@ -241,11 +228,11 @@ public class GhostGrid : MonoBehaviour
 
         for (int i = 0; i < childrenCount; i++)
         {
-            // Ignore self
+            // Ignore self.
             if (children[i] == transform)
                 continue;
 
-            // Rename
+            // Rename.
             children[i].name = i.ToString().PadLeft(leftPad, '0');
             count += 1;
         }
@@ -253,10 +240,8 @@ public class GhostGrid : MonoBehaviour
         return count;
     }
 
-    // ~
-    // MENU ITEMS
+    // Menu Items
 
-    // ~
     // ALT + S
     [MenuItem("Tools/GhostGrid/Snap Once &s")]
     private static void SnapSelectedGrid()
@@ -283,7 +268,6 @@ public class GhostGrid : MonoBehaviour
         return Selection.activeTransform != null;
     }
 
-    // ~
     // ALT + A
     [MenuItem("Tools/GhostGrid/Enable Auto Snap &a")]
     private static void EnableGridAutoSnap()
@@ -310,7 +294,6 @@ public class GhostGrid : MonoBehaviour
         return Selection.activeTransform != null;
     }
 
-    // ~
     // ALT + D
     [MenuItem("Tools/GhostGrid/Disable Auto Snap On All Grids &d")]
     private static void DisableAllGrids()
@@ -324,7 +307,6 @@ public class GhostGrid : MonoBehaviour
             others[i].doAutoSnap = false;
     }
 
-    // ~
     // Optimizations (ALT + F)
     [MenuItem("Tools/GhostGrid/Apply Current Optimizations &f")]
     private static void MenuApplyCurrentOptimizations()
@@ -375,7 +357,6 @@ public class GhostGrid : MonoBehaviour
         return Selection.activeTransform != null;
     }
 
-    // ~
     // Extrusion Mode (ALT + E)
     [MenuItem("Tools/GhostGrid/Enter Extrusion Mode (wip) &e")]
     private static void MenuEnterExtrusionMode()

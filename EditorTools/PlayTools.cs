@@ -2,6 +2,9 @@
 
 using UnityEditor;
 
+// Experimental, unfinished, but useful menu item commands to Play and Dev
+// scenes.
+
 public static class PlayTools
 {
     [MenuItem("Game/Play")]

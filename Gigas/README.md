@@ -7,7 +7,7 @@ tech.
 
 The official Unity ECS (DOTS) is pretty cool and stuff, I tried it and I really
 like what they are creating. But you can't use it yet, and with some luck maybe
-we may need to wait until Unity 2020 LTS for a production-ready well tested
+we may need to wait until Unity 2021 LTS for a production-ready well tested
 version that works completely with everything, who knows.
 
 But we really want to start thinking with Data Oriented patterns for our code

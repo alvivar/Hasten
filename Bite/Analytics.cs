@@ -98,7 +98,7 @@ public class Analytics : MonoBehaviour
         {
             firstConnection = true;
 
-            Debug.Log($"Analytics started!");
+            Debug.Log($"Analytics connected");
 
             LoadDataFromServer();
 

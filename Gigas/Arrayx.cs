@@ -22,11 +22,6 @@ public class Arrayx<T>
         return x;
     }
 
-    // @todo Those functions below need a performance test.
-
-    // @todo Would be better if those functions below become extensions?
-    // Performance wise?
-
     public void Add(T element)
     {
         Elements[Length++] = element;
@@ -168,30 +163,4 @@ public class Arrayx<T>
     {
         Length = 0;
     }
-
-    // @todo Are those below better that the self referenced way up ^ there?
-
-    // public static Arrayx<T> Add(Arrayx<T> arrx, T component)
-    // {
-    //     arrx.Elements[arrx.Length++] = component;
-
-    //     if (arrx.Length >= arrx.Size)
-    //     {
-    //         arrx.Size *= 2;
-    //         Array.Resize(ref arrx.Elements, arrx.Size);
-    //     }
-
-    //     return arrx;
-    // }
-
-    // public static Arrayx<T> RemoveAt(Arrayx<T> arrx, int indexToRemove)
-    // {
-    //     Array.Copy(
-    //         arrx.Elements, indexToRemove + 1,
-    //         arrx.Elements, indexToRemove,
-    //         arrx.Length - indexToRemove - 1);
-    //     arrx.Length--;
-
-    //     return arrx;
-    // }
 }

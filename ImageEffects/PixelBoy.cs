@@ -12,14 +12,16 @@ public class PixelBoy : MonoBehaviour
     public int w = 720;
     int h;
 
-    protected void Start()
-    {
-        if (!SystemInfo.supportsImageEffects)
-        {
-            enabled = false;
-            return;
-        }
-    }
+    // protected void Start()
+    // {
+    //     // @todo Deprecated, always return true..
+
+    //     if (!SystemInfo.supportsImageEffects)
+    //     {
+    //         enabled = false;
+    //         return;
+    //     }
+    // }
 
     void Update()
     {

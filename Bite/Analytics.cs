@@ -17,6 +17,10 @@ public class Analytics : MonoBehaviour
 {
     public string user = "team.game.user";
 
+    [Header("Server")]
+    public string host = "142.93.180.20";
+    public int port = 1984;
+
     [Header("Info")]
     public string id; // SystemInfo.deviceUniqueIdentifier
     public string key;
@@ -24,7 +28,7 @@ public class Analytics : MonoBehaviour
 
     [Header("Config")]
     public int tick = 3;
-    public float timer = 3;
+    public float timer = 1;
 
     [Header("Optional")]
     public Transform position;
@@ -66,7 +70,7 @@ public class Analytics : MonoBehaviour
 
     void Connect()
     {
-        bite = new Bite("142.93.180.20", 1984);
+        bite = new Bite(host, port);
         bite.OnResponse += OnResponse;
         bite.OnError += OnError;
     }

@@ -1,12 +1,7 @@
 using System;
 using UnityEngine;
 
-internal class Pos
-{
-    public float x;
-    public float y;
-    public float z;
-}
+internal class Pos { public float x; public float y; public float z; }
 
 [System.Serializable]
 public class AnalyticsData
@@ -49,7 +44,7 @@ public class Analytics : MonoBehaviour
 
     void Update()
     {
-        // Tick.
+        // Tick
         if (Time.time < timer)
             return;
         timer = Time.time + tick;
@@ -61,7 +56,7 @@ public class Analytics : MonoBehaviour
             return;
         }
 
-        // Statistics.
+        // Statistics
         SaveTimePlayed(tick);
 
         SaveLastEpoch();

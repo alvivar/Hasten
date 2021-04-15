@@ -28,12 +28,12 @@ public class Analytics : MonoBehaviour
 
     [Header("Config")]
     public int tick = 3;
-    public float timer = 1;
+    public float clock = 1;
 
     [Header("Optional")]
     public Transform position;
 
-    private bool firstConnection = false;
+    private bool connected = false;
     private bool lastPositionLoaded = false;
 
     private Bite bite;
@@ -49,12 +49,12 @@ public class Analytics : MonoBehaviour
     void Update()
     {
         // Tick
-        if (Time.time < timer)
+        if (Time.time < clock)
             return;
-        timer = Time.time + tick;
+        clock = Time.time + tick;
 
         // Ping until first response.
-        if (!firstConnection)
+        if (!connected)
         {
             bite.Send("g");
             return;
@@ -80,7 +80,6 @@ public class Analytics : MonoBehaviour
         if (bite != null)
         {
             bite.Stop();
-
             bite.OnResponse -= OnResponse;
             bite.OnError -= OnError;
         }
@@ -89,13 +88,17 @@ public class Analytics : MonoBehaviour
     void OnError(string error)
     {
         Debug.Log($"Analytics error: {error}");
+
+        OnDestroy();
+        connected = false;
+        Start();
     }
 
     void OnResponse(string response)
     {
-        if (!firstConnection)
+        if (!connected)
         {
-            firstConnection = true;
+            connected = true;
 
             Debug.Log($"Analytics connected");
 
@@ -169,9 +172,10 @@ public class Analytics : MonoBehaviour
 
         data.lastPosition = position.transform.position;
 
-        bite.Send($"s {key}.lastPosition.x {data.lastPosition.x}");
-        bite.Send($"s {key}.lastPosition.y {data.lastPosition.y}");
-        bite.Send($"s {key}.lastPosition.z {data.lastPosition.z}");
+        var x = $"s {key}.lastPosition.x {data.lastPosition.x}\n";
+        var y = $"s {key}.lastPosition.y {data.lastPosition.y}\n";
+        var z = $"s {key}.lastPosition.z {data.lastPosition.z}";
+        bite.Send($"{x}{y}{z}");
     }
 
     public void SetName(string name)

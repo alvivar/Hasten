@@ -12,10 +12,10 @@ public class Arrayx<T>
     public T[] Elements;
     public int Length;
 
-    public static Arrayx<T> New(int size)
+    public static Arrayx<T> New(int size = 2) // Rust <3
     {
         var x = new Arrayx<T>();
-        x.Size = size < 1 ? 1 : size;
+        x.Size = size < 2 ? 2 : size; // With 2 we avoid 1 Array.Resize on the first Add.
         x.Elements = new T[size];
         x.Length = 0;
 
@@ -148,11 +148,10 @@ public class Arrayx<T>
         return array;
     }
 
-    // If this is called when the Length is 0, it fails.
+    // This fails when Length is 0.
 
-    // Check this for a possible solution
+    // Default could be a solution.
     // https://stackoverflow.com/questions/302096/how-can-i-return-null-from-a-generic-method-in-c
-
     // But returning default could be a problem with a list of ints.
     public T LastElement()
     {

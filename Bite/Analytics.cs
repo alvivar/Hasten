@@ -1,18 +1,6 @@
 using System;
 using UnityEngine;
 
-internal class Pos { public float x; public float y; public float z; }
-
-[System.Serializable]
-public class AnalyticsData
-{
-    public string name;
-    public int timePlayed;
-    public Vector3 lastPosition;
-    public long lastEpoch;
-    public long startedEpoch;
-}
-
 public class Analytics : MonoBehaviour
 {
     public string user = "team.game.user";
@@ -37,6 +25,17 @@ public class Analytics : MonoBehaviour
     private bool lastPositionLoaded = false;
 
     private Bite bite;
+
+    public static Analytics instance;
+    public static Analytics Instance
+    {
+        get
+        {
+            if (!instance)
+                instance = FindObjectOfType<Analytics>();
+            return instance;
+        }
+    }
 
     void Start()
     {
@@ -89,6 +88,7 @@ public class Analytics : MonoBehaviour
     {
         Debug.Log($"Analytics error: {error}");
 
+        // Reconnect on error.
         OnDestroy();
         connected = false;
         Start();
@@ -138,6 +138,9 @@ public class Analytics : MonoBehaviour
 
     void SaveTimePlayed(int time)
     {
+        if (data.timePlayed < 0) // Wait to be loaded for the first time.
+            return;
+
         data.timePlayed += time;
         bite.Send($"s {key}.timePlayed {data.timePlayed}");
     }
@@ -172,6 +175,7 @@ public class Analytics : MonoBehaviour
 
         data.lastPosition = position.transform.position;
 
+        // Multiples sets in one send.
         var x = $"s {key}.lastPosition.x {data.lastPosition.x}\n";
         var y = $"s {key}.lastPosition.y {data.lastPosition.y}\n";
         var z = $"s {key}.lastPosition.z {data.lastPosition.z}";
@@ -183,4 +187,16 @@ public class Analytics : MonoBehaviour
         data.name = name;
         bite.Send($"s {key}.name {data.name}");
     }
+}
+
+internal class Pos { public float x; public float y; public float z; }
+
+[System.Serializable]
+public class AnalyticsData
+{
+    public string name;
+    public int timePlayed = -1;
+    public Vector3 lastPosition;
+    public long lastEpoch;
+    public long startedEpoch;
 }

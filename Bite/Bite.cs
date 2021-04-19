@@ -103,16 +103,13 @@ public class Bite
                     continue;
 
                 // Send
-
                 var writer = new StreamWriter(stream);
 
-                writer.WriteLine(some.message);
+                writer.WriteLine(some.message.TrimEnd());
                 writer.Flush();
 
                 // Receive or subscription?
-
                 var sub = some.message.Trim().ToLower().StartsWith("#");
-
                 var reader = new StreamReader(stream);
 
                 do

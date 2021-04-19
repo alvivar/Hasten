@@ -1,20 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-
-public class BiteMsg
-{
-    public string message;
-    public Action<string> callback;
-
-    public BiteMsg(string message, Action<string> callback)
-    {
-        this.message = message;
-        this.callback = callback;
-    }
-}
 
 public class Bite
 {
@@ -104,7 +93,6 @@ public class Bite
 
                 // Send
                 var writer = new StreamWriter(stream);
-
                 writer.WriteLine(some.message.TrimEnd());
                 writer.Flush();
 
@@ -137,18 +125,29 @@ public class Bite
     public static int Int(string str, int or)
     {
         int n;
-        return int.TryParse(str, out n) ? n : or;
+        return int.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out n) ? n : or;
     }
 
     public static float Float(string str, float or)
     {
         float n;
-        return float.TryParse(str, out n) ? n : or;
+        return float.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out n) ? n : or;
     }
 
     public static long Long(string str, long or)
     {
         long n;
-        return long.TryParse(str, out n) ? n : or;
+        return long.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out n) ? n : or;
+    }
+}
+
+public class BiteMsg
+{
+    public string message;
+    public Action<string> callback;
+    public BiteMsg(string message, Action<string> callback)
+    {
+        this.message = message;
+        this.callback = callback;
     }
 }

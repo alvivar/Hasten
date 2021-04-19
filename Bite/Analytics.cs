@@ -87,11 +87,6 @@ public class Analytics : MonoBehaviour
     void OnError(string error)
     {
         Debug.Log($"Analytics error: {error}");
-
-        // Reconnect on error.
-        OnDestroy();
-        connected = false;
-        Start();
     }
 
     void OnResponse(string response)

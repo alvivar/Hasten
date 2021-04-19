@@ -18,8 +18,6 @@ public class BoxelStamper : MonoBehaviour
     public Transform pivotA;
     public Transform pivotB;
 
-    int createdCount = 0;
-
     // [ExecuteInEditMode]
     void Update()
     {

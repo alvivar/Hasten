@@ -8,14 +8,15 @@ using System;
 
 public class Arrayx<T>
 {
-    public int Size;
     public T[] Elements;
+
+    public int Size;
     public int Length;
 
-    public static Arrayx<T> New(int size = 2) // Rust <3
+    public static Arrayx<T> New(int size = 1) // <3
     {
         var x = new Arrayx<T>();
-        x.Size = size < 2 ? 2 : size; // With 2 we avoid 1 Array.Resize on the first Add.
+        x.Size = size < 1 ? 1 : size;
         x.Elements = new T[size];
         x.Length = 0;
 
@@ -24,13 +25,13 @@ public class Arrayx<T>
 
     public void Add(T element)
     {
-        Elements[Length++] = element;
-
         if (Length >= Size)
         {
             Size *= 2;
             Array.Resize(ref Elements, Size);
         }
+
+        Elements[Length++] = element;
     }
 
     public void Remove(T element)
@@ -80,16 +81,12 @@ public class Arrayx<T>
 
     public Arrayx<T> Append(T[] array)
     {
-        for (int i = 0; i < array.Length; i++)
-        {
-            Elements[Length++] = array[i];
+        var len = Length + array.Length;
+        if (len > Length)
+            Array.Resize(ref Elements, len);
 
-            if (Length >= Size)
-            {
-                Size *= 2;
-                Array.Resize(ref Elements, Size);
-            }
-        }
+        for (int i = 0; i < array.Length; i++)
+            Elements[Length++] = array[i];
 
         return this;
     }
@@ -108,6 +105,12 @@ public class Arrayx<T>
             result.Add(callback(Elements[i]));
 
         return result;
+    }
+
+    public void MapSelf(Func<T, T> callback)
+    {
+        for (int i = 0; i < Length; i++)
+            Elements[i] = callback(Elements[i]);
     }
 
     public TR Reduce<TR>(TR accumulator, Func<TR, T, TR> callback)
@@ -148,12 +151,10 @@ public class Arrayx<T>
         return array;
     }
 
-    // This fails when Length is 0.
-
-    // Default could be a solution.
+    // This fails when Length is 0. Default could be a solution, but returning
+    // default could be a problem with a list of ints.
     // https://stackoverflow.com/questions/302096/how-can-i-return-null-from-a-generic-method-in-c
-    // But returning default could be a problem with a list of ints.
-    public T LastElement()
+    public T Last()
     {
         return Elements[Length - 1];
     }

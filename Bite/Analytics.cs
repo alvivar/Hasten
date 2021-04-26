@@ -26,38 +26,26 @@ public class Analytics : MonoBehaviour
 
     private Bite bite;
 
-    public static Analytics instance;
-    public static Analytics Instance
-    {
-        get
-        {
-            if (!instance)
-                instance = FindObjectOfType<Analytics>();
-            return instance;
-        }
-    }
-
     void Start()
     {
         id = SystemInfo.deviceUniqueIdentifier;
         key = $"{user}.{id}";
 
-        Connect();
+        bite = new Bite(host, port);
+        bite.OnConnected += OnConnected;
+        bite.OnError += OnError;
     }
 
     void Update()
     {
+        // Wait for connection.
+        if (!connected)
+            return;
+
         // Tick
-        if (Time.time < clock)
+        if (clock > Time.time)
             return;
         clock = Time.time + tick;
-
-        // Ping until first response.
-        if (!connected)
-        {
-            bite.Send("g");
-            return;
-        }
 
         // Statistics
         SaveTimePlayed(tick);
@@ -67,19 +55,12 @@ public class Analytics : MonoBehaviour
         SaveLastPosition();
     }
 
-    void Connect()
-    {
-        bite = new Bite(host, port);
-        bite.OnResponse += OnResponse;
-        bite.OnError += OnError;
-    }
-
     void OnDestroy()
     {
         if (bite != null)
         {
             bite.Stop();
-            bite.OnResponse -= OnResponse;
+            bite.OnConnected -= OnConnected;
             bite.OnError -= OnError;
         }
     }
@@ -89,18 +70,12 @@ public class Analytics : MonoBehaviour
         Debug.Log($"Analytics error: {error}");
     }
 
-    void OnResponse(string response)
+    void OnConnected()
     {
-        if (!connected)
-        {
-            connected = true;
-
-            Debug.Log($"Analytics connected");
-
-            LoadDataFromServer();
-
-            LoadOrSetStartedEpoch();
-        }
+        connected = true;
+        LoadDataFromServer();
+        LoadOrSetStartedEpoch();
+        Debug.Log($"Analytics connected");
     }
 
     void LoadDataFromServer()

@@ -7,6 +7,7 @@ using System.Threading;
 
 public class Bite
 {
+    public Action OnConnected;
     public Action<string> OnResponse;
     public Action<string> OnError;
 
@@ -32,7 +33,7 @@ public class Bite
     public void Stop()
     {
         allowThread = false;
-
+        stream.Close();
         tcpClient.Close();
     }
 
@@ -76,6 +77,9 @@ public class Bite
             tcpClient = new TcpClient(host, port);
             stream = tcpClient.GetStream();
 
+            if (OnConnected != null)
+                OnConnected();
+
             while (allowThread)
             {
                 BiteMsg some;
@@ -93,7 +97,7 @@ public class Bite
 
                 // Send
                 var writer = new StreamWriter(stream);
-                writer.WriteLine(some.message.TrimEnd());
+                writer.WriteLine(some.message);
                 writer.Flush();
 
                 // Receive or subscription?
@@ -145,6 +149,7 @@ public class BiteMsg
 {
     public string message;
     public Action<string> callback;
+
     public BiteMsg(string message, Action<string> callback)
     {
         this.message = message;

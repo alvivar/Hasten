@@ -8,8 +8,7 @@
 
 // 07/01/2015 3:21 am
 
-// @todo
-// Fails with one element.
+// @todo Fails with one element.
 
 using System.Collections.Generic;
 using UnityEngine;

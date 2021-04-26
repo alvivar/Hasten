@@ -16,8 +16,6 @@ public class TimelineEditor : Editor
     Vector3 timelineRot;
     Vector3 timelineSca;
 
-    int childrenIndex = 0;
-
     string message = "";
     char[] spinner = { '/', '-', '\\', '|' };
     int spinnerId = 0;

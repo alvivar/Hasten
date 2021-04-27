@@ -16,7 +16,7 @@ public class Analytics : MonoBehaviour
 
     [Header("Config")]
     public int tick = 3;
-    public float clock = 1;
+    public float clock = 0;
 
     [Header("Optional")]
     public Transform position;

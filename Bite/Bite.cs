@@ -22,6 +22,8 @@ public class Bite
     private string host;
     private int port;
 
+    const string HEARTBEAT = "\x7\x5\x6\x4"; // Bell, Enquiry, Acknowledge, End of Transmission.
+
     public Bite(string host, int port)
     {
         this.host = host;
@@ -107,6 +109,9 @@ public class Bite
                 do
                 {
                     var response = reader.ReadLine();
+
+                    if (response.Contains(HEARTBEAT))
+                        response = response.Replace(HEARTBEAT, "");
 
                     if (some.callback != null)
                         some.callback(response);

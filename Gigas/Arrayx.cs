@@ -23,6 +23,15 @@ public class Arrayx<T>
         return x;
     }
 
+    public void Grow(int size)
+    {
+        if (Size < size)
+        {
+            Size = size;
+            Array.Resize(ref Elements, Size);
+        }
+    }
+
     public void Add(T element)
     {
         if (Length >= Size)
@@ -77,6 +86,21 @@ public class Arrayx<T>
         }
 
         return false;
+    }
+
+    public int IndexOf(T element)
+    {
+        var index = -1;
+        for (int i = 0; i < Length; i++)
+        {
+            if (Elements[i].Equals(element))
+            {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
     }
 
     public Arrayx<T> Append(T[] array)

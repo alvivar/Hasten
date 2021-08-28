@@ -7,21 +7,19 @@ public static class Gigas
     // Returns the 'components' that belongs to the 'entities' intersected.
     // Let's assume that the first array on 'entities' is the one related
     // position by position to the 'components' in the result.
-    public static Arrayx<T> Get<T>(Arrayx<int>[] entities, Arrayx<T> components)
+    public static Arrayx<T> Get<T>(Arrayx<int>[] entities, Arrayx<T> components, Arrayx<T> result)
     {
         // Just one array means just one source, no interception!
         if (entities.Length <= 1)
             return components;
 
-        // Create an array with enough space to contain the answers
+        // Use the result array with enough space to contain the answer
         var maxSize = 0;
         for (int i = 0; i < entities.Length; i++)
             maxSize += entities[i].Length;
 
-        var result = new Arrayx<T>(); // @todo Could I squeeze more performance by caching this stuff?
-        result.Size = result.Size < maxSize ? maxSize : result.Size;
-        result.Elements = new T[result.Size];
-        result.Length = 0;
+        result.Grow(maxSize);
+        result.Clear();
 
         // The ids should repeat this much to detect being on each array
         var validCount = entities.Length;
@@ -60,7 +58,7 @@ public static class Gigas
                 // Is the element repeated in all the arrays? Let's collect the
                 // value if exists
                 if (currentFoundCount >= validCount && matchedValue != null)
-                    result.Elements[result.Length++] = matchedValue;
+                    result.Add(matchedValue);
             }
         }
 

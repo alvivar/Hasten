@@ -1,4 +1,5 @@
 using System;
+using BiteServer;
 using UnityEngine;
 
 public class Analytics : MonoBehaviour
@@ -32,22 +33,32 @@ public class Analytics : MonoBehaviour
         key = $"{user}.{id}";
 
         bite = new Bite(host, port);
-        bite.OnConnected += OnConnected;
-        bite.OnError += OnError;
+
+        bite.Send($"Ping from {id}", r =>
+        {
+            connected = true;
+            Debug.Log("Analytics connected");
+        });
+
+        LoadDataFromServer();
+        LoadOrSetStartedEpoch();
+    }
+
+    void OnDestroy()
+    {
+        if (bite != null)
+            bite.Close();
     }
 
     void Update()
     {
-        // Wait for connection.
         if (!connected)
             return;
 
-        // Tick
         if (clock > Time.time)
             return;
         clock = Time.time + tick;
 
-        // Statistics
         SaveTimePlayed(tick);
 
         SaveLastEpoch();
@@ -55,42 +66,17 @@ public class Analytics : MonoBehaviour
         SaveLastPosition();
     }
 
-    void OnDestroy()
-    {
-        if (bite != null)
-        {
-            bite.Stop();
-            bite.OnConnected -= OnConnected;
-            bite.OnError -= OnError;
-        }
-    }
-
-    void OnError(string error)
-    {
-        Debug.Log($"Analytics error: {error}");
-    }
-
-    void OnConnected()
-    {
-        connected = true;
-        LoadDataFromServer();
-        LoadOrSetStartedEpoch();
-        Debug.Log($"Analytics connected");
-    }
-
     void LoadDataFromServer()
     {
         bite.Send($"g {key}.name", response =>
         {
-            if (response.Trim().Length < 1)
-                response = "?";
-
-            data.name = response;
+            if (response.Trim().Length < 1) SetName($"{id}");
+            else data.name = response;
         });
 
         bite.Send($"g {key}.timePlayed", response =>
         {
-            data.timePlayed = Bite.Int(response, 0);
+            data.timePlayed = Bitf.Int(response, 0);
         });
 
         bite.Send($"j {key}.lastPosition", response =>
@@ -98,11 +84,25 @@ public class Analytics : MonoBehaviour
             var json = JsonUtility.FromJson<Pos>(response);
 
             data.lastPosition = new Vector3(
-                Bite.Float($"{json.x}", 0),
-                Bite.Float($"{json.y}", 0),
-                Bite.Float($"{json.z}", 0));
+                Bitf.Float($"{json.x}", 0),
+                Bitf.Float($"{json.y}", 0),
+                Bitf.Float($"{json.z}", 0));
 
             lastPositionLoaded = true;
+        });
+    }
+
+    void LoadOrSetStartedEpoch()
+    {
+        bite.Send($"g {key}.startedEpoch", response =>
+        {
+            data.startedEpoch = Bitf.Long(response, 0);
+
+            if (data.startedEpoch <= 0)
+            {
+                data.startedEpoch = DateTimeOffset.Now.ToUnixTimeSeconds();
+                bite.Send($"s {key}.startedEpoch {data.startedEpoch}");
+            }
         });
     }
 
@@ -119,20 +119,6 @@ public class Analytics : MonoBehaviour
     {
         data.lastEpoch = DateTimeOffset.Now.ToUnixTimeSeconds();
         bite.Send($"s {key}.lastEpoch {data.lastEpoch}");
-    }
-
-    void LoadOrSetStartedEpoch()
-    {
-        bite.Send($"g {key}.startedEpoch", response =>
-        {
-            data.startedEpoch = Bite.Long(response, 0);
-
-            if (data.startedEpoch <= 0)
-            {
-                data.startedEpoch = DateTimeOffset.Now.ToUnixTimeSeconds();
-                bite.Send($"s {key}.startedEpoch {data.startedEpoch}");
-            }
-        });
     }
 
     void SaveLastPosition()
@@ -159,14 +145,19 @@ public class Analytics : MonoBehaviour
     }
 }
 
-internal class Pos { public float x; public float y; public float z; }
-
 [System.Serializable]
 public class AnalyticsData
 {
     public string name;
     public int timePlayed = -1;
     public Vector3 lastPosition;
-    public long lastEpoch;
-    public long startedEpoch;
+    public long lastEpoch = -1;
+    public long startedEpoch = -1;
+}
+
+internal class Pos
+{
+    public float x;
+    public float y;
+    public float z;
 }

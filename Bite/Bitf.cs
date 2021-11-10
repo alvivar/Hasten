@@ -35,6 +35,48 @@ public static class Bitf
         return $"{intf}.{decf}";
     }
 
+    public static string Str(Vector3 vec, int precision)
+    {
+        var x = Str(vec.x, precision);
+        var y = Str(vec.y, precision);
+        var z = Str(vec.z, precision);
+
+        return $"{x},{y},{z}";
+    }
+
+    public static string Str(Quaternion q, int precision)
+    {
+        var x = Str(q.x, precision);
+        var y = Str(q.y, precision);
+        var z = Str(q.z, precision);
+        var w = Str(q.w, precision);
+
+        return $"{x},{y},{z},{w}";
+    }
+
+    public static Vector3 Vec3(string str)
+    {
+        var xyz = str.Split(',');
+        var vec = new Vector3(
+            Float(xyz[0], -1),
+            Float(xyz[1], -1),
+            Float(xyz[2], -1));
+
+        return vec;
+    }
+
+    public static Vector4 Vec4(string str)
+    {
+        var xyz = str.Split(',');
+        var vec = new Vector4(
+            Float(xyz[0], -1),
+            Float(xyz[1], -1),
+            Float(xyz[2], -1),
+            Float(xyz[3], -1));
+
+        return vec;
+    }
+
     public static float Round(float f, int precision)
     {
         precision = (int) Mathf.Pow(10, precision);

@@ -174,7 +174,8 @@ public class Arrayx<T>
     }
 
     // This fails when Length is 0, should this be an exception? Or we just let
-    // it roll? Or maybe there is a nice trick to return the nullable from T?
+    // it roll? Or maybe there is a nice trick to return the nullable from T
+    // without too much overhead?
     public T Last()
     {
         return Elements[Length - 1];

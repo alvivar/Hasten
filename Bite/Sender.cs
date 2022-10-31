@@ -1,56 +1,52 @@
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 
-namespace BiteServer
+namespace BiteClient
 {
     internal sealed class Sender
     {
-        internal Queue<string> messages = new Queue<string>();
+        internal Queue<Frame> frames = new Queue<Frame>();
 
         private NetworkStream stream;
-        private StreamWriter writer;
         private Thread thread;
 
         internal Sender(NetworkStream stream)
         {
             this.stream = stream;
-            writer = new StreamWriter(this.stream);
             thread = new Thread(Run);
             thread.Start();
         }
 
-        internal void Send(string message)
+        internal void Send(Frame frame)
         {
-            lock(messages)
+            lock (frames)
             {
-                messages.Enqueue(message);
+                frames.Enqueue(frame);
             }
+        }
+
+        internal void Abort()
+        {
+            if (thread != null)
+                thread.Abort();
         }
 
         private void Run()
         {
             while (true)
             {
-                if (messages.Count < 1)
+                if (frames.Count < 1)
                     continue;
 
-                lock(messages)
+                lock (frames)
                 {
-                    writer.WriteLine(messages.Dequeue());
-                    writer.Flush();
+                    var frame = frames.Dequeue();
+                    stream.Write(frame.Data, 0, frame.Data.Length);
                 }
             }
-        }
-
-        internal void Close()
-        {
-            if (writer != null)
-                writer.Close();
-
-            if (thread != null)
-                thread.Abort();
         }
     }
 }

@@ -4,61 +4,84 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace BiteServer
+namespace BiteClient
 {
     internal sealed class Receiver
     {
-        internal event Action<string> DataReceived;
+        internal event Action<Frame> OnFrameReceived;
 
-        private Queue<Action<string>> actions = new Queue<Action<string>>();
+        private Queue<Action<Frame>> actions = new Queue<Action<Frame>>();
         private NetworkStream stream;
-        private StreamReader reader;
         private Thread thread;
+        private Frames frames = new Frames();
 
         internal Receiver(NetworkStream stream)
         {
             this.stream = stream;
-            reader = new StreamReader(this.stream);
             thread = new Thread(Run);
             thread.Start();
         }
 
-        internal void React(Action<string> callback)
+        internal void React(Action<Frame> callback)
         {
-            lock(actions)
-            {
+            lock (actions)
                 actions.Enqueue(callback);
-            }
+        }
+
+        internal void Abort()
+        {
+            if (thread != null)
+                thread.Abort();
         }
 
         private void Run()
         {
+            var memory = new MemoryStream();
+
             while (true)
             {
-                var response = reader.ReadLine();
+                if (!stream.CanRead)
+                    return;
 
-                if (DataReceived != null)
-                    DataReceived(response);
+                // Incoming message may be larger than the buffer size.
+                byte[] buffer = new byte[4096];
+                int bytesRead = 0;
 
-                if (actions.Count < 1)
-                    continue;
-
-                lock(actions)
+                do
                 {
-                    var action = actions.Dequeue();
-                    if (action != null)
-                        action(response);
+                    bytesRead = stream.Read(buffer, 0, buffer.Length);
+                    memory.Write(buffer, 0, bytesRead);
+                }
+                while (stream.DataAvailable);
+
+                // If seems that the connection was closed.
+                if (bytesRead <= 0)
+                    throw new SocketException((int)SocketError.NetworkUnreachable);
+
+                frames.Feed(memory.ToArray());
+                memory.SetLength(0);
+
+                while (frames.HasPendingData)
+                    frames.TryCompleteFrame();
+
+                while (frames.HasCompleteFrame)
+                {
+                    var frame = frames.Dequeue();
+
+                    if (OnFrameReceived != null)
+                        OnFrameReceived(frame);
+
+                    if (actions.Count < 1)
+                        continue;
+
+                    lock (actions)
+                    {
+                        var action = actions.Dequeue();
+                        if (action != null)
+                            action(frame);
+                    }
                 }
             }
-        }
-
-        internal void Close()
-        {
-            if (reader != null)
-                reader.Close();
-
-            if (thread != null)
-                thread.Abort();
         }
     }
 }

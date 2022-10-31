@@ -1,14 +1,26 @@
 using System;
-using BiteServer;
 using UnityEngine;
+using BiteClient;
+
+[System.Serializable]
+public struct AnalyticsData
+{
+    public string name;
+    public int timePlayed;
+    public Vector3 lastPosition;
+    public long lastEpoch;
+    public long startedEpoch;
+}
+
+internal struct Pos { public float x; public float y; public float z; }
 
 public class Analytics : MonoBehaviour
 {
-    public string user = "team.game.user";
+    public string keyName = "team.game.user";
 
     [Header("Server")]
-    public string host = "142.93.180.20";
-    public int port = 1984;
+    public string host = "167.99.58.31";
+    public int port = 1986;
 
     [Header("Info")]
     public string id; // SystemInfo.deviceUniqueIdentifier
@@ -22,81 +34,109 @@ public class Analytics : MonoBehaviour
     [Header("Optional")]
     public Transform position;
 
-    private bool connected = false;
     private bool lastPositionLoaded = false;
+    private bool allowUpdate = false;
 
     private Bite bite;
 
-    void Start()
+    private void Start()
     {
         id = SystemInfo.deviceUniqueIdentifier;
-        key = $"{user}.{id}";
+        key = $"{keyName}.{id}";
 
         bite = new Bite(host, port);
-
-        bite.Send($"Ping from {id}", r =>
+        bite.OnConnected += frame => bite.Send($"! ping {id}", frame =>
         {
-            connected = true;
-            Debug.Log("Analytics connected");
-        });
+            allowUpdate = true;
 
-        LoadDataFromServer();
-        LoadOrSetStartedEpoch();
+            LoadDataFromServer();
+            LoadOrSetStartedEpoch();
+
+            Debug.Log($"Analytics connected");
+        });
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         if (bite != null)
-            bite.Close();
+            bite.Shutdown();
     }
 
-    void Update()
+    // private void Update()
+    // {
+    //     // Wait for connection.
+    //     if (!allowUpdate)
+    //         return;
+
+    //     // Server tick
+    //     if (clock > Time.time)
+    //         return;
+    //     clock = Time.time + tick;
+
+    //     // Statistics
+    //     SaveTimePlayed(tick);
+    //     SaveLastEpoch();
+    //     SaveLastPosition();
+    // }
+
+    public void SetName(string name)
     {
-        if (!connected)
-            return;
-
-        if (clock > Time.time)
-            return;
-        clock = Time.time + tick;
-
-        SaveTimePlayed(tick);
-
-        SaveLastEpoch();
-
-        SaveLastPosition();
+        data.name = name;
+        bite.Send($"s {key}.name {data.name}");
     }
 
-    void LoadDataFromServer()
+    private void LoadDataFromServer()
     {
-        bite.Send($"g {key}.name", response =>
+        bite.Send($"g {key}.name", frame =>
         {
-            if (response.Trim().Length < 1) SetName($"{id}");
-            else data.name = response;
+            Debug.Log($"Analytics name: {string.Join(" ", frame.Data)}");
+            var message = Bitf.Str(frame.Content);
+            Debug.Log($"Analytics name: {message}");
+
+            if (message.Trim().Length < 1)
+                message = "?";
+
+            data.name = message;
         });
 
-        bite.Send($"g {key}.timePlayed", response =>
+        bite.Send($"g {key}.timePlayed", frame =>
         {
-            data.timePlayed = Bitf.Int(response, 0);
+            Debug.Log($"Analytics timePlayed: {string.Join(" ", frame.Data)}");
+            data.timePlayed = Bitf.Int(frame.Text);
+            Debug.Log($"Analytics timePlayed: {data.timePlayed}");
         });
 
-        bite.Send($"j {key}.lastPosition", response =>
+        bite.Send($"j {key}.lastPosition", frame =>
         {
-            var json = JsonUtility.FromJson<Pos>(response);
+            Debug.Log($"Analytics lastPosition: {string.Join(" ", frame.Data)}");
+            var message = frame.Text;
+            Debug.Log($"Analytics lastPosition: {message}");
 
-            data.lastPosition = new Vector3(
-                Bitf.Float($"{json.x}", 0),
-                Bitf.Float($"{json.y}", 0),
-                Bitf.Float($"{json.z}", 0));
+            try
+            {
+                var json = JsonUtility.FromJson<Pos>(message);
+                data.lastPosition = new Vector3(
+                    Bitf.Float($"{json.x}"),
+                    Bitf.Float($"{json.y}"),
+                    Bitf.Float($"{json.z}"));
+            }
+            catch (ArgumentException e)
+            {
+                Debug.Log($"Not a valid json: {e.Message}");
+            }
 
             lastPositionLoaded = true;
         });
     }
 
-    void LoadOrSetStartedEpoch()
+    private void LoadOrSetStartedEpoch()
     {
-        bite.Send($"g {key}.startedEpoch", response =>
+        bite.Send($"g {key}.startedEpoch", frame =>
         {
-            data.startedEpoch = Bitf.Long(response, 0);
+            var str = frame.Text;
+            Debug.Log($"Started Epoch: {str}");
+            data.startedEpoch = Bitf.Long(str);
+            Debug.Log($"Started Epoch: {data.startedEpoch}");
 
             if (data.startedEpoch <= 0)
             {
@@ -106,22 +146,22 @@ public class Analytics : MonoBehaviour
         });
     }
 
-    void SaveTimePlayed(int time)
+    private void SaveTimePlayed(int time)
     {
-        if (data.timePlayed < 0) // Wait to be loaded for the first time.
+        if (data.timePlayed <= 0) // Wait to be loaded for the first time.
             return;
 
         data.timePlayed += time;
         bite.Send($"s {key}.timePlayed {data.timePlayed}");
     }
 
-    void SaveLastEpoch()
+    private void SaveLastEpoch()
     {
         data.lastEpoch = DateTimeOffset.Now.ToUnixTimeSeconds();
         bite.Send($"s {key}.lastEpoch {data.lastEpoch}");
     }
 
-    void SaveLastPosition()
+    private void SaveLastPosition()
     {
         if (!position || !lastPositionLoaded)
             return;
@@ -137,27 +177,4 @@ public class Analytics : MonoBehaviour
         var z = $"s {key}.lastPosition.z {data.lastPosition.z}";
         bite.Send($"{x}{y}{z}");
     }
-
-    public void SetName(string name)
-    {
-        data.name = name;
-        bite.Send($"s {key}.name {data.name}");
-    }
-}
-
-[System.Serializable]
-public class AnalyticsData
-{
-    public string name;
-    public int timePlayed = -1;
-    public Vector3 lastPosition;
-    public long lastEpoch = -1;
-    public long startedEpoch = -1;
-}
-
-internal class Pos
-{
-    public float x;
-    public float y;
-    public float z;
 }

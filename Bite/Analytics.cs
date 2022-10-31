@@ -20,7 +20,7 @@ public class Analytics : MonoBehaviour
 
     [Header("Server")]
     public string host = "167.99.58.31";
-    public int port = 1986;
+    public int port = 1984;
 
     [Header("Info")]
     public string id; // SystemInfo.deviceUniqueIdentifier

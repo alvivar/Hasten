@@ -4,7 +4,7 @@ using System.Text;
 
 public class BiteTest : MonoBehaviour
 {
-    public string command = "s test";
+    public string command = "s test ";
     public string subscription = "#g test";
 
     [Header("Network")]

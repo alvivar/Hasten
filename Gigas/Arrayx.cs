@@ -43,6 +43,18 @@ public class Arrayx<T>
         Elements[Length++] = element;
     }
 
+    public Arrayx<T> Append(T[] array)
+    {
+        var len = Length + array.Length;
+        if (len > Length)
+            Array.Resize(ref Elements, len);
+
+        for (int i = 0; i < array.Length; i++)
+            Elements[Length++] = array[i];
+
+        return this;
+    }
+
     public void Remove(T element)
     {
         var index = -1;
@@ -77,6 +89,11 @@ public class Arrayx<T>
         Length--;
     }
 
+    public bool Empty()
+    {
+        return Length == 0;
+    }
+
     public bool Contains(T element)
     {
         for (int i = 0; i < Length; i++)
@@ -101,18 +118,6 @@ public class Arrayx<T>
         }
 
         return index;
-    }
-
-    public Arrayx<T> Append(T[] array)
-    {
-        var len = Length + array.Length;
-        if (len > Length)
-            Array.Resize(ref Elements, len);
-
-        for (int i = 0; i < array.Length; i++)
-            Elements[Length++] = array[i];
-
-        return this;
     }
 
     public void ForEach(Action<T> callback)
@@ -163,6 +168,39 @@ public class Arrayx<T>
         return result;
     }
 
+    public T First()
+    {
+        return Elements[0];
+    }
+
+    // This fails when Length is 0, should this be an exception? Or we just let
+    // it roll? Or maybe there is a nice trick to return the nullable from T?
+    public T Last()
+    {
+        return Elements[Length - 1];
+    }
+
+    public T PopFirst()
+    {
+        var element = Elements[0];
+        RemoveAt(0);
+
+        return element;
+    }
+
+    public T PopLast()
+    {
+        var element = Elements[Length - 1];
+        RemoveAt(Length - 1);
+
+        return element;
+    }
+
+    public void Clear()
+    {
+        Length = 0;
+    }
+
     public T[] ToArray()
     {
         var array = new T[Length];
@@ -173,18 +211,5 @@ public class Arrayx<T>
             Length);
 
         return array;
-    }
-
-    // This fails when Length is 0. Default could be a solution, but returning
-    // default could be a problem with a list of ints.
-    // https://stackoverflow.com/questions/302096/how-can-i-return-null-from-a-generic-method-in-c
-    public T Last()
-    {
-        return Elements[Length - 1];
-    }
-
-    public void Clear()
-    {
-        Length = 0;
     }
 }

@@ -22,7 +22,7 @@ public class TimelineLinear : MonoBehaviour
         {
             Vector3 dir = Vector3.zero;
 
-            linearMove = this.tt().Pause().Loop((ttHandler t) =>
+            linearMove = this.tt().Pause().Loop(t =>
                 {
                     // Go slow
                     dir = (timeline.positions[index] - transform.position).normalized;

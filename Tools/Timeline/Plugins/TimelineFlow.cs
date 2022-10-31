@@ -35,7 +35,7 @@ public class TimelineFlow : MonoBehaviour
         index = index < 0 ? timeline.positions.Count - 1 : index;
         this.index = index;
 
-        return this.tt("@flowTo").Reset().Add((ttHandler t) =>
+        return this.tt("@flowTo").Reset().Add(t =>
         {
             // @todo
             // This need to be fixed with some tween engine, so this component can work again

@@ -46,7 +46,7 @@ public static class Femto
 
             // Look for '!commands' on each file
             string line = "";
-            using(StreamReader fileWithGigas = new StreamReader(file))
+            using (StreamReader fileWithGigas = new StreamReader(file))
             {
                 var className = "";
                 var gigasFound = false;
@@ -118,7 +118,7 @@ public static class Femto
         }
 
         // Write out our file
-        using(var writer = new StreamWriter(filePath))
+        using (var writer = new StreamWriter(filePath))
         {
             writer.WriteLine("// This file is auto-generated. Modifications won't be saved, be cool.");
             writer.WriteLine();

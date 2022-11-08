@@ -1,4 +1,4 @@
-﻿// Arrayx is the simples array list.
+﻿// Arrayx is the simplest array list.
 
 // The idea is to use 'Length' as index when 'Elements' change, so we can resize
 // the array as much as we like, and also be able to iterate on 'Length' for the
@@ -55,6 +55,50 @@ public class Arrayx<T>
         return this;
     }
 
+    public bool IsEmpty()
+    {
+        return Length == 0;
+    }
+
+    public T First()
+    {
+        return Elements[0];
+    }
+
+    // This fails when Length is 0. Should this be an exception? Or we just let
+    // it roll? Or maybe there is a nice trick to return the nullable from T
+    // without overhead? Or it's your responsibility to check Length before?
+    public T Last()
+    {
+        return Elements[Length - 1];
+    }
+
+    public bool Contains(T element)
+    {
+        for (int i = 0; i < Length; i++)
+        {
+            if (Elements[i].Equals(element))
+                return true;
+        }
+
+        return false;
+    }
+
+    public int IndexOf(T element)
+    {
+        var index = -1;
+        for (int i = 0; i < Length; i++)
+        {
+            if (Elements[i].Equals(element))
+            {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
+    }
+
     public void Remove(T element)
     {
         var index = -1;
@@ -89,35 +133,17 @@ public class Arrayx<T>
         Length--;
     }
 
-    public bool Empty()
+    public T Pop(int index)
     {
-        return Length == 0;
+        var element = Elements[index];
+        RemoveAt(index);
+
+        return element;
     }
 
-    public bool Contains(T element)
+    public void Clear()
     {
-        for (int i = 0; i < Length; i++)
-        {
-            if (Elements[i].Equals(element))
-                return true;
-        }
-
-        return false;
-    }
-
-    public int IndexOf(T element)
-    {
-        var index = -1;
-        for (int i = 0; i < Length; i++)
-        {
-            if (Elements[i].Equals(element))
-            {
-                index = i;
-                break;
-            }
-        }
-
-        return index;
+        Length = 0;
     }
 
     public void ForEach(Action<T> callback)
@@ -166,40 +192,6 @@ public class Arrayx<T>
         }
 
         return result;
-    }
-
-    public T First()
-    {
-        return Elements[0];
-    }
-
-    // This fails when Length is 0, should this be an exception? Or we just let
-    // it roll? Or maybe there is a nice trick to return the nullable from T
-    // without too much overhead?
-    public T Last()
-    {
-        return Elements[Length - 1];
-    }
-
-    public T PopFirst()
-    {
-        var element = Elements[0];
-        RemoveAt(0);
-
-        return element;
-    }
-
-    public T PopLast()
-    {
-        var element = Elements[Length - 1];
-        RemoveAt(Length - 1);
-
-        return element;
-    }
-
-    public void Clear()
-    {
-        Length = 0;
     }
 
     public T[] ToArray()

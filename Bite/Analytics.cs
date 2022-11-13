@@ -35,7 +35,6 @@ public class Analytics : MonoBehaviour
     public Transform position;
 
     private bool lastPositionLoaded = false;
-    private bool allowUpdate = false;
 
     private Bite bite;
 
@@ -47,8 +46,6 @@ public class Analytics : MonoBehaviour
         bite = new Bite(host, port);
         bite.OnConnected += frame => bite.Send($"! ping {id}", frame =>
         {
-            allowUpdate = true;
-
             LoadDataFromServer();
             LoadOrSetStartedEpoch();
 

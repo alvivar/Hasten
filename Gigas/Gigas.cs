@@ -7,7 +7,7 @@ public static class Gigas
     // Returns the 'components' that belongs to the 'entities' intersected.
     // Let's assume that the first array on 'entities' is the one related
     // position by position to the 'components' in the result.
-    public static Arrayx<T> Get<T>(Arrayx<int>[] entities, Arrayx<T> components, Arrayx<T> result)
+    public static Arrayx<T> Get<T>(Arrayx<int>[] entities, Arrayx<T> components)
     {
         // Just one array means just one source, no interception!
         if (entities.Length <= 1)
@@ -18,8 +18,7 @@ public static class Gigas
         for (int i = 0; i < entities.Length; i++)
             maxSize += entities[i].Length;
 
-        result.Grow(maxSize);
-        result.Clear();
+        var result = Arrayx<T>.New(maxSize);
 
         // The ids should repeat this much to detect being on each array
         var validCount = entities.Length;

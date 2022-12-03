@@ -45,9 +45,7 @@ public class Arrayx<T>
 
     public Arrayx<T> Append(T[] array)
     {
-        var len = Length + array.Length;
-        if (len > Length)
-            Array.Resize(ref Elements, len);
+        Grow(Length + array.Length);
 
         for (int i = 0; i < array.Length; i++)
             Elements[Length++] = array[i];
@@ -155,6 +153,17 @@ public class Arrayx<T>
     public Arrayx<T> Map(Func<T, T> callback)
     {
         var result = Arrayx<T>.New(Length);
+
+        for (int i = 0; i < Length; i++)
+            result.Add(callback(Elements[i]));
+
+        return result;
+    }
+
+    // @todo Untested!
+    public Arrayx<TR> Map<TR>(Func<T, TR> callback)
+    {
+        var result = Arrayx<TR>.New(Length);
 
         for (int i = 0; i < Length; i++)
             result.Add(callback(Elements[i]));

@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -9,7 +11,6 @@ public class HierarchyTitle : MonoBehaviour
 
     private string lastName = "";
 
-#if UNITY_EDITOR
     void Update()
     {
         var left = new string(character, margin);
@@ -21,5 +22,6 @@ public class HierarchyTitle : MonoBehaviour
 
         transform.name = name;
     }
-#endif
 }
+
+#endif

@@ -6,6 +6,8 @@
 
 // Found 2017/07/25 07:11 pm
 
+#if UNITY_EDITOR
+
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -33,8 +35,6 @@ public class PolygonMesh2D : MonoBehaviour
         meshFilter = gameObject.GetComponent<MeshFilter>();
     }
 
-#if UNITY_EDITOR
-
     // (Re)builds the Mesh using the path of the PolygonCollider2D.
     public void OnColliderUpdate()
     {
@@ -54,9 +54,9 @@ public class PolygonMesh2D : MonoBehaviour
         if (!Application.isPlaying)
             OnColliderUpdate();
     }
+}
 
 #endif
-}
 
 class Triangulator
 {

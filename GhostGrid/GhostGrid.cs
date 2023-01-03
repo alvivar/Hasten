@@ -1,21 +1,18 @@
 // GhostGrid v0.1.3.8
+// 07/01/2015 3:21 am
 
-// Lightweight grid component with auto snapping & additional magic. Just add
-// 'GhostGrid.cs' to any GameObject to activate the grid for him and his
-// children.
+// Lightweight grid component with auto snapping & additional magic.
+// Just add 'GhostGrid.cs' to any GameObject to activate the grid for him and // his children.
 
 // Check out 'Tools/GhostGrid' in the menu for shortcuts!
 
-// 07/01/2015 3:21 am
-
 // @todo Fails with one element.
+
+#if UNITY_EDITOR
 
 using System.Collections.Generic;
 using UnityEngine;
-
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
 
 [ExecuteInEditMode]
 public class GhostGrid : MonoBehaviour
@@ -43,8 +40,6 @@ public class GhostGrid : MonoBehaviour
     private static List<GhostGrid> others = null;
 
     private const string NOT_FOUND = "GhostGrid :: GhostGrid not found on selected GameObject (or parents).";
-
-#if UNITY_EDITOR
 
     void Update()
     {
@@ -383,5 +378,6 @@ public class GhostGrid : MonoBehaviour
     {
         return Selection.activeTransform != null;
     }
-#endif
 }
+
+#endif

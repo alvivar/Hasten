@@ -97,6 +97,32 @@ public class Arrayx<T>
         return index;
     }
 
+    // Important: Beware when T is a numeric value like integer, because default
+    // will be 0, and that may be a valid value for you.
+    public T Find(Func<T, bool> callback)
+    {
+        for (int i = 0; i < Length; i++)
+        {
+            if (callback(Elements[i]))
+                return Elements[i];
+        }
+
+        return default;
+    }
+
+    public Arrayx<T> FindAll(Func<T, bool> callback)
+    {
+        var result = Arrayx<T>.New(Length);
+
+        for (int i = 0; i < Length; i++)
+        {
+            if (callback(Elements[i]))
+                result.Add(Elements[i]);
+        }
+
+        return result;
+    }
+
     public void Remove(T element)
     {
         var index = -1;
@@ -183,22 +209,6 @@ public class Arrayx<T>
 
         for (int i = 0; i < Length; i++)
             result = callback(result, Elements[i]);
-
-        return result;
-    }
-
-    public Arrayx<T> Filter(Func<T, bool> callback, bool first = false)
-    {
-        var result = Arrayx<T>.New(Length);
-
-        for (int i = 0; i < Length; i++)
-        {
-            if (callback(Elements[i]))
-            {
-                result.Add(Elements[i]);
-                if (first) break;
-            }
-        }
 
         return result;
     }

@@ -2,6 +2,7 @@
 
 using UnityEditor;
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -98,16 +99,28 @@ public static class Femto
             filePath = Path.Combine(directory, "EntitySet.cs");
         }
 
+        // Dates.
+        DateTime currentTime = DateTime.Now;
+        var day = currentTime.Day;
+        var dayName = currentTime.ToString("dddd");
+        var monthName = currentTime.ToString("MMMM");
+        var year = currentTime.Year;
+        var time = currentTime.ToString("h:mm tt");
+
         // Write out our file.
         using (var writer = new StreamWriter(filePath))
         {
-            writer.WriteLine("// This file is auto-generated. Modifications won't be saved, be cool.");
             writer.WriteLine();
-            writer.WriteLine("// EntitySet is a static database of GameObjects (Entities) and MonoBehaviour");
-            writer.WriteLine("// classes (Components). Check out 'Femto.cs' for more information about the");
-            writer.WriteLine("// code generated.");
+            writer.WriteLine($"// {dayName}, {monthName} {day}, {year}");
+            writer.WriteLine($"// {time}");
             writer.WriteLine();
-            writer.WriteLine("// Refresh with the menu item 'Gigas/Generate EntitySet.cs'");
+            writer.WriteLine("// This file is auto-generated. Modifications can be overwritten.");
+            writer.WriteLine();
+            writer.WriteLine("// EntitySet is a static database of GameObjects (Entities) and MonoBehaviour classes (Components).");
+            writer.WriteLine("// Check out 'Femto.cs' for more information about code generation.");
+            writer.WriteLine();
+            writer.WriteLine("// Update with the menu item 'Gigas/Generate EntitySet.cs'");
+            writer.WriteLine();
             writer.WriteLine();
             writer.WriteLine("using UnityEngine;");
             writer.WriteLine("using System.Collections.Generic;");
@@ -130,8 +143,8 @@ public static class Femto
 
                 writer.WriteLine($"        // {entityClass}");
                 writer.WriteLine();
-                writer.WriteLine($"        public static Arrayx<{entityClass}> {entityName} = Arrayx<{entityClass}>.New();");
-                writer.WriteLine($"        public static Arrayx<int> {entityId} = Arrayx<int>.New();");
+                writer.WriteLine($"        public static Arrayx<{entityClass}> {entityName} = new Arrayx<{entityClass}>();");
+                writer.WriteLine($"        public static Arrayx<int> {entityId} = new Arrayx<int>();");
 
                 writer.WriteLine();
                 writer.WriteLine($"        public static void Add{entityClass}({entityClass} component)");
@@ -184,8 +197,8 @@ public static class Femto
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
-                writer.WriteLine($"        private static Arrayx<Arrayx<int>> {entityGetIds} = Arrayx<Arrayx<int>>.New();");
-                writer.WriteLine($"        private static Arrayx<{entityClass}> {entityGetResult} = Arrayx<{entityClass}>.New();");
+                writer.WriteLine($"        private static Arrayx<Arrayx<int>> {entityGetIds} = new Arrayx<Arrayx<int>>();");
+                writer.WriteLine($"        private static Arrayx<{entityClass}> {entityGetResult} = new Arrayx<{entityClass}>();");
                 writer.WriteLine($"        public static Arrayx<{entityClass}> Get{entityClass}(params Arrayx<int>[] ids)");
                 writer.WriteLine($"        {{");
                 writer.WriteLine($"            // {entityId} needs to be the first in the array parameter,");

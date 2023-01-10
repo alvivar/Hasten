@@ -89,7 +89,7 @@ public static class Femto
         string directory = "";
         if (string.IsNullOrEmpty(filePath))
         {
-            directory = EditorUtility.OpenFolderPanel("Choose the location for EntitySet.cs", Application.dataPath, "");
+            directory = EditorUtility.OpenFolderPanel("Choose the EntitySet.cs location", Application.dataPath, "");
 
             // Canceled choose? Do nothing.
             if (string.IsNullOrEmpty(directory))
@@ -109,12 +109,11 @@ public static class Femto
             writer.WriteLine();
             writer.WriteLine("// Refresh with the menu item 'Gigas/Generate EntitySet.cs'");
             writer.WriteLine();
-            writer.WriteLine("using System;");
-            writer.WriteLine("using System.Collections.Generic;");
             writer.WriteLine("using UnityEngine;");
+            writer.WriteLine("using System.Collections.Generic;");
             writer.WriteLine();
-            writer.WriteLine("//  namespace Gigas");
-            writer.WriteLine("//  {");
+            writer.WriteLine("// namespace ?");
+            writer.WriteLine("// {");
 
             writer.WriteLine("    public static class EntitySet");
             writer.WriteLine("    {");
@@ -126,25 +125,19 @@ public static class Femto
                 var entityName = $"{entityClass}s";
                 var entityId = $"{entityClass}Ids";
                 var entityIdCache = $"{entityClass}IdCache";
-                var entityGetCache = $"{entityClass}GetCache";
-                var entityValidGetCache = $"{entityClass}ValidGetCache";
-                var entityInvalidGetCache = $"{entityClass}InvalidGetCache";
+                var entityGetIds = $"{entityClass}GetIds";
+                var entityGetResult = $"{entityClass}GetResult";
 
                 writer.WriteLine($"        // {entityClass}");
                 writer.WriteLine();
                 writer.WriteLine($"        public static Arrayx<{entityClass}> {entityName} = Arrayx<{entityClass}>.New();");
-                writer.WriteLine();
-                writer.WriteLine($"        private static Arrayx<int> {entityId} = Arrayx<int>.New();");
-                writer.WriteLine($"        private static long {entityValidGetCache} = 0;");
-                writer.WriteLine($"        private static long {entityInvalidGetCache} = 0;");
+                writer.WriteLine($"        public static Arrayx<int> {entityId} = Arrayx<int>.New();");
 
                 writer.WriteLine();
                 writer.WriteLine($"        public static void Add{entityClass}({entityClass} component)");
                 writer.WriteLine($"        {{");
                 writer.WriteLine($"            {entityId}.Add(component.gameObject.GetInstanceID());");
                 writer.WriteLine($"            {entityName}.Add(component);");
-                writer.WriteLine();
-                writer.WriteLine($"            {entityInvalidGetCache} += 1;");
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
@@ -156,9 +149,8 @@ public static class Femto
                 writer.WriteLine($"            {entityId}.RemoveAt(index);");
                 writer.WriteLine($"            {entityName}.RemoveAt(index);");
                 writer.WriteLine();
-                writer.WriteLine($"            // Removing the element changes the cache.");
+                writer.WriteLine($"            // Removing the element changes the cache order.");
                 writer.WriteLine($"            {entityIdCache}.Clear();");
-                writer.WriteLine($"            {entityInvalidGetCache} += 1;");
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
@@ -175,10 +167,8 @@ public static class Femto
 
                 writer.WriteLine();
                 writer.WriteLine($"        private static Dictionary<int, int> {entityIdCache} = new Dictionary<int, int>();");
-                writer.WriteLine($"        public static {entityClass} Get{entityClass}(int instanceID)");
+                writer.WriteLine($"        public static {entityClass} Get{entityClass}(int id)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            var id = instanceID;");
-                writer.WriteLine();
                 writer.WriteLine($"            int cacheId;");
                 writer.WriteLine($"            if ({entityIdCache}.TryGetValue(id, out cacheId))");
                 writer.WriteLine($"                return {entityName}.Elements[cacheId];");
@@ -194,66 +184,24 @@ public static class Femto
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
-                writer.WriteLine($"        private static Dictionary<string, Arrayx<{entityClass}>> {entityGetCache} = new Dictionary<string, Arrayx<{entityClass}>>();");
-                writer.WriteLine($"        public static Arrayx<{entityClass}> Get{entityClass}(params Type[] types)");
+                writer.WriteLine($"        private static Arrayx<Arrayx<int>> {entityGetIds} = Arrayx<Arrayx<int>>.New();");
+                writer.WriteLine($"        private static Arrayx<{entityClass}> {entityGetResult} = Arrayx<{entityClass}>.New();");
+                writer.WriteLine($"        public static Arrayx<{entityClass}> Get{entityClass}(params Arrayx<int>[] ids)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            var key = \"\";");
-                writer.WriteLine($"            var validCache = true;");
-                writer.WriteLine($"            for (int i = 0; i < types.Length; i++)");
-                writer.WriteLine($"            {{");
-                writer.WriteLine($"                key += types[i].Name;");
-                writer.WriteLine();
-                writer.WriteLine($"                var valid = GetValidCache(types[i]);");
-                writer.WriteLine($"                var invalid = GetInvalidCache(types[i]);");
-                writer.WriteLine();
-                writer.WriteLine($"                if (invalid > valid)");
-                writer.WriteLine($"                {{");
-                writer.WriteLine($"                    validCache = false;");
-                writer.WriteLine();
-                writer.WriteLine($"                    if (invalid > {entityValidGetCache})");
-                writer.WriteLine($"                        {entityValidGetCache} = invalid;");
-                writer.WriteLine();
-                writer.WriteLine($"                    if (invalid > {entityInvalidGetCache})");
-                writer.WriteLine($"                        {entityInvalidGetCache} = invalid;");
-                writer.WriteLine($"                }}");
-                writer.WriteLine($"            }}");
-                writer.WriteLine();
-                writer.WriteLine($"            Arrayx<{entityClass}> cache;");
-                writer.WriteLine($"            if (validCache && {entityGetCache}.TryGetValue(key, out cache))");
-                writer.WriteLine($"                return cache;");
-                writer.WriteLine();
                 writer.WriteLine($"            // {entityId} needs to be the first in the array parameter,");
                 writer.WriteLine($"            // that's how Gigas.Get relates the ids to the components.");
-                writer.WriteLine($"            Arrayx<int>[] {entityClass}PlusTypes = new Arrayx<int>[types.Length + 1];");
-                writer.WriteLine($"            {entityClass}PlusTypes[0] = {entityId};");
                 writer.WriteLine();
-                writer.WriteLine($"            for (int i = 0; i < types.Length; i++)");
-                writer.WriteLine($"                {entityClass}PlusTypes[i + 1] = GetIds(types[i]);");
+                writer.WriteLine($"            {entityGetIds}.Clear();");
+                writer.WriteLine($"            {entityGetIds}.Add({entityId});");
+                writer.WriteLine($"            for (int i = 0; i < ids.Length; i++)");
+                writer.WriteLine($"                {entityGetIds}.Add(ids[i]);");
                 writer.WriteLine();
-                writer.WriteLine($"            {entityGetCache}[key] = Gigas.Get<{entityClass}>({entityClass}PlusTypes, EntitySet.{entityName});");
-                writer.WriteLine();
-                writer.WriteLine($"            return {entityGetCache}[key];");
+                writer.WriteLine($"            return Gigas.Get<{entityClass}>({entityGetIds}, EntitySet.{entityName}, {entityGetResult});");
                 writer.WriteLine($"        }}");
-
-                // Previous implementation ^ without cache.
-                // writer.WriteLine();
-                // writer.WriteLine($"        public static Arrayx<{entityClass}> Get{entityClass}(params Arrayx<int>[] ids)");
-                // writer.WriteLine($"        {{");
-                // writer.WriteLine($"            // {entityId} needs to be the first in the array parameter,");
-                // writer.WriteLine($"            // that's how Gigas.Get relates the ids to the components.");
-                // writer.WriteLine();
-                // writer.WriteLine($"            Arrayx<int>[] {entityClass}PlusIds = new Arrayx<int>[ids.Length + 1];");
-                // writer.WriteLine($"            {entityClass}PlusIds[0] = {entityId};");
-                // writer.WriteLine($"            Array.Copy(ids, 0, {entityClass}PlusIds, 1, ids.Length);");
-                // writer.WriteLine();
-                // writer.WriteLine($"            return Gigas.Get<{entityClass}>({entityClass}PlusIds, EntitySet.{entityName});");
-                // writer.WriteLine($"        }}");
 
                 if (i < entityClasses.Count - 1)
                     writer.WriteLine();
             }
-
-            writer.WriteLine();
 
             // A function that clears all entities.
             writer.WriteLine();
@@ -265,85 +213,11 @@ public static class Femto
                 var entityName = $"{entityClass}s";
                 var entityId = $"{entityClass}Ids";
 
-                writer.WriteLine($"            {entityId}.Length = 0;");
                 writer.WriteLine($"            {entityName}.Length = 0;");
+                writer.WriteLine($"            {entityId}.Length = 0;");
 
                 if (i < entityClasses.Count - 1)
                     writer.WriteLine();
-            }
-            writer.WriteLine($"        }}");
-
-            // A private function that gets the ids by class type.
-            writer.WriteLine();
-            writer.WriteLine($"        private static Arrayx<int> GetIds(Type type)");
-            writer.WriteLine($"        {{");
-            for (int i = 0; i < entityClasses.Count; i++)
-            {
-                var entityClass = entityClasses[i];
-                var entityId = $"{entityClass}Ids";
-
-                writer.WriteLine($"            if (type == typeof({entityClass}))");
-                writer.WriteLine($"                return {entityId};");
-
-                if (i < entityClasses.Count - 1)
-                {
-                    writer.WriteLine();
-                }
-                else
-                {
-                    writer.WriteLine();
-                    writer.WriteLine($"            return null;");
-                }
-            }
-            writer.WriteLine($"        }}");
-
-            // A private function that gets the valid cache count by class type.
-            writer.WriteLine();
-            writer.WriteLine($"        private static long GetValidCache(Type type)");
-            writer.WriteLine($"        {{");
-            for (int i = 0; i < entityClasses.Count; i++)
-            {
-                var entityClass = entityClasses[i];
-                var entityId = $"{entityClass}Ids";
-                var entityValidGetCache = $"{entityClass}ValidGetCache";
-
-                writer.WriteLine($"            if (type == typeof({entityClass}))");
-                writer.WriteLine($"                return {entityValidGetCache};");
-
-                if (i < entityClasses.Count - 1)
-                {
-                    writer.WriteLine();
-                }
-                else
-                {
-                    writer.WriteLine();
-                    writer.WriteLine($"            return -1;");
-                }
-            }
-            writer.WriteLine($"        }}");
-
-            // A private function that gets the invalid cache count by class type.
-            writer.WriteLine();
-            writer.WriteLine($"        private static long GetInvalidCache(Type type)");
-            writer.WriteLine($"        {{");
-            for (int i = 0; i < entityClasses.Count; i++)
-            {
-                var entityClass = entityClasses[i];
-                var entityId = $"{entityClass}Ids";
-                var entityInvalidGetCache = $"{entityClass}InvalidGetCache";
-
-                writer.WriteLine($"            if (type == typeof({entityClass}))");
-                writer.WriteLine($"                return {entityInvalidGetCache};");
-
-                if (i < entityClasses.Count - 1)
-                {
-                    writer.WriteLine();
-                }
-                else
-                {
-                    writer.WriteLine();
-                    writer.WriteLine($"            return -1;");
-                }
             }
             writer.WriteLine($"        }}");
 
@@ -351,7 +225,7 @@ public static class Femto
             writer.WriteLine("    }");
 
             // End of namespace EntitySet.
-            writer.WriteLine("//  }");
+            writer.WriteLine("// }");
         }
 
         // Refresh.

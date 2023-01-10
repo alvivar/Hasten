@@ -6,41 +6,37 @@
 
 #if UNITY_EDITOR
 
+using UnityEngine;
+using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using UnityEditor;
-using UnityEngine;
 
 public class ChildrenTools
 {
     // Select
 
-    [MenuItem("GameObject/Children Tools/Select/All Children", false, 10)]
+    [MenuItem("GameObject/Children Tools/Select/All Children", false)]
     static void SelectAllChildren()
     {
         var allChildren = new List<Transform>();
         foreach (var t in Selection.transforms)
-        {
             allChildren.AddRange(t.GetComponentsInChildren<Transform>());
-        }
 
         Selection.objects = allChildren.Select(x => x.gameObject).ToArray();
     }
 
-    [MenuItem("GameObject/Children Tools/Select/All Parents", false, 10)]
+    [MenuItem("GameObject/Children Tools/Select/All Parents", false)]
     static void SelectAllParents()
     {
         var allChildren = new List<Transform>();
         foreach (var t in Selection.transforms)
-        {
             allChildren.AddRange(t.GetComponentsInParent<Transform>());
-        }
 
         Selection.objects = allChildren.Select(x => x.gameObject).ToArray();
     }
 
-    [MenuItem("GameObject/Children Tools/Select/All With Similar Name And Parent Structure", false, 10)]
+    [MenuItem("GameObject/Children Tools/Select/All With Similar Name And Parent Structure", false)]
     static void SelectSimilarChildren()
     {
         Transform selected = Selection.activeTransform;
@@ -69,7 +65,7 @@ public class ChildrenTools
 
     // Sort
 
-    [MenuItem("GameObject/Children Tools/Sort/Children By Name", false, 10)]
+    [MenuItem("GameObject/Children Tools/Sort/Children By Name", false)]
     static void SortByName()
     {
         var selected = Selection.activeTransform;
@@ -81,10 +77,11 @@ public class ChildrenTools
         int i = 0;
         foreach (var t in firstChildren)
             t.SetSiblingIndex(i++);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    [MenuItem("GameObject/Children Tools/Sort/Children By X", false, 10)]
+    [MenuItem("GameObject/Children Tools/Sort/Children By X", false)]
     static void SortByX()
     {
         var selected = Selection.activeTransform;
@@ -96,10 +93,11 @@ public class ChildrenTools
         int i = 0;
         foreach (var t in firstChildren)
             t.SetSiblingIndex(i++);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    [MenuItem("GameObject/Children Tools/Sort/Children By Y", false, 10)]
+    [MenuItem("GameObject/Children Tools/Sort/Children By Y", false)]
     static void SortByY()
     {
         var selected = Selection.activeTransform;
@@ -111,10 +109,11 @@ public class ChildrenTools
         int i = 0;
         foreach (var t in firstChildren)
             t.SetSiblingIndex(i++);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    [MenuItem("GameObject/Children Tools/Sort/Children By Z", false, 10)]
+    [MenuItem("GameObject/Children Tools/Sort/Children By Z", false)]
     static void SortByZ()
     {
         var selected = Selection.activeTransform;
@@ -126,10 +125,11 @@ public class ChildrenTools
         int i = 0;
         foreach (var t in firstChildren)
             t.SetSiblingIndex(i++);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    [MenuItem("GameObject/Children Tools/Sort/Children By Magnitude", false, 10)]
+    [MenuItem("GameObject/Children Tools/Sort/Children By Magnitude", false)]
     static void SortBySqrMagnitude()
     {
         var selected = Selection.activeTransform;
@@ -141,12 +141,13 @@ public class ChildrenTools
         int i = 0;
         foreach (var t in firstChildren)
             t.SetSiblingIndex(i++);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
     // Reposition
 
-    [MenuItem("GameObject/Children Tools/Reposition/To Position 0", false, 10)]
+    [MenuItem("GameObject/Children Tools/Reposition/To Position 0", false)]
     static void RelocateToPos0()
     {
         var selected = Selection.activeTransform;
@@ -158,10 +159,11 @@ public class ChildrenTools
         foreach (var t in firstChildren)
             t.localPosition += displacement;
         selected.localPosition = Vector3.zero;
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    [MenuItem("GameObject/Children Tools/Reposition/To The Center Of All Children", false, 10)]
+    [MenuItem("GameObject/Children Tools/Reposition/To The Center Of All Children", false)]
     static void RelocateToCenterOfChildren()
     {
         var selected = Selection.activeTransform;
@@ -184,6 +186,21 @@ public class ChildrenTools
         foreach (var t in firstChildren)
             t.localPosition += displacement;
         selected.localPosition = averagePos;
+
+        UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
+    }
+
+    [MenuItem("GameObject/Children Tools/Reposition/Randomize Children Position Slightly", false)]
+    static void RandomizeChildrenPositionSlightly()
+    {
+        var selected = Selection.activeTransform;
+
+        var children = selected.GetComponentsInChildren<Transform>()
+            .Where(x => x.parent == selected);
+
+        foreach (var t in children)
+            t.localPosition += Random.insideUnitSphere;
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
@@ -191,7 +208,7 @@ public class ChildrenTools
 
     // ALL
 
-    [MenuItem("GameObject/Children Tools/Snap/All To 0.01", false, 10)]
+    [MenuItem("GameObject/Children Tools/Snap/All To 0.01", false)]
     static void SnapAllToDot01()
     {
         var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
@@ -202,10 +219,11 @@ public class ChildrenTools
             t.localEulerAngles = Snap(t.localEulerAngles, 0.01f);
             t.localScale = Snap(t.localScale, 0.01f);
         }
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    [MenuItem("GameObject/Children Tools/Snap/All To 0.1", false, 10)]
+    [MenuItem("GameObject/Children Tools/Snap/All To 0.1", false)]
     static void SnapAllToDot1()
     {
         var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
@@ -216,78 +234,85 @@ public class ChildrenTools
             t.localEulerAngles = Snap(t.localEulerAngles, 0.1f);
             t.localScale = Snap(t.localScale, 0.1f);
         }
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
     // Position
 
-    [MenuItem("GameObject/Children Tools/Snap/Pos/All To 0.01", false, 10)]
+    [MenuItem("GameObject/Children Tools/Snap/Pos/All To 0.01", false)]
     static void SnapPosToDot01()
     {
         var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
 
         foreach (var t in all)
             t.localPosition = Snap(t.localPosition, 0.01f);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    [MenuItem("GameObject/Children Tools/Snap/Pos/All To 0.1", false, 10)]
+    [MenuItem("GameObject/Children Tools/Snap/Pos/All To 0.1", false)]
     static void SnapPosToDot1()
     {
         var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
 
         foreach (var t in all)
             t.localPosition = Snap(t.localPosition, 0.1f);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
     // Rotation
 
-    [MenuItem("GameObject/Children Tools/Snap/Rotation/All To 0.01", false, 10)]
+    [MenuItem("GameObject/Children Tools/Snap/Rotation/All To 0.01", false)]
     static void SnapEulerToDot01()
     {
         var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
 
         foreach (var t in all)
             t.localEulerAngles = Snap(t.localEulerAngles, 0.01f);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    [MenuItem("GameObject/Children Tools/Snap/Rotation/All To 0.1", false, 10)]
+    [MenuItem("GameObject/Children Tools/Snap/Rotation/All To 0.1", false)]
     static void SnapEulerToDot1()
     {
         var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
 
         foreach (var t in all)
             t.localEulerAngles = Snap(t.localEulerAngles, 0.1f);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
     // Scale
 
-    [MenuItem("GameObject/Children Tools/Snap/Scale/All To 0.01", false, 10)]
+    [MenuItem("GameObject/Children Tools/Snap/Scale/All To 0.01", false)]
     static void SnapScaleToDot1()
     {
         var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
 
         foreach (var t in all)
             t.localScale = Snap(t.localScale, 0.01f);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    [MenuItem("GameObject/Children Tools/Snap/Scale/All To 0.1", false, 10)]
+    [MenuItem("GameObject/Children Tools/Snap/Scale/All To 0.1", false)]
     static void SnapScaleToDot01()
     {
         var all = Selection.activeTransform.GetComponentsInChildren<Transform>();
 
         foreach (var t in all)
             t.localScale = Snap(t.localScale, 0.1f);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
     // Rename
 
-    [MenuItem("GameObject/Children Tools/Rename/Enumerate", false, 10)]
+    [MenuItem("GameObject/Children Tools/Rename/Enumerate", false)]
     static void RenameEnumerate()
     {
         var selected = Selection.activeTransform;
@@ -305,10 +330,11 @@ public class ChildrenTools
 
             t.name = name;
         }
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    [MenuItem("GameObject/Children Tools/Rename/Enumerate By Magnitude", false, 10)]
+    [MenuItem("GameObject/Children Tools/Rename/Enumerate By Magnitude", false)]
     static void RenameEnumerateByMagnitude()
     {
         var selected = Selection.activeTransform;
@@ -326,10 +352,11 @@ public class ChildrenTools
 
             t.name = name;
         }
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    [MenuItem("GameObject/Children Tools/Rename/Enumerate And Sort By Magnitude", false, 10)]
+    [MenuItem("GameObject/Children Tools/Rename/Enumerate And Sort By Magnitude", false)]
     static void RenameEnumerateAndSortByMagnitude()
     {
         var selected = Selection.activeTransform;
@@ -354,10 +381,11 @@ public class ChildrenTools
         i = 0;
         foreach (var t in firstChildren)
             t.SetSiblingIndex(i++);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
-    [MenuItem("GameObject/Children Tools/Rename/Enumerate And Sort By X", false, 10)]
+    [MenuItem("GameObject/Children Tools/Rename/Enumerate And Sort By X", false)]
     static void RenameEnumerateAndSortByX()
     {
         var selected = Selection.activeTransform;
@@ -382,12 +410,13 @@ public class ChildrenTools
         i = 0;
         foreach (var t in firstChildren)
             t.SetSiblingIndex(i++);
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 
     // Groups
 
-    [MenuItem("GameObject/Children Tools/Group/Into New Game Object", false, 10)]
+    [MenuItem("GameObject/Children Tools/Group/Into New Game Object", false)]
     static void GroupIntoNewGameObject()
     {
         if (Selection.transforms.Length < 1) return;
@@ -404,6 +433,7 @@ public class ChildrenTools
             t.SetParent(parent.transform);
 
         Selection.objects = new GameObject[] { parent };
+
         UnityEditor.SceneManagement.EditorSceneManager.MarkAllScenesDirty();
     }
 

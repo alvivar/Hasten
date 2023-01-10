@@ -8,9 +8,9 @@
 
 #if UNITY_EDITOR
 
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(PolygonCollider2D))]
@@ -55,8 +55,6 @@ public class PolygonMesh2D : MonoBehaviour
             OnColliderUpdate();
     }
 }
-
-#endif
 
 class Triangulator
 {
@@ -181,3 +179,5 @@ class Triangulator
         return ((aCROSSbp >= 0.0f) && (bCROSScp >= 0.0f) && (cCROSSap >= 0.0f));
     }
 }
+
+#endif

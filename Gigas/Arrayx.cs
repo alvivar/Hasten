@@ -13,14 +13,11 @@ public class Arrayx<T>
     public int Size;
     public int Length;
 
-    public static Arrayx<T> New(int size = 1) // <3
+    public Arrayx(int size = 1)
     {
-        var x = new Arrayx<T>();
-        x.Size = size < 1 ? 1 : size;
-        x.Elements = new T[size];
-        x.Length = 0;
-
-        return x;
+        Size = size < 1 ? 1 : size;
+        Elements = new T[size];
+        Length = 0;
     }
 
     public void Grow(int size)
@@ -112,7 +109,7 @@ public class Arrayx<T>
 
     public Arrayx<T> FindAll(Func<T, bool> callback)
     {
-        var result = Arrayx<T>.New(Length);
+        var result = new Arrayx<T>(Length);
 
         for (int i = 0; i < Length; i++)
         {
@@ -178,7 +175,7 @@ public class Arrayx<T>
 
     public Arrayx<T> Map(Func<T, T> callback)
     {
-        var result = Arrayx<T>.New(Length);
+        var result = new Arrayx<T>(Length);
 
         for (int i = 0; i < Length; i++)
             result.Add(callback(Elements[i]));
@@ -189,7 +186,7 @@ public class Arrayx<T>
     // @todo Untested!
     public Arrayx<TR> Map<TR>(Func<T, TR> callback)
     {
-        var result = Arrayx<TR>.New(Length);
+        var result = new Arrayx<TR>(Length);
 
         for (int i = 0; i < Length; i++)
             result.Add(callback(Elements[i]));

@@ -119,7 +119,7 @@ public static class Femto
             writer.WriteLine("// EntitySet is a static database of GameObjects (Entities) and MonoBehaviour classes (Components).");
             writer.WriteLine("// Check out 'Femto.cs' for more information about code generation.");
             writer.WriteLine();
-            writer.WriteLine("// Update with the menu item 'Gigas/Generate EntitySet.cs'");
+            writer.WriteLine("// To update use the menu item 'Gigas/Generate EntitySet.cs'.");
             writer.WriteLine();
             writer.WriteLine();
             writer.WriteLine("using UnityEngine;");
@@ -145,6 +145,10 @@ public static class Femto
                 writer.WriteLine();
                 writer.WriteLine($"        public static Arrayx<{entityClass}> {entityName} = new Arrayx<{entityClass}>();");
                 writer.WriteLine($"        public static Arrayx<int> {entityId} = new Arrayx<int>();");
+                writer.WriteLine();
+                writer.WriteLine($"        private static Dictionary<int, int> {entityIdCache} = new Dictionary<int, int>();");
+                writer.WriteLine($"        private static Arrayx<Arrayx<int>> {entityGetIds} = new Arrayx<Arrayx<int>>();");
+                writer.WriteLine($"        private static Arrayx<{entityClass}> {entityGetResult} = new Arrayx<{entityClass}>();");
 
                 writer.WriteLine();
                 writer.WriteLine($"        public static void Add{entityClass}({entityClass} component)");
@@ -179,7 +183,6 @@ public static class Femto
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
-                writer.WriteLine($"        private static Dictionary<int, int> {entityIdCache} = new Dictionary<int, int>();");
                 writer.WriteLine($"        public static {entityClass} Get{entityClass}(int id)");
                 writer.WriteLine($"        {{");
                 writer.WriteLine($"            int cacheId;");
@@ -197,8 +200,6 @@ public static class Femto
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
-                writer.WriteLine($"        private static Arrayx<Arrayx<int>> {entityGetIds} = new Arrayx<Arrayx<int>>();");
-                writer.WriteLine($"        private static Arrayx<{entityClass}> {entityGetResult} = new Arrayx<{entityClass}>();");
                 writer.WriteLine($"        public static Arrayx<{entityClass}> Get{entityClass}(params Arrayx<int>[] ids)");
                 writer.WriteLine($"        {{");
                 writer.WriteLine($"            // {entityId} needs to be the first in the array parameter,");
@@ -218,6 +219,7 @@ public static class Femto
 
             // A function that clears all entities.
             writer.WriteLine();
+            writer.WriteLine();
             writer.WriteLine($"        public static void Clear()");
             writer.WriteLine($"        {{");
             for (int i = 0; i < entityClasses.Count; i++)
@@ -226,8 +228,8 @@ public static class Femto
                 var entityName = $"{entityClass}s";
                 var entityId = $"{entityClass}Ids";
 
-                writer.WriteLine($"            {entityName}.Length = 0;");
-                writer.WriteLine($"            {entityId}.Length = 0;");
+                writer.WriteLine($"            {entityName}.Clear();");
+                writer.WriteLine($"            {entityId}.Clear();");
 
                 if (i < entityClasses.Count - 1)
                     writer.WriteLine();

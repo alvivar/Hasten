@@ -44,7 +44,7 @@ namespace BiteClient
                 lock (frames)
                 {
                     var frame = frames.Dequeue();
-                    stream.Write(frame.Data, 0, frame.Data.Length);
+                    stream.Write(frame.Bytes, 0, frame.Bytes.Length);
                 }
             }
         }

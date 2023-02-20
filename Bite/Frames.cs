@@ -6,18 +6,17 @@ namespace BiteClient
 {
     public class Frame
     {
-        public int ClientId { get { return (data[0] << 8) | data[1]; } }
-        public int MessageId { get { return (data[2] << 8) | data[3]; } }
-        public int Size { get { return (data[4] << 8) | data[5]; } }
+        public int ClientId { get { return (bytes[0] << 8) | bytes[1]; } }
+        public int MessageId { get { return (bytes[2] << 8) | bytes[3]; } }
+        public int Size { get { return (bytes[4] << 8) | bytes[5]; } }
 
-        public byte[] Data { get { return data; } }
-
-        public byte[] Content
+        public byte[] Bytes { get { return bytes; } } // Full.
+        public byte[] Body // No header.
         {
             get
             {
-                var content = new byte[data.Length - 6];
-                Array.Copy(data, 6, content, 0, content.Length);
+                var content = new byte[bytes.Length - 6];
+                Array.Copy(bytes, 6, content, 0, content.Length);
                 return content;
             }
         }
@@ -26,20 +25,20 @@ namespace BiteClient
         {
             get
             {
-                var text = Content;
+                var text = Body;
                 return Encoding.UTF8.GetString(text, 0, text.Length);
             }
         }
 
-        private byte[] data = new byte[0];
+        private byte[] bytes = new byte[0];
 
         public Frame Feed(byte[] data)
         {
-            var newData = new byte[this.data.Length + data.Length];
-            Array.Copy(this.data, newData, this.data.Length);
-            Array.Copy(data, 0, newData, this.data.Length, data.Length);
+            var newData = new byte[this.bytes.Length + data.Length];
+            Array.Copy(this.bytes, newData, this.bytes.Length);
+            Array.Copy(data, 0, newData, this.bytes.Length, data.Length);
 
-            this.data = newData;
+            this.bytes = newData;
 
             return this;
         }
@@ -63,18 +62,18 @@ namespace BiteClient
             Array.Copy(header, newData, header.Length);
             Array.Copy(data, 0, newData, header.Length, data.Length);
 
-            this.data = newData;
+            this.bytes = newData;
 
             return this;
         }
 
-        /// Remove and returns the remainder data that overflows the size.
+        /// Remove and returns the remainder data that overflows the protocol size.
         public byte[] SplitRemainder()
         {
             var size = Size;
-            var remainder = new byte[data.Length - size];
-            Array.Copy(data, size, remainder, 0, remainder.Length);
-            Array.Resize(ref data, size);
+            var remainder = new byte[bytes.Length - size];
+            Array.Copy(bytes, size, remainder, 0, remainder.Length);
+            Array.Resize(ref bytes, size);
 
             return remainder;
         }
@@ -83,16 +82,6 @@ namespace BiteClient
     public class Frames
     {
         public bool HasCompleteFrame { get { return frames.Count > 0; } }
-        public bool HasPendingData
-        {
-            get
-            {
-                if (frame.Data.Length < 6)
-                    return false;
-
-                return frame.Size <= frame.Data.Length;
-            }
-        }
 
         private Queue<Frame> frames = new Queue<Frame>();
         private Frame frame = new Frame();
@@ -100,31 +89,32 @@ namespace BiteClient
         public void Feed(byte[] data)
         {
             frame.Feed(data);
-            TryCompleteFrame();
         }
 
-        public void TryCompleteFrame()
+        public bool ProcessingCompleteFrames()
         {
             // A complete frame!
-            if (frame.Size == frame.Data.Length)
+            if (frame.Size == frame.Bytes.Length)
             {
                 frames.Enqueue(frame);
                 frame = new Frame();
+
+                return false;
             }
 
-            // More than one frame in the buffer, lets split, save the frame,
-            // buffer the rest on a new frame.
-            else if (frame.Size < frame.Data.Length)
+            // More than one frame in the buffer, lets split, save the frame, buffer the rest on a new frame.
+            else if (frame.Size < frame.Bytes.Length)
             {
                 var remainder = new Frame().Feed(frame.SplitRemainder());
                 frames.Enqueue(frame);
                 frame = remainder;
+
+                return true;
             }
 
-            // Not enough data in the buffer for a complete frame, maybe after
-            // the next feed.
-            else if (frame.Size > frame.Data.Length)
-                return;
+            // Not enough data in the buffer for a complete frame, maybe after the next feed.
+            // else if (frame.Size > frame.Data.Length)
+            return false;
         }
 
         public Frame Dequeue()

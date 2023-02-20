@@ -33,7 +33,7 @@ public class BiteTest : MonoBehaviour
                 var text = frame.Text.Trim();
 
                 Debug.Log($"Client {clientId} Message {messageId}");
-                Debug.Log($"Bytes ({frame.Size}): {string.Join(" ", frame.Data)}");
+                Debug.Log($"Bytes ({frame.Size}): {string.Join(" ", frame.Bytes)}");
                 Debug.Log($"Text ({text.Length}): {text}");
 
                 SendMaxBytes();
@@ -47,7 +47,7 @@ public class BiteTest : MonoBehaviour
             var text = frame.Text.Trim();
 
             Debug.Log($"Client {clientId} Message {messageId}");
-            Debug.Log($"Bytes ({frame.Size}): {string.Join(" ", frame.Data)}");
+            Debug.Log($"Bytes ({frame.Size}): {string.Join(" ", frame.Bytes)}");
             Debug.Log($"Text ({text.Length}): {text}");
         };
     }
@@ -63,7 +63,7 @@ public class BiteTest : MonoBehaviour
             var text = frame.Text.Trim();
 
             Debug.Log($"Client {clientId} Message {messageId}");
-            Debug.Log($"Bytes ({frame.Size}): {string.Join(" ", frame.Data)}");
+            Debug.Log($"Bytes ({frame.Size}): {string.Join(" ", frame.Bytes)}");
             Debug.Log($"Text ({text.Length}): {text}");
         });
 
@@ -94,7 +94,7 @@ public class BiteTest : MonoBehaviour
             var text = frame.Text.Trim();
 
             Debug.Log($"Client {clientId} Message {messageId}");
-            Debug.Log($"Bytes ({frame.Size}): {string.Join(" ", frame.Data)}");
+            Debug.Log($"Bytes ({frame.Size}): {string.Join(" ", frame.Bytes)}");
             Debug.Log($"Text ({text.Length}): {text}");
         });
     }

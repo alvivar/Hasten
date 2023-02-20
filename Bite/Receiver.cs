@@ -54,22 +54,19 @@ namespace BiteClient
                 }
                 while (stream.DataAvailable);
 
-                // If seems that the connection was closed.
+                // The connection was closed.
                 if (bytesRead <= 0)
                     throw new SocketException((int)SocketError.NetworkUnreachable);
 
                 frames.Feed(memory.ToArray());
                 memory.SetLength(0);
 
-                while (frames.HasPendingData)
-                    frames.TryCompleteFrame();
-
+                while (frames.ProcessingCompleteFrames()) ;
                 while (frames.HasCompleteFrame)
                 {
                     var frame = frames.Dequeue();
 
-                    if (OnFrameReceived != null)
-                        OnFrameReceived(frame);
+                    OnFrameReceived?.Invoke(frame);
 
                     if (actions.Count < 1)
                         continue;

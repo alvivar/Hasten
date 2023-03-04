@@ -1,5 +1,5 @@
 using UnityEngine;
-using BiteClient;
+using BITEClient;
 using System.Text;
 
 public class BiteTest : MonoBehaviour

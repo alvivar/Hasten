@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 
-namespace BiteClient
+namespace BITEClient
 {
     public class Frame
     {
@@ -86,15 +86,20 @@ namespace BiteClient
         private Queue<Frame> frames = new Queue<Frame>();
         private Frame frame = new Frame();
 
-        public void Feed(byte[] data)
+        public Frames Feed(byte[] data)
         {
             frame.Feed(data);
+            return this;
         }
 
         public bool ProcessingCompleteFrames()
         {
+            // Not enough data in the buffer for the minimum frame.
+            if (frame.Bytes.Length < 6)
+                return false;
+
             // A complete frame!
-            if (frame.Size == frame.Bytes.Length)
+            else if (frame.Size == frame.Bytes.Length)
             {
                 frames.Enqueue(frame);
                 frame = new Frame();
@@ -107,13 +112,19 @@ namespace BiteClient
             {
                 var remainder = new Frame().Feed(frame.SplitRemainder());
                 frames.Enqueue(frame);
-                frame = remainder;
 
+                if (remainder.Bytes.Length < 1)
+                {
+                    frame = new Frame();
+                    return false;
+                }
+
+                frame = remainder;
                 return true;
             }
 
             // Not enough data in the buffer for a complete frame, maybe after the next feed.
-            // else if (frame.Size > frame.Data.Length)
+            // else if (frame.Size > frame.Bytes.Length)
             return false;
         }
 

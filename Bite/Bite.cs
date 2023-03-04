@@ -2,7 +2,7 @@ using System;
 using System.Net.Sockets;
 using System.Text;
 
-namespace BiteClient
+namespace BITEClient
 {
     public sealed class Bite
     {

@@ -4,7 +4,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace BiteClient
+namespace BITEClient
 {
     internal sealed class Receiver
     {

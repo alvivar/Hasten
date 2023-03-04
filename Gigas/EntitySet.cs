@@ -5,14 +5,3 @@
 // code generated.
 
 // Refresh with the menu item 'Tools/Gigas/Generate EntitySet.cs'
-
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-
-public static class EntitySet
-{
-    public static void Clear() { }
-
-    public static void ClearAlt() { }
-}

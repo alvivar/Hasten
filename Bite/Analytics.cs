@@ -1,6 +1,6 @@
 // using System;
 // using UnityEngine;
-// using BiteClient;
+// using BITEClient;
 
 // [System.Serializable]
 // public struct AnalyticsData

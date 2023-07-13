@@ -2,7 +2,7 @@ using System;
 using System.Net.Sockets;
 using System.Text;
 
-namespace BITEClient
+namespace BITE
 {
     public sealed class Bite
     {
@@ -43,7 +43,7 @@ namespace BITEClient
                 throw new SocketException((int)SocketError.NotConnected);
 
             messageId += 1;
-            var frame = new Frame().FromProtocol((int)clientId, messageId, data);
+            var frame = new Frame().FeedProtocol((int)clientId, messageId, data);
             sender.Send(frame);
 
             if (action != null)
@@ -55,7 +55,7 @@ namespace BITEClient
             Send(Encoding.ASCII.GetBytes(text), action);
         }
 
-        /// Naturally throws an ThreadAbortException.
+        // Naturally throws an ThreadAbortException.
         internal void Shutdown()
         {
             client.Close();

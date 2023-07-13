@@ -1,8 +1,8 @@
 using System;
-using System.Text;
 using System.Collections.Generic;
+using System.Text;
 
-namespace BITEClient
+namespace BITE
 {
     public class Frame
     {
@@ -43,7 +43,7 @@ namespace BITEClient
             return this;
         }
 
-        public Frame FromProtocol(int clientId, int messageId, byte[] data)
+        public Frame FeedProtocol(int clientId, int messageId, byte[] data)
         {
             var header = new byte[6];
 
@@ -62,12 +62,10 @@ namespace BITEClient
             Array.Copy(header, newData, header.Length);
             Array.Copy(data, 0, newData, header.Length, data.Length);
 
-            this.bytes = newData;
-
-            return this;
+            return this.Feed(newData);
         }
 
-        /// Remove and returns the remainder data that overflows the protocol size.
+        // Remove and returns the remainder data that overflows the protocol size.
         public byte[] SplitRemainder()
         {
             var size = Size;
@@ -89,6 +87,7 @@ namespace BITEClient
         public Frames Feed(byte[] data)
         {
             frame.Feed(data);
+
             return this;
         }
 
@@ -116,10 +115,12 @@ namespace BITEClient
                 if (remainder.Bytes.Length < 1)
                 {
                     frame = new Frame();
+
                     return false;
                 }
 
                 frame = remainder;
+
                 return true;
             }
 

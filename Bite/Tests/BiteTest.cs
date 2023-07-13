@@ -1,8 +1,8 @@
-using UnityEngine;
-using BITEClient;
+using BITE;
 using System.Text;
+using UnityEngine;
 
-public class BiteTest : MonoBehaviour
+public class BITETest : MonoBehaviour
 {
     public string command = "s test ";
     public string subscription = "#g test";

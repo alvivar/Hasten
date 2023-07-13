@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 
-/// Utilities to cast bytes.
+// Utilities to cast bytes.
 public static class Bitf
 {
     public static int Int(string str, int or = 0)
@@ -87,6 +87,46 @@ public static class Bitf
         }
 
         return numbers.ToArray();
+    }
+
+    public static string Vector2(Vector3 vector)
+    {
+        var sx = vector.x < 0 ? "-" : "";
+        var sy = vector.y < 0 ? "-" : "";
+
+        var nx = (int)Mathf.Abs(vector.x);
+        var ny = (int)Mathf.Abs(vector.y);
+
+        var dx = (int)Mathf.Abs((vector.x - nx) * 1000);
+        var dy = (int)Mathf.Abs((vector.y - ny) * 1000);
+
+        var tdx = $".{dx}".TrimEnd('0').TrimEnd('.');
+        var tdy = $".{dy}".TrimEnd('0').TrimEnd('.');
+
+        return $"{sx}{nx}{tdx},{sy}{ny}{tdy}";
+    }
+
+    public static Vector3 Vector3(string str)
+    {
+        var numbers = new List<float>();
+
+        foreach (var s in str.Split(' ', ','))
+        {
+            float n;
+            if (float.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out n))
+                numbers.Add(n);
+        }
+
+        if (numbers.Count < 1)
+            return new Vector3(0, 0, 0);
+
+        if (numbers.Count < 2)
+            return new Vector3(numbers[0], 0, 0);
+
+        if (numbers.Count < 3)
+            return new Vector3(numbers[0], numbers[1], 0);
+
+        return new Vector3(numbers[0], numbers[1], numbers[2]);
     }
 
     private static T[] SubArray<T>(this T[] data, int index, int length)

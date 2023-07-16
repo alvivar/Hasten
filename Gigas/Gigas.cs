@@ -1,62 +1,68 @@
-// Gigas is just a cool name.
+using System.Collections.Generic;
 
-// Get is the core, the function that queries Entities to obtain components.
-
-public static class Gigas
+// Gigas provides static methods to query entities and obtain associated components.
+public static class Gigas // v3
 {
-    // Returns the 'components' that belongs to the 'entities' intersected.
-    // Let's assume that the first array on 'entities' is the one related
-    // position by position to the 'components' in the result.
+    private static HashSet<int> visited = new HashSet<int>(); // To avoid GC.
+
+    // The method Get returns the components corresponding to the entities that exist in all entity arrays.
     public static Arrayx<T> Get<T>(Arrayx<Arrayx<int>> entities, Arrayx<T> components, Arrayx<T> result)
     {
-        // Just one array means just one source, no interception!
+        // Clear the result array to ensure no pre-existing data.
+        result.Clear();
+
+        // If there's only one or no entities source, return the components associated with it.
         if (entities.Length <= 1)
             return components;
 
-        // Result cache.
-        result.Clear();
+        // Dictionary to hold the count of each entity across all sources and their corresponding component.
+        // Key: Entity, Value: Tuple (Count of entity, Corresponding Component)
+        Dictionary<int, (int Count, T Value)> counts = DictionaryPool<int, (int, T)>.Rent(); // From a pool to avoid GC.
 
-        // The ids should repeat this much to detect being on each array.
-        var validCount = entities.Length;
-
-        // Running over all the ids arrays.
+        // Iterating over all entity arrays (entity sources).
         for (int i = 0; i < entities.Length; i++)
         {
-            // For each of element of that array.
-            for (int j = 0; j < entities.Elements[i].Length; j++)
+            // HashSet to keep track of entities already visited in the current source.
+            visited.Clear();
+
+            // Iterating over each entity in the current source.
+            for (int j = 0; j < entities[i].Length; j++)
             {
-                var current = entities.Elements[i].Elements[j];
-                var currentFoundCount = 0;
-                T matchedValue = default;
+                var current = entities[i][j];
 
-                // Let's run over all the ids arrays.
-                for (int k = 0; k < entities.Length; k++)
+                // Skip entity if it's already visited in the current source.
+                if (visited.Contains(current))
+                    continue;
+
+                // Mark the entity as visited.
+                visited.Add(current);
+
+                // If the entity is already in the dictionary, increment its count.
+                // Otherwise, add it to the dictionary with count 1 and its associated component.
+                // The component is only taken from the first source.
+                if (counts.ContainsKey(current))
                 {
-                    // To compare the elements repetition.
-                    for (int l = 0; l < entities.Elements[k].Length; l++)
-                    {
-                        if (current == entities.Elements[k].Elements[l])
-                        {
-                            currentFoundCount++;
-
-                            // Using 'i' because the match should happen only
-                            // once and the ids related to the source are on 0.
-                            if (i == 0 && k == 0)
-                                matchedValue = components.Elements[l];
-
-                            // We found what we are looking for.
-                            break;
-                        }
-                    }
+                    counts[current] = (counts[current].Count + 1, counts[current].Value);
                 }
-
-                // Is the element repeated in all the arrays? Let's collect the
-                // value if exists.
-                if (currentFoundCount >= validCount && matchedValue != null)
-                    result.Add(matchedValue);
+                else
+                {
+                    counts[current] = (1, i == 0 ? components[j] : default);
+                }
             }
         }
 
+        // Iterating over the dictionary to add components to the result.
+        // Components are only added if their corresponding entity exists in all sources and is not null.
+        foreach (var pair in counts)
+        {
+            if (pair.Value.Count == entities.Length && pair.Value.Value != null)
+                result.Add(pair.Value.Value);
+        }
+
+        // After using the dictionary, return it back to the pool.
+        DictionaryPool<int, (int, T)>.Return(counts);
+
+        // Return the result array containing components of intersecting entities.
         return result;
     }
 }

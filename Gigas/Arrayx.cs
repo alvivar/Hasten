@@ -1,78 +1,69 @@
-﻿// Arrayx is the simplest array list.
+﻿// Arrayx uses 'Length' as a dual-purpose property: it both tracks the number of
+// elements stored in 'Elements' and serves as the index for new entries.
 
-// The idea is to use 'Length' as index when 'Elements' change, so we can resize
-// the array as much as we like, and also be able to iterate on 'Length' for the
-// real subset.
+// This design enables dynamic resizing of 'Elements' as required, and ensures
+// iteration, mapping, and reduction operations work strictly on the active data
+// subset, eliminating any interactions with unused array slots. This results in
+// efficient memory usage and data integrity.
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
-public class Arrayx<T>
+public class Arrayx<T> : IEnumerable<T>
 {
-    public T[] Elements;
+    public T this[int index]
+    {
+        get => elements[index];
+        set => elements[index] = value;
+    }
 
-    public int Size;
-    public int Length;
+    public int Length { get; private set; }
+
+    private T[] elements;
 
     public Arrayx(int size = 1)
     {
-        Size = size < 1 ? 1 : size;
-        Elements = new T[size];
+        elements = new T[size < 1 ? 1 : size];
         Length = 0;
     }
 
-    public void Grow(int size)
+    public void Grow(int minSize)
     {
-        if (Size < size)
-        {
-            Size = size;
-            Array.Resize(ref Elements, Size);
-        }
+        if (elements.Length >= minSize)
+            return;
+
+        int newSize = Math.Max(elements.Length == 0 ? 1 : elements.Length * 2, minSize);
+        Array.Resize(ref elements, newSize);
     }
 
     public void Add(T element)
     {
-        if (Length >= Size)
-        {
-            Size *= 2;
-            Array.Resize(ref Elements, Size);
-        }
-
-        Elements[Length++] = element;
+        Grow(Length + 1);
+        elements[Length++] = element;
     }
 
-    public Arrayx<T> Append(T[] array)
+    public void Append(T[] array)
     {
         Grow(Length + array.Length);
-
-        for (int i = 0; i < array.Length; i++)
-            Elements[Length++] = array[i];
-
-        return this;
+        Array.Copy(array, 0, elements, Length, array.Length);
+        Length += array.Length;
     }
 
-    public bool IsEmpty()
-    {
-        return Length == 0;
-    }
+    public bool IsEmpty() => Length == 0;
 
-    public T First()
-    {
-        return Elements[0];
-    }
+    public T First() => elements[0];
 
     // This fails when Length is 0. Should this be an exception? Or we just let
     // it roll? Or maybe there is a nice trick to return the nullable from T
-    // without overhead? Or it's your responsibility to check Length before?
-    public T Last()
-    {
-        return Elements[Length - 1];
-    }
+    // without overhead? Or it's the programmer responsibility to check?
+    public T Last() => elements[Length - 1];
 
     public bool Contains(T element)
     {
         for (int i = 0; i < Length; i++)
         {
-            if (Elements[i].Equals(element))
+            if (elements[i].Equals(element))
                 return true;
         }
 
@@ -81,17 +72,13 @@ public class Arrayx<T>
 
     public int IndexOf(T element)
     {
-        var index = -1;
         for (int i = 0; i < Length; i++)
         {
-            if (Elements[i].Equals(element))
-            {
-                index = i;
-                break;
-            }
+            if (elements[i].Equals(element))
+                return i;
         }
 
-        return index;
+        return -1;
     }
 
     // Important: Beware when T is a numeric value like integer, because default
@@ -100,46 +87,17 @@ public class Arrayx<T>
     {
         for (int i = 0; i < Length; i++)
         {
-            if (callback(Elements[i]))
-                return Elements[i];
+            if (callback(elements[i]))
+                return elements[i];
         }
 
         return default;
     }
 
-    public Arrayx<T> FindAll(Func<T, bool> callback)
-    {
-        var result = new Arrayx<T>(Length);
-
-        for (int i = 0; i < Length; i++)
-        {
-            if (callback(Elements[i]))
-                result.Add(Elements[i]);
-        }
-
-        return result;
-    }
-
     public void Remove(T element)
     {
-        var index = -1;
-        for (int i = 0; i < Length; i++)
-        {
-            if (Elements[i].Equals(element))
-            {
-                index = i;
-                break;
-            }
-        }
-
-        if (index < 0)
-            return;
-
-        Array.Copy(
-            Elements, index + 1,
-            Elements, index,
-            Length - index - 1);
-        Length--;
+        int index = IndexOf(element);
+        if (index >= 0) RemoveAt(index);
     }
 
     public void RemoveAt(int index)
@@ -147,30 +105,24 @@ public class Arrayx<T>
         if (index < 0 || index >= Length)
             return;
 
-        Array.Copy(
-            Elements, index + 1,
-            Elements, index,
-            Length - index - 1);
+        Array.Copy(elements, index + 1, elements, index, Length - index - 1);
         Length--;
     }
 
     public T Pop(int index)
     {
-        var element = Elements[index];
+        var element = elements[index];
         RemoveAt(index);
 
         return element;
     }
 
-    public void Clear()
-    {
-        Length = 0;
-    }
+    public void Clear() => Length = 0;
 
     public void ForEach(Action<T> callback)
     {
         for (int i = 0; i < Length; i++)
-            callback(Elements[i]);
+            callback(elements[i]);
     }
 
     public Arrayx<T> Map(Func<T, T> callback)
@@ -178,18 +130,18 @@ public class Arrayx<T>
         var result = new Arrayx<T>(Length);
 
         for (int i = 0; i < Length; i++)
-            result.Add(callback(Elements[i]));
+            result.Add(callback(elements[i]));
 
         return result;
     }
 
-    // @todo Untested!
+    // @todo Untested.
     public Arrayx<TR> Map<TR>(Func<T, TR> callback)
     {
         var result = new Arrayx<TR>(Length);
 
         for (int i = 0; i < Length; i++)
-            result.Add(callback(Elements[i]));
+            result.Add(callback(elements[i]));
 
         return result;
     }
@@ -197,7 +149,7 @@ public class Arrayx<T>
     public void MapSelf(Func<T, T> callback)
     {
         for (int i = 0; i < Length; i++)
-            Elements[i] = callback(Elements[i]);
+            elements[i] = callback(elements[i]);
     }
 
     public TR Reduce<TR>(TR accumulator, Func<TR, T, TR> callback)
@@ -205,20 +157,35 @@ public class Arrayx<T>
         TR result = accumulator;
 
         for (int i = 0; i < Length; i++)
-            result = callback(result, Elements[i]);
+            result = callback(result, elements[i]);
 
         return result;
     }
 
-    public T[] ToArray()
+    public void Optimize()
     {
-        var array = new T[Length];
+        if (Length == elements.Length)
+            return;
 
-        Array.Copy(
-            Elements, 0,
-            array, 0,
-            Length);
+        Array.Resize(ref elements, Length);
+    }
 
-        return array;
+    public T[] Clone()
+    {
+        var clone = new T[Length];
+        Array.Copy(elements, 0, clone, 0, Length);
+
+        return clone;
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        for (int i = 0; i < Length; i++)
+            yield return elements[i];
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

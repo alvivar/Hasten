@@ -1,10 +1,10 @@
-﻿#if UNITY_EDITOR
+#if UNITY_EDITOR
 
-using UnityEditor;
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
+using UnityEngine;
 
 // Femto is a Unity code generator that creates the 'EntitySet.cs', a simple
 // static entities database.
@@ -20,32 +20,57 @@ using System.IO;
 
 public static class Femto
 {
-    public static List<string> entityClasses = new List<string>();
-
     [MenuItem("Gigas/Generate EntitySet.cs")]
-    public static void GenerateGigasEntity()
+    public static void GenerateEntitySet()
     {
-        // Try to find an existing file in the project called "EntitySet.cs".
-        string filePath = "";
+        var (entitySetFile, classes) = ScanEntitySetAndFiles();
+
+        // If no such file exists, use the save panel to select a folder to create it.
+        string dir = "";
+        if (string.IsNullOrEmpty(entitySetFile))
+        {
+            dir = EditorUtility.OpenFolderPanel("Select the location to save the EntitySet file", Application.dataPath, "");
+
+            // Canceled?
+            if (string.IsNullOrEmpty(dir))
+                return;
+
+            entitySetFile = Path.Combine(dir, "EntitySet.cs");
+        }
+
+        GenerateEntitySet(entitySetFile, classes);
+
+        AssetDatabase.Refresh();
+    }
+
+    private static (string, List<string>) ScanEntitySetAndFiles()
+    {
+        string entitySetFile = "";
+        List<string> classes = new List<string>();
+
         foreach (var file in Directory.GetFiles(Application.dataPath, "*.cs", SearchOption.AllDirectories))
         {
-            // Ignore some of them.
-            if (Path.GetFileNameWithoutExtension(file) == "EntitySet")
+            var onlyName = Path.GetFileNameWithoutExtension(file);
+
+            // Ignore some special files.
+
+            if (onlyName == "EntitySet")
             {
-                filePath = file;
+                entitySetFile = file; // Found!
                 continue;
             }
 
-            if (Path.GetFileNameWithoutExtension(file) == "Femto")
+            if (onlyName == "Femto")
                 continue;
 
             // Look for '!commands' on each file.
-            string line = "";
-            using (StreamReader fileWithGigas = new StreamReader(file))
+
+            using (var fileWithGigas = new StreamReader(file))
             {
                 var className = "";
                 var gigasFound = false;
 
+                string line = "";
                 while ((line = fileWithGigas.ReadLine()) != null)
                 {
                     // Found!
@@ -53,54 +78,37 @@ public static class Femto
                         gigasFound = true;
 
                     // Extract the class name.
-                    if (line.Contains("class"))
+                    if (line.Contains("public class"))
                     {
                         var tokens = line.Split(' ');
-                        var index = 0;
-                        foreach (var token in tokens)
+                        for (var index = 0; index < tokens.Length; index++)
                         {
-                            if (token.Contains("class"))
-                            {
-                                // I just don't care @hack.
-                                try { className = tokens[index + 1].Trim(); }
-                                catch { break; }
-                                break;
-                            }
+                            if (!tokens[index].Contains("class"))
+                                continue;
 
-                            index++;
+                            if (index + 1 < tokens.Length)
+                                className = tokens[index + 1].Trim();
+                            break;
                         }
 
                         break;
                     }
                 }
 
-                // For the normal API.
-                if (gigasFound)
-                {
-                    if (!entityClasses.Contains(className))
-                        entityClasses.Add(className);
-                }
+                if (gigasFound && !classes.Contains(className))
+                    classes.Add(className);
             }
         }
 
-        // To be consistent on repositories.
-        entityClasses.Sort();
+        classes.Sort();
 
-        // If no such file exists already, use the save panel to get a folder in which the file will be placed.
-        string directory = "";
-        if (string.IsNullOrEmpty(filePath))
-        {
-            directory = EditorUtility.OpenFolderPanel("Choose the EntitySet.cs location", Application.dataPath, "");
+        return (entitySetFile, classes);
+    }
 
-            // Canceled choose? Do nothing.
-            if (string.IsNullOrEmpty(directory))
-                return;
-
-            filePath = Path.Combine(directory, "EntitySet.cs");
-        }
-
+    private static void GenerateEntitySet(string filePath, List<string> classes)
+    {
         // Dates.
-        DateTime currentTime = DateTime.Now;
+        var currentTime = DateTime.Now;
         var day = currentTime.Day;
         var dayName = currentTime.ToString("dddd");
         var monthName = currentTime.ToString("MMMM");
@@ -132,109 +140,90 @@ public static class Femto
             writer.WriteLine("    {");
 
             // The EntitySet API.
-            for (int i = 0; i < entityClasses.Count; i++)
+            for (int i = 0; i < classes.Count; i++)
             {
-                var entityClass = entityClasses[i];
-                var entityName = $"{entityClass}s";
-                var entityId = $"{entityClass}Ids";
-                var entityIdCache = $"{entityClass}IdCache";
-                var entityGetIds = $"{entityClass}GetIds";
-                var entityGetResult = $"{entityClass}GetResult";
+                var component = classes[i];
+                var componentId = $"{component}Id";
+                var components = $"{component}Component";
+                var componentIdCache = $"{component}IdCache";
+                var componentGetIds = $"{component}GetAllIds";
+                var componentGetResult = $"{component}GetAllResult";
 
-                writer.WriteLine($"        // {entityClass}");
+                writer.WriteLine($"        // {component}");
                 writer.WriteLine();
-                writer.WriteLine($"        public static Arrayx<{entityClass}> {entityName} = new Arrayx<{entityClass}>();");
-                writer.WriteLine($"        public static Arrayx<int> {entityId} = new Arrayx<int>();");
+                writer.WriteLine($"        public static Arrayx<int> {componentId} = new Arrayx<int>();");
                 writer.WriteLine();
-                writer.WriteLine($"        private static Dictionary<int, int> {entityIdCache} = new Dictionary<int, int>();");
-                writer.WriteLine($"        private static Arrayx<Arrayx<int>> {entityGetIds} = new Arrayx<Arrayx<int>>();");
-                writer.WriteLine($"        private static Arrayx<{entityClass}> {entityGetResult} = new Arrayx<{entityClass}>();");
+                writer.WriteLine($"        private static Arrayx<{component}> {components} = new Arrayx<{component}>();");
+                writer.WriteLine($"        private static Dictionary<int, int> {componentIdCache} = new Dictionary<int, int>();");
+                writer.WriteLine($"        private static Arrayx<Arrayx<int>> {componentGetIds} = new Arrayx<Arrayx<int>>();");
+                writer.WriteLine($"        private static Arrayx<{component}> {componentGetResult} = new Arrayx<{component}>();");
 
                 writer.WriteLine();
-                writer.WriteLine($"        public static void Add{entityClass}({entityClass} component)");
+                writer.WriteLine($"        public static void Add{component}({component} component)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            {entityId}.Add(component.gameObject.GetInstanceID());");
-                writer.WriteLine($"            {entityName}.Add(component);");
+                writer.WriteLine($"            {componentId}.Add(component.gameObject.GetInstanceID());");
+                writer.WriteLine($"            {components}.Add(component);");
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
-                writer.WriteLine($"        public static void Remove{entityClass}({entityClass} component)");
+                writer.WriteLine($"        public static void Remove{component}({component} component)");
                 writer.WriteLine($"        {{");
                 writer.WriteLine($"            var id = component.gameObject.GetInstanceID();");
-                writer.WriteLine($"            var index = {entityId}.IndexOf(id);");
+                writer.WriteLine($"            var index = {componentId}.IndexOf(id);");
                 writer.WriteLine();
-                writer.WriteLine($"            {entityId}.RemoveAt(index);");
-                writer.WriteLine($"            {entityName}.RemoveAt(index);");
+                writer.WriteLine($"            {componentId}.RemoveAt(index);");
+                writer.WriteLine($"            {components}.RemoveAt(index);");
                 writer.WriteLine();
                 writer.WriteLine($"            // Removing the element changes the cache order.");
-                writer.WriteLine($"            {entityIdCache}.Clear();");
+                writer.WriteLine($"            {componentIdCache}.Clear();");
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
-                writer.WriteLine($"        public static {entityClass} Get{entityClass}(MonoBehaviour component)");
+                writer.WriteLine($"        public static {component} Get{component}(MonoBehaviour component)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            return Get{entityClass}(component.gameObject.GetInstanceID());");
+                writer.WriteLine($"            return Get{component}(component.gameObject.GetInstanceID());");
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
-                writer.WriteLine($"        public static {entityClass} Get{entityClass}(GameObject gameobject)");
+                writer.WriteLine($"        public static {component} Get{component}(GameObject gameobject)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            return Get{entityClass}(gameobject.GetInstanceID());");
+                writer.WriteLine($"            return Get{component}(gameobject.GetInstanceID());");
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
-                writer.WriteLine($"        public static {entityClass} Get{entityClass}(int id)");
+                writer.WriteLine($"        public static {component} Get{component}(int id)");
                 writer.WriteLine($"        {{");
                 writer.WriteLine($"            int cacheId;");
-                writer.WriteLine($"            if ({entityIdCache}.TryGetValue(id, out cacheId))");
-                writer.WriteLine($"                return {entityName}.Elements[cacheId];");
+                writer.WriteLine($"            if ({componentIdCache}.TryGetValue(id, out cacheId))");
+                writer.WriteLine($"                return {components}[cacheId];");
                 writer.WriteLine();
-                writer.WriteLine($"            var index = {entityId}.IndexOf(id);");
+                writer.WriteLine($"            var index = {componentId}.IndexOf(id);");
                 writer.WriteLine();
                 writer.WriteLine($"            if (index < 0)");
                 writer.WriteLine($"                return null;");
                 writer.WriteLine();
-                writer.WriteLine($"            {entityIdCache}[id] = index;");
+                writer.WriteLine($"            {componentIdCache}[id] = index;");
                 writer.WriteLine();
-                writer.WriteLine($"            return {entityName}.Elements[index];");
+                writer.WriteLine($"            return {components}[index];");
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
-                writer.WriteLine($"        public static Arrayx<{entityClass}> Get{entityClass}(params Arrayx<int>[] ids)");
+                writer.WriteLine($"        public static Arrayx<{component}> GetAll{component}(params Arrayx<int>[] containingIds)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            // {entityId} needs to be the first in the array parameter,");
-                writer.WriteLine($"            // that's how Gigas.Get relates the ids to the components.");
+                writer.WriteLine($"            if (containingIds.Length == 0)");
+                writer.WriteLine($"                return {components};");
                 writer.WriteLine();
-                writer.WriteLine($"            {entityGetIds}.Clear();");
-                writer.WriteLine($"            {entityGetIds}.Add({entityId});");
-                writer.WriteLine($"            for (int i = 0; i < ids.Length; i++)");
-                writer.WriteLine($"                {entityGetIds}.Add(ids[i]);");
+                writer.WriteLine($"            {componentGetIds}.Clear();");
+                writer.WriteLine($"            {componentGetIds}.Add({componentId});");
+                writer.WriteLine($"            for (int i = 0; i < containingIds.Length; i++)");
+                writer.WriteLine($"                {componentGetIds}.Add(containingIds[i]);");
                 writer.WriteLine();
-                writer.WriteLine($"            return Gigas.Get<{entityClass}>({entityGetIds}, EntitySet.{entityName}, {entityGetResult});");
+                writer.WriteLine($"            return Gigas.Get<{component}>({componentGetIds}, EntitySet.{components}, {componentGetResult});");
                 writer.WriteLine($"        }}");
 
-                if (i < entityClasses.Count - 1)
+                if (i < classes.Count - 1)
                     writer.WriteLine();
             }
-
-            // A function that clears all entities.
-            writer.WriteLine();
-            writer.WriteLine();
-            writer.WriteLine($"        public static void Clear()");
-            writer.WriteLine($"        {{");
-            for (int i = 0; i < entityClasses.Count; i++)
-            {
-                var entityClass = entityClasses[i];
-                var entityName = $"{entityClass}s";
-                var entityId = $"{entityClass}Ids";
-
-                writer.WriteLine($"            {entityName}.Clear();");
-                writer.WriteLine($"            {entityId}.Clear();");
-
-                if (i < entityClasses.Count - 1)
-                    writer.WriteLine();
-            }
-            writer.WriteLine($"        }}");
 
             // End of class.
             writer.WriteLine("    }");
@@ -242,9 +231,6 @@ public static class Femto
             // End of namespace EntitySet.
             writer.WriteLine("// }");
         }
-
-        // Refresh.
-        AssetDatabase.Refresh();
     }
 }
 

@@ -1,7 +1,9 @@
-// This file is auto-generated. Modifications won't be saved, be cool.
 
-// EntitySet is a static database of GameObjects (Entities) and MonoBehaviour
-// classes (Components). Check out 'Femto.cs' for more information about the
-// code generated.
+// This file is auto-generated. Modifications can be overwritten.
 
-// Refresh with the menu item 'Tools/Gigas/Generate EntitySet.cs'
+// EntitySet is a static database of GameObjects (Entities) and MonoBehaviour classes (Components).
+// Check out 'Femto.cs' for more information about code generation.
+
+// To update use the menu item 'Gigas/Generate EntitySet.cs'.
+
+public static class EntitySet { }

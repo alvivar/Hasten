@@ -133,8 +133,10 @@ public static class Extensions
 
     private static IEnumerator ResetTrailRenderer(TrailRenderer trail)
     {
-        trail.time = -Mathf.Abs(trail.time);
+        trail.enabled = false;
+        trail.Clear();
         yield return null;
-        trail.time = Mathf.Abs(trail.time);
+        yield return null;
+        trail.enabled = true;
     }
 }

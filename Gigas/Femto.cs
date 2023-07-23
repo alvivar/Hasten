@@ -191,18 +191,17 @@ public static class Femto
                 writer.WriteLine($"        }}");
 
                 writer.WriteLine();
-                writer.WriteLine($"        public static {component} Get{component}(int id)");
+                writer.WriteLine($"        public static {component} Get{component}(int instanceID)");
                 writer.WriteLine($"        {{");
-                writer.WriteLine($"            int cacheId;");
-                writer.WriteLine($"            if ({componentIdCache}.TryGetValue(id, out cacheId))");
+                writer.WriteLine($"            if ({componentIdCache}.TryGetValue(instanceID, out int cacheId))");
                 writer.WriteLine($"                return {components}[cacheId];");
                 writer.WriteLine();
-                writer.WriteLine($"            var index = {componentId}.IndexOf(id);");
+                writer.WriteLine($"            var index = {componentId}.IndexOf(instanceID);");
                 writer.WriteLine();
                 writer.WriteLine($"            if (index < 0)");
                 writer.WriteLine($"                return null;");
                 writer.WriteLine();
-                writer.WriteLine($"            {componentIdCache}[id] = index;");
+                writer.WriteLine($"            {componentIdCache}[instanceID] = index;");
                 writer.WriteLine();
                 writer.WriteLine($"            return {components}[index];");
                 writer.WriteLine($"        }}");

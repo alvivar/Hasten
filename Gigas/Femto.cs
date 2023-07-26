@@ -124,8 +124,9 @@ public static class Femto
             writer.WriteLine();
             writer.WriteLine("// This file is auto-generated. Modifications can be overwritten.");
             writer.WriteLine();
-            writer.WriteLine("// EntitySet is a static database of GameObjects (Entities) and MonoBehaviour classes (Components).");
-            writer.WriteLine("// Check out 'Femto.cs' for more information about code generation.");
+            writer.WriteLine("// EntitySet is a static database of GameObjects (Entities) and MonoBehaviour");
+            writer.WriteLine("// classes (Components). Check out 'Femto.cs' for more information about the");
+            writer.WriteLine("// code generation.");
             writer.WriteLine();
             writer.WriteLine("// To update use the menu item 'Gigas/Generate EntitySet.cs'.");
             writer.WriteLine();

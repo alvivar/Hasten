@@ -20,9 +20,10 @@
 //     public int id = -1;
 //     public int messageCount = 0;
 
-//     private Dictionary<int, Action<Frame>> callbacks = new Dictionary<int, Action<Frame>>();
-//     private Frames framesReceived = new Frames();
-//     private Frame frameQueue = new Frame();
+//     private readonly Dictionary<int, Action<Frame>> callbacks = new();
+//     private readonly Frames framesReceived = new();
+
+//     private Frame frameQueue = new();
 //     private WebSocket webSocket;
 
 //     public void Start()
@@ -85,6 +86,7 @@
 //     void OnClosed(WebSocket ws, UInt16 code, string message)
 //     {
 //         Debug.Log($"BITE WS Closed: {code} {message}");
+
 //         webSocket = null;
 //         connected = false;
 //     }
@@ -92,6 +94,7 @@
 //     void OnError(WebSocket ws, string error)
 //     {
 //         Debug.Log($"BITE WS Error: {error}");
+
 //         webSocket = null;
 //         connected = false;
 //     }

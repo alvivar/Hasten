@@ -8,8 +8,7 @@ public static class Bitf
 {
     public static int Int(string str, int or = 0)
     {
-        int n;
-        return int.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out n) ? n : or;
+        return int.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out int n) ? n : or;
     }
 
     public static int Int(byte[] bigEndian, int or = 0)
@@ -27,14 +26,12 @@ public static class Bitf
 
     public static float Float(string str, float or = 0)
     {
-        float n;
-        return float.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out n) ? n : or;
+        return float.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out float n) ? n : or;
     }
 
     public static long Long(string str, long or = 0)
     {
-        long n;
-        return long.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out n) ? n : or;
+        return long.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out long n) ? n : or;
     }
 
     public static long Long(byte[] bigEndian, long or = 0)
@@ -81,8 +78,7 @@ public static class Bitf
 
         foreach (var s in str.Split(' ', ','))
         {
-            float n;
-            if (float.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out n))
+            if (float.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out float n))
                 numbers.Add(n);
         }
 
@@ -112,8 +108,7 @@ public static class Bitf
 
         foreach (var s in str.Split(' ', ','))
         {
-            float n;
-            if (float.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out n))
+            if (float.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out float n))
                 numbers.Add(n);
         }
 

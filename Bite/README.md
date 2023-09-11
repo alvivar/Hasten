@@ -1,4 +1,4 @@
-# C# Bite
+# C# BITE Client
 
 C# client library for [**BITE**](https://github.com/alvivar/bite). Should work fine with Unity.
 
@@ -11,18 +11,17 @@ To **send**.
     bite.Send("s author Andrés Villalobos");
     bite.Send("g author");
 
-You can use a **System.Action<Byte[]>** callback on **Send** to deal directly with the **response**.
+You can use a **System.Action<Frame[]>** callback on **Send** to deal directly with the **response**.
 
-    bite.Send("g author", response => {
-        // Handle your response.
+    bite.Send("g author", frame => {
+        // The frame is the abstraction with the result.
     });
 
-You also have a **System.Action<Byte[]>** to subscribe.
+You also have a couple of **System.Action<Frame[]>** to subscribe.
 
-    bite.OnResponse += YourOnResponse;
+    bite.OnConnected += YourOnConnected; // Once, when connected.
+    bite.OnFrameReceived += YourOnFrameReceived; // Every time a frame is received.
 
-Bonus: There are some static utility to deal with string to ints, floats or longs.
+Bonus: There is a static utility to deal with common conversions, check out **Bitf.cs**.
 
     int i = Bitf.Int("Try or default ->", 1984);
-
-Check out the **Unity** [**Analytics.cs**](https://github.com/alvivar/bite/blob/master/.csharp/Analytics.cs) example!

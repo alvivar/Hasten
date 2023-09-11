@@ -1,7 +1,7 @@
 # BITE Unity WebGL WebSocket Client
 
-**BITE** is a tcp server, but [BITEWS](https://github.com/alvivar/bitews) is a WebSocket proxy for **BITE**.
+**BITE** is a tcp server, but [BITEWS](https://github.com/alvivar/bitews) is a WebSocket proxy that you can use with **BITE**.
 
-**BITEBestWS.cs** is a Unity WebGL WebSocket client library for [BITEWS](https://github.com/alvivar/bitews) through the popular Unity Extension [Best HTTP/2](https://assetstore.unity.com/packages/tools/network/best-http-2-155981) that you can use in Unity WebGL builds.
+**BITEBestWS.cs** is a Unity WebGL WebSocket client library for [BITEWS](https://github.com/alvivar/bitews) by using the popular Unity Extension [Best HTTP/2](https://assetstore.unity.com/packages/tools/network/best-http-2-155981).
 
-By the way, **BITEBestWS.cs** is comment out, just in case you don't have Best HTTP/2 installed.
+Of course, you will need to install [Best HTTP/2](https://assetstore.unity.com/packages/tools/network/best-http-2-155981) to use this.
